@@ -1,0 +1,77 @@
+package br.com.giorgetti.games.squareplatform.tiles;
+
+import java.awt.image.BufferedImage;
+
+/**
+ * Created by fgiorgetti on 5/1/15.
+ */
+public class Tile {
+
+    private BufferedImage tileImage;
+
+    // Tile position in the tileSet
+    private int tilePositionId;
+
+    private TileType type;
+
+    enum TileType {
+
+        NORMAL(0), BLOCKED(1);
+
+        int type;
+
+        TileType(int type) {
+           this.type = type;
+        }
+
+        public static TileType fromType(int type) {
+            if ( type == 0 ) {
+                return NORMAL;
+            }
+
+            return BLOCKED;
+        }
+    }
+
+    public Tile(BufferedImage image, TileType type) {
+
+        this.tileImage = image;
+        this.type = type;
+
+    }
+
+    public int getWidth() {
+        return tileImage.getWidth();
+    }
+
+    public int getHeight() {
+        return tileImage.getHeight();
+    }
+
+    /* Getters and Setters */
+
+    public TileType getType() {
+        return type;
+    }
+
+    public void setType(TileType type) {
+        this.type = type;
+    }
+
+    public BufferedImage getTileImage() {
+        return tileImage;
+    }
+
+    public void setTileImage(BufferedImage tileImage) {
+        this.tileImage = tileImage;
+    }
+
+    public int getTilePositionId() {
+        return tilePositionId;
+    }
+
+    public void setTilePositionId(int tilePositionId) {
+        this.tilePositionId = tilePositionId;
+    }
+
+}
