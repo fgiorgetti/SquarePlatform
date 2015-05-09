@@ -45,12 +45,13 @@ public class TileSet {
 
         // Loop through all image rows
         int tilesRead = 0;
+        out:
         for ( int row = 0; row < imageSet.getHeight() / spriteHeight; row++ ) {
             for ( int col = 0 ; col < imageSet.getWidth() / spriteWidth ; col++ ) {
 
                 // If read total number of sprites available, stop reading
                 if ( tilesRead == numTiles ) {
-                    break;
+                    break out;
                 }
 
                 // Creating and loading new tile
@@ -59,7 +60,6 @@ public class TileSet {
                 tileSet.put(tilesRead++, tile);
             }
         }
-
     }
 
     /**
@@ -74,6 +74,9 @@ public class TileSet {
      * @param position
      * @return
      */
+    public Tile getTile(String position) {
+       return getTile(Integer.parseInt(position));
+    }
     public Tile getTile(int position) {
         return tileSet.get(position);
     }

@@ -65,8 +65,8 @@ public class TileMap {
      * to save space used by the tile map to represent the tileset which a given tile
      * belongs to.
      */
-    private Map<Integer, TileSet> tileSetMap;
-    private Map<String, Integer> tileSetIdMap;
+    private Map<String, TileSet> tileSetMap;
+    private Map<String, String> tileSetIdMap;
 
     // Dimensions
     private int rows, cols, height, width;
@@ -100,10 +100,10 @@ public class TileMap {
      * 2 = tile position on the tileset
      * 3 = type for the tile (blocked, normal, ...)
      */
-    private static final int POS_MAP_COLUMN     = 0;
-    private static final int POS_MAP_TILESET_ID = 1;
-    private static final int POS_MAP_TILEPOS_ID = 2;
-    private static final int POS_MAP_TILE_TYPE  = 3;
+    public static final int POS_MAP_COLUMN     = 0;
+    public static final int POS_MAP_TILESET_ID = 1;
+    public static final int POS_MAP_TILEPOS_ID = 2;
+    public static final int POS_MAP_TILE_TYPE  = 3;
 
     private Map<Integer,Map<Integer,String[]>> map = new HashMap<Integer, Map<Integer, String[]>>();
 
@@ -131,7 +131,7 @@ public class TileMap {
         // Opening the tile map file
         BufferedReader reader = null;
         try {
-            new BufferedReader(new FileReader(new File(getClass().getResource("").toURI())));
+            reader = new BufferedReader(new FileReader(new File(getClass().getResource(tileMapPath).toURI())));
         } catch (Exception e1) {
             System.err.println("Unable to load tile map: " + tileMapPath);
             System.exit(ErrorConstants.INVALID_TILE_MAP_PATH);
@@ -171,7 +171,7 @@ public class TileMap {
      */
     private void readVariables(String line) {
 
-        String[] info = line.split("");
+        String[] info = line.split("=");
         String key   = info[0];
         String value = info[1];
 
@@ -197,12 +197,12 @@ public class TileMap {
                 }
                 break;
             case "TS":
-                tileSetIdMap = new HashMap<String, Integer>();
-                tileSetMap   = new HashMap<Integer, TileSet>();
+                tileSetIdMap = new HashMap<String, String>();
+                tileSetMap   = new HashMap<String, TileSet>();
                 for ( String tileSetInfo : value.split(INFO_SEPARATOR) ) {
                     arr = tileSetInfo.split(PROP_SEPARATOR);
-                    tileSetIdMap.put(arr[POS_TILESET_NAME], Integer.parseInt(arr[POS_TILESET_ID]));
-                    tileSetMap.put(Integer.parseInt(arr[POS_TILESET_ID]),
+                    tileSetIdMap.put(arr[POS_TILESET_NAME], arr[POS_TILESET_ID]);
+                    tileSetMap.put(arr[POS_TILESET_ID],
                             new TileSet(
 	                            arr[POS_TILESET_PATH],
 	                            Integer.parseInt(arr[POS_TILESET_WIDTH]),
@@ -240,6 +240,94 @@ public class TileMap {
             map.get(row).put(Integer.parseInt(colInfo[POS_MAP_COLUMN]), colInfo);
         }
 
+    }
+
+    public int getRows() {
+        return rows;
+    }
+
+    public void setRows(int rows) {
+        this.rows = rows;
+    }
+
+    public int getCols() {
+        return cols;
+    }
+
+    public void setCols(int cols) {
+        this.cols = cols;
+    }
+
+    public int getHeight() {
+        return height;
+    }
+
+    public void setHeight(int height) {
+        this.height = height;
+    }
+
+    public int getWidth() {
+        return width;
+    }
+
+    public void setWidth(int width) {
+        this.width = width;
+    }
+
+    public List<String[]> getBackgrounds() {
+        return backgrounds;
+    }
+
+    public void setBackgrounds(List<String[]> backgrounds) {
+        this.backgrounds = backgrounds;
+    }
+
+    public int getPlayerX() {
+        return playerX;
+    }
+
+    public void setPlayerX(int playerX) {
+        this.playerX = playerX;
+    }
+
+    public int getPlayerY() {
+        return playerY;
+    }
+
+    public void setPlayerY(int playerY) {
+        this.playerY = playerY;
+    }
+
+    public List<String[]> getSprites() {
+        return sprites;
+    }
+
+    public void setSprites(List<String[]> sprites) {
+        this.sprites = sprites;
+    }
+
+    public Map<Integer, Map<Integer, String[]>> getMap() {
+        return map;
+    }
+
+    public void setMap(Map<Integer, Map<Integer, String[]>> map) {
+        this.map = map;
+    }
+
+    public Map<String, TileSet> getTileSetMap() {
+        return tileSetMap;
+    }
+
+    public void setTileSetMap(Map<String, TileSet> tileSetMap) {
+        this.tileSetMap = tileSetMap;
+    }
+
+    public Map<String, String> getTileSetIdMap() {
+        return tileSetIdMap;
+    }
+
+    public void setTileSetIdMap(Map<String, String> tileSetIdMap) {
+        this.tileSetIdMap = tileSetIdMap;
     }
 
 }
