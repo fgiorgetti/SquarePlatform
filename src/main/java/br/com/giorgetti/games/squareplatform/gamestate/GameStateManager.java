@@ -1,6 +1,6 @@
 package br.com.giorgetti.games.squareplatform.gamestate;
 
-import br.com.giorgetti.games.squareplatform.gamestate.levels.Level1;
+import br.com.giorgetti.games.squareplatform.gamestate.levels.LevelStateManager;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
@@ -11,7 +11,7 @@ import java.awt.event.KeyListener;
  */
 public class GameStateManager implements KeyListener {
 
-    public GameState currentState = new Level1();
+    public GameState currentState = new LevelStateManager("/maps/level1.dat");
 
     public void gameLoop(Graphics2D g) {
 
@@ -29,6 +29,8 @@ public class GameStateManager implements KeyListener {
     }
 
     public void keyPressed(KeyEvent e) {
+
+        currentState.keyPressed(e);
 
     }
 

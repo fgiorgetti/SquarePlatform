@@ -1,6 +1,7 @@
 package br.com.giorgetti.games.squareplatform.tiles;
 
 import br.com.giorgetti.games.squareplatform.exception.ErrorConstants;
+import br.com.giorgetti.games.squareplatform.main.GamePanel;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -69,10 +70,11 @@ public class TileMap {
     private Map<String, String> tileSetIdMap;
 
     // Dimensions
-    private int rows, cols, height, width;
+    private int rows, cols, height, width, maxRowsOnScreen, maxColsOnScreen, maxX, maxY;
+    private int rowOffset, colOffset, x, y;
 
     // Backgrounds
-    private List<String[]> backgrounds;
+    private List<Background> backgrounds;
 
     // Player initial position
     private static final int POS_PLAYER_X = 0;
@@ -185,15 +187,20 @@ public class TileMap {
                 break;
             case "WIDTH":
                 width = Integer.parseInt(value);
+                maxX = width * cols - GamePanel.WIDTH;
+                maxColsOnScreen = GamePanel.WIDTH / width;
                 break;
             case "HEIGHT":
                 height = Integer.parseInt(value);
+                maxY = height * rows - GamePanel.HEIGHT;
+                maxRowsOnScreen = GamePanel.HEIGHT / height;
                 break;
             case "BG":
                 // Loading backgrounds
-                backgrounds = new ArrayList<String[]>();
+                backgrounds = new ArrayList<Background>();
                 for ( String bgInfo : value.split(INFO_SEPARATOR) ) {
-                    backgrounds.add(bgInfo.split(PROP_SEPARATOR));
+                    String[] bg = bgInfo.split(PROP_SEPARATOR);
+                    backgrounds.add(new Background(bg[POS_BG_PATH], bg[POS_BG_SPEED]));
                 }
                 break;
             case "TS":
@@ -218,7 +225,7 @@ public class TileMap {
                 }
                 break;
             case "PLAYER":
-                arr = value.split(INFO_SEPARATOR);
+                arr = value.split(PROP_SEPARATOR);
                 playerX = Integer.parseInt(arr[POS_PLAYER_X]);
                 playerY = Integer.parseInt(arr[POS_PLAYER_Y]);
                 break;
@@ -274,28 +281,42 @@ public class TileMap {
         this.width = width;
     }
 
-    public List<String[]> getBackgrounds() {
+    public List<Background> getBackgrounds() {
         return backgrounds;
     }
 
-    public void setBackgrounds(List<String[]> backgrounds) {
+    public void setBackgrounds(List<Background> backgrounds) {
         this.backgrounds = backgrounds;
     }
 
     public int getPlayerX() {
+        System.out.println("Player X = " + playerX);
         return playerX;
     }
 
     public void setPlayerX(int playerX) {
-        this.playerX = playerX;
+        if ( playerX > cols * width ) {
+            this.playerX = cols * width;
+        } else if ( playerX < 0 ) {
+            this.playerX = 0;
+        } else {
+            this.playerX = playerX;
+        }
     }
 
     public int getPlayerY() {
+        System.out.println("Player Y = " + playerY);
         return playerY;
     }
 
     public void setPlayerY(int playerY) {
-        this.playerY = playerY;
+        if ( playerY > rows * height - GamePanel.HEIGHT ) {
+            this.playerY = rows * height - GamePanel.HEIGHT;
+        } else if ( playerY < 0 ) {
+            this.playerY = 0;
+        } else {
+            this.playerY = playerY;
+        }
     }
 
     public List<String[]> getSprites() {
@@ -330,4 +351,80 @@ public class TileMap {
         this.tileSetIdMap = tileSetIdMap;
     }
 
+    public int getMaxX() {
+        return maxX;
+    }
+
+    public void setMaxX(int maxX) {
+        this.maxX = maxX;
+    }
+
+    public int getMaxY() {
+        return maxY;
+    }
+
+    public void setMaxY(int maxY) {
+        this.maxY = maxY;
+    }
+
+    public int getRowOffset() {
+        return rowOffset;
+    }
+
+    public void setRowOffset(int rowOffset) {
+        this.rowOffset = rowOffset;
+    }
+
+    public int getColOffset() {
+        return colOffset;
+    }
+
+    public void setColOffset(int colOffset) {
+        this.colOffset = colOffset;
+    }
+
+    public int getX() {
+        return x;
+    }
+
+    public void setX(int x) {
+        if ( x < 0 ) {
+            this.x = 0;
+        } else if ( x > getMaxX() ) {
+            this.x = getMaxX();
+        } else {
+            this.x = x;
+        }
+    }
+
+    public int getY() {
+        System.out.println("Map Y = " + y);
+        return y;
+    }
+
+    public void setY(int y) {
+        if ( y < 0 ) {
+            this.y = 0;
+        } else if ( y > getMaxY() ) {
+            this.y = getMaxY();
+        } else {
+            this.y = y;
+        }
+    }
+
+    public int getMaxRowsOnScreen() {
+        return maxRowsOnScreen;
+    }
+
+    public void setMaxRowsOnScreen(int maxRowsOnScreen) {
+        this.maxRowsOnScreen = maxRowsOnScreen;
+    }
+
+    public int getMaxColsOnScreen() {
+        return maxColsOnScreen;
+    }
+
+    public void setMaxColsOnScreen(int maxColsOnScreen) {
+        this.maxColsOnScreen = maxColsOnScreen;
+    }
 }
