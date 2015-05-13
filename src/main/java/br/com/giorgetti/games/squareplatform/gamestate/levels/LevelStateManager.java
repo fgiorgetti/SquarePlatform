@@ -32,11 +32,14 @@ public class LevelStateManager implements GameState {
 
     public void draw(Graphics2D g) {
 
+        long start = System.currentTimeMillis();
         // Drawing backgrounds
         // TODO Consider current position and move speed
         for ( Background bg : map.getBackgrounds() ) {
-            g.drawImage(bg.getImage().getScaledInstance(GamePanel.WIDTH, GamePanel.HEIGHT, 0), 0, 0, null);
+            g.drawImage(bg.getImage(), 0, 0, null);
+            //g.drawImage(bg.getImage().getScaledInstance(GamePanel.WIDTH, GamePanel.HEIGHT, 0), 0, 0, null);
         }
+        System.out.println("Elapsed = " + (System.currentTimeMillis() - start ));
 
         // Drawing map on the screen...
         for ( int row : map.getMap().keySet() ) {
@@ -72,18 +75,14 @@ public class LevelStateManager implements GameState {
     public void keyPressed(KeyEvent e) {
 
         if ( e.getKeyCode() == KeyEvent.VK_RIGHT ) {
-            System.out.println("key pressed right");
             getMap().setPlayerX(getMap().getPlayerX()+16);
         } else if ( e.getKeyCode() == KeyEvent.VK_LEFT ) {
-            System.out.println("key pressed left");
             getMap().setPlayerX(getMap().getPlayerX()-16);
         }
 
         if ( e.getKeyCode() == KeyEvent.VK_UP ) {
-            System.out.println("key pressed up");
             getMap().setPlayerY(getMap().getPlayerY()+16);
         } else if ( e.getKeyCode() == KeyEvent.VK_DOWN ) {
-            System.out.println("key pressed down");
             getMap().setPlayerY(getMap().getPlayerY()-16);
         }
 

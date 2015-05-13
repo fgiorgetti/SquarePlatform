@@ -290,7 +290,6 @@ public class TileMap {
     }
 
     public int getPlayerX() {
-        System.out.println("Player X = " + playerX);
         return playerX;
     }
 
@@ -305,13 +304,12 @@ public class TileMap {
     }
 
     public int getPlayerY() {
-        System.out.println("Player Y = " + playerY);
         return playerY;
     }
 
     public void setPlayerY(int playerY) {
-        if ( playerY > rows * height - GamePanel.HEIGHT ) {
-            this.playerY = rows * height - GamePanel.HEIGHT;
+        if ( playerY > rows * height) {
+            this.playerY = rows * height;
         } else if ( playerY < 0 ) {
             this.playerY = 0;
         } else {
@@ -398,7 +396,6 @@ public class TileMap {
     }
 
     public int getY() {
-        System.out.println("Map Y = " + y);
         return y;
     }
 
@@ -416,15 +413,8 @@ public class TileMap {
         return maxRowsOnScreen;
     }
 
-    public void setMaxRowsOnScreen(int maxRowsOnScreen) {
-        this.maxRowsOnScreen = maxRowsOnScreen;
-    }
-
     public int getMaxColsOnScreen() {
         return maxColsOnScreen;
     }
 
-    public void setMaxColsOnScreen(int maxColsOnScreen) {
-        this.maxColsOnScreen = maxColsOnScreen;
-    }
 }

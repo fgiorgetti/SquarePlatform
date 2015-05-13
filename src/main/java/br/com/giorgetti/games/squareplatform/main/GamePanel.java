@@ -14,11 +14,11 @@ import java.awt.image.BufferedImage;
 public class GamePanel extends JPanel implements Runnable {
 
     // Game panel dimensions
-    public static final int WIDTH = 320;
-    public static final int HEIGHT = 200;
+    public static final int WIDTH = 400;
+    public static final int HEIGHT = 300;
 
     public static final int SCALE = 2;
-    public static final int FPS = 60;
+    public static final int FPS = 30;
     public static final long TARGET_TIME = 1000 / FPS;
 
     private BufferedImage image;
@@ -80,6 +80,8 @@ public class GamePanel extends JPanel implements Runnable {
         while ( true ) {
 
             // Let the game state manager handle the content
+            g.setColor(Color.WHITE);
+            g.fillRect(0, 0, WIDTH, HEIGHT);
             gsm.gameLoop(g);
 
             // Draw prepared content to screen
