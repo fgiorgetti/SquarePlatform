@@ -14,7 +14,7 @@ public class Tile {
 
     private TileType type;
 
-    enum TileType {
+    public enum TileType {
 
         NORMAL(0), BLOCKED(1);
 
@@ -24,8 +24,8 @@ public class Tile {
            this.type = type;
         }
 
-        public static TileType fromType(int type) {
-            if ( type == 0 ) {
+        public static TileType fromType(String type) {
+            if ( "0".equals(type) ) {
                 return NORMAL;
             }
 

@@ -4,10 +4,12 @@ import br.com.giorgetti.games.squareplatform.gamestate.GameState;
 import br.com.giorgetti.games.squareplatform.main.GamePanel;
 import br.com.giorgetti.games.squareplatform.tiles.Background;
 import br.com.giorgetti.games.squareplatform.tiles.Tile;
+import br.com.giorgetti.games.squareplatform.tiles.Tile.TileType;
 import br.com.giorgetti.games.squareplatform.tiles.TileMap;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
+
 
 /**
  * Created by fgiorgetti on 5/1/15.
@@ -53,6 +55,7 @@ public class LevelStateManager implements GameState {
                 // Drawing the tile map
                 String[] arr = map.getMap().get(row).get(col);
                 Tile t = map.getTileSetMap().get(arr[TileMap.POS_MAP_TILESET_ID]).getTile(arr[TileMap.POS_MAP_TILEPOS_ID]);
+                t.setType(TileType.fromType(arr[TileMap.POS_MAP_TILE_TYPE]));
                 g.drawImage(t.getTileImage(),
                         col * map.getWidth() - map.getX(),
                         GamePanel.HEIGHT - row * map.getHeight() + map.getY(),
