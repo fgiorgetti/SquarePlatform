@@ -32,14 +32,12 @@ public class LevelStateManager implements GameState {
 
     public void draw(Graphics2D g) {
 
-        long start = System.currentTimeMillis();
         // Drawing backgrounds
         // TODO Consider current position and move speed
         for ( Background bg : map.getBackgrounds() ) {
             g.drawImage(bg.getImage(), 0, 0, null);
             //g.drawImage(bg.getImage().getScaledInstance(GamePanel.WIDTH, GamePanel.HEIGHT, 0), 0, 0, null);
         }
-        System.out.println("Elapsed = " + (System.currentTimeMillis() - start ));
 
         // Drawing map on the screen...
         for ( int row : map.getMap().keySet() ) {
