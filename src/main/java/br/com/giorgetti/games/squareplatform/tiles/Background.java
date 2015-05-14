@@ -13,12 +13,14 @@ import java.nio.Buffer;
  */
 public class Background {
 
+    private String bgPath;
     private BufferedImage image;
     private int speedPct;
 
     public Background(String bgPath, String speedPct) {
 
         try {
+            this.bgPath = bgPath;
             this.image = ImageIO.read(getClass().getResourceAsStream(bgPath));
         } catch (IOException e) {}
         this.speedPct = Integer.parseInt(speedPct);
@@ -37,7 +39,10 @@ public class Background {
         return speedPct;
     }
 
-    public void setSpeedPct(int speedPct) {
-        this.speedPct = speedPct;
+    public void setSpeedPct(int speedPct) { this.speedPct = speedPct; }
+
+    public String toString() {
+        return speedPct + TileMap.PROP_SEPARATOR + bgPath;
     }
+
 }

@@ -7,10 +7,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by fgiorgetti on 5/1/15.
@@ -413,8 +410,123 @@ public class TileMap {
         return maxRowsOnScreen;
     }
 
-    public int getMaxColsOnScreen() {
-        return maxColsOnScreen;
+    public int getMaxColsOnScreen() { return maxColsOnScreen; }
+
+    public String toString() {
+
+        StringBuilder sb = new StringBuilder();
+
+        // Serializing TileMap as a String
+        /*
+        [1] 0,1,1,0 1,1,1,0 2,1,1,0 3,1,1,0 4,1,1,0 5,1,1,0 6,1,1,0 7,1,0,0 8,1,2,0 9,1,3,0 10,1,3,0 11,1,3,0 12,1,3,0 13,1,3,0 14,1,3,0
+        [3] 5,1,4,0 6,1,4,0 7,1,4,0
+        [3] 5,1,4,0 6,1,4,0 7,1,4,0
+        [4] 12,1,4,0
+        */
+        sb.append("ROWS=").append(getRows()).append("\n")
+                .append("COLS=").append(getCols()).append("\n")
+                .append("WIDTH=").append(getWidth()).append("\n")
+                .append("HEIGHT=").append(getHeight()).append("\n")
+                .append("BG=").append(getBackgroundsAsString()).append("\n")
+                .append("TS=").append(getTileSetsAsString()).append("\n")
+                .append("SPRITES=").append(getSpritesAsString())
+                .append("PLAYER=").append(getPlayerX()).append(PROP_SEPARATOR).append(getPlayerY()).append("\n")
+                .append(getMapAsString());
+        
+
+
+        return sb.toString();
+
+    }
+
+    private String getMapAsString() {
+
+        StringBuilder s = new StringBuilder();
+        TreeSet<Integer> lines = new TreeSet<Integer>(getMap().keySet());
+
+
+        for ( int line : lines ) {
+            s.append("[").append(line).append("]");
+            for ( int col : new TreeSet<Integer>(getMap().get(line).keySet()) ) {
+                String[] info = getMap().get(line).get(col);
+                s.append(TileMap.INFO_SEPARATOR);
+                for ( int i = 0 ; i < info.length ; i++ ) {
+                    s.append(info[i]).append(TileMap.PROP_SEPARATOR);
+                }
+            }
+            s.append("\n");
+        }
+
+        return s.toString();
+
+    }
+
+    /**
+     * Serializes the tile sets
+     * @return
+     */
+    private String getTileSetsAsString() {
+
+        StringBuilder s = new StringBuilder();
+
+        for ( String name : getTileSetIdMap().keySet() ) {
+
+            if ( s.length() > 0 )
+                s.append(TileMap.INFO_SEPARATOR);
+
+            String id = getTileSetIdMap().get(name);
+            TileSet t = getTileSetMap().get(id);
+
+            s.append(id).append(TileMap.PROP_SEPARATOR)
+                    .append(name).append(TileMap.PROP_SEPARATOR)
+                    .append(t.getImagePath()).append(TileMap.PROP_SEPARATOR)
+                    .append(t.getSpriteWidth()).append(TileMap.PROP_SEPARATOR)
+                    .append(t.getSpriteHeight()).append(TileMap.PROP_SEPARATOR)
+                    .append(t.getNumTiles());
+
+        }
+
+        return s.toString();
+    }
+
+    /**
+     * Serialize the backgrounds defined on this map
+     * @return
+     */
+    private String getBackgroundsAsString() {
+        StringBuilder s = new StringBuilder();
+        for ( Background b : getBackgrounds() ) {
+            if ( s.length() > 0)
+                s.append(TileMap.INFO_SEPARATOR);
+            s.append(b.toString());
+        }
+        return s.toString();
+    }
+
+    /**
+     * Returns a String that can be used to Serialize
+     * the sprites defined on the map.
+     *
+     * @return
+     */
+    private String getSpritesAsString() {
+
+        StringBuilder s = new StringBuilder();
+        for ( String[] sprite: getSprites() ) {
+            if ( s.length() > 0)
+                s.append(TileMap.INFO_SEPARATOR);
+
+            for ( int i = 0 ; i < sprite.length ; i++ ) {
+
+                if ( i > 0 )
+                    s.append(PROP_SEPARATOR);
+
+                s.append(sprite[i]);
+
+            }
+        }
+        return s.append("\n").toString();
+
     }
 
 }

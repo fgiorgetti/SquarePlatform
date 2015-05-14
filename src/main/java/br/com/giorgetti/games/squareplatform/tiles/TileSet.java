@@ -17,6 +17,7 @@ public class TileSet {
 
     private Map<Integer,Tile> tileSet;
     private BufferedImage imageSet;
+    private String imagePath;
     private int spriteWidth;
     private int spriteHeight;
     private int numTiles;
@@ -24,6 +25,7 @@ public class TileSet {
     public TileSet(String resourceImagePath, int spriteWidth, int spriteHeight, int numTiles) {
 
         try {
+            this.imagePath = resourceImagePath;
             this.imageSet = ImageIO.read(this.getClass().getResourceAsStream(resourceImagePath));
         } catch (IOException e) {
             this.imageSet = new BufferedImage(0,0,BufferedImage.TYPE_INT_RGB);
@@ -77,7 +79,25 @@ public class TileSet {
     public Tile getTile(String position) {
        return getTile(Integer.parseInt(position));
     }
+
     public Tile getTile(int position) {
         return tileSet.get(position);
     }
+
+    public String getImagePath() {
+        return imagePath;
+    }
+
+    public int getSpriteWidth() {
+        return spriteWidth;
+    }
+
+    public int getSpriteHeight() {
+        return spriteHeight;
+    }
+
+    public int getNumTiles() {
+        return numTiles;
+    }
+
 }

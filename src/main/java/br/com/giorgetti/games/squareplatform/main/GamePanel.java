@@ -18,7 +18,7 @@ public class GamePanel extends JPanel implements Runnable {
     public static final int HEIGHT = 300;
 
     public static final int SCALE = 2;
-    public static final int FPS = 30;
+    public static final int FPS = 60;
     public static final long TARGET_TIME = 1000 / FPS;
 
     private BufferedImage image;

@@ -49,7 +49,7 @@ public class LevelStateManager implements GameState {
 
             for ( int col : map.getMap().get(row).keySet() ) {
 
-                if ( col < map.getColOffset() || col > map.getColOffset() + map.getMaxColsOnScreen() )
+                if ( col < map.getColOffset() || col > map.getColOffset() + map.getMaxColsOnScreen()+1 )
                     continue;
 
                 // Drawing the tile map
@@ -76,17 +76,20 @@ public class LevelStateManager implements GameState {
     public void keyPressed(KeyEvent e) {
 
         if ( e.getKeyCode() == KeyEvent.VK_RIGHT ) {
-            getMap().setPlayerX(getMap().getPlayerX()+16);
+            getMap().setPlayerX(getMap().getPlayerX()+4);
         } else if ( e.getKeyCode() == KeyEvent.VK_LEFT ) {
-            getMap().setPlayerX(getMap().getPlayerX()-16);
+            getMap().setPlayerX(getMap().getPlayerX()-4);
         }
 
         if ( e.getKeyCode() == KeyEvent.VK_UP ) {
-            getMap().setPlayerY(getMap().getPlayerY()+16);
+            getMap().setPlayerY(getMap().getPlayerY()+4);
         } else if ( e.getKeyCode() == KeyEvent.VK_DOWN ) {
-            getMap().setPlayerY(getMap().getPlayerY()-16);
+            getMap().setPlayerY(getMap().getPlayerY()-4);
         }
 
+        if ( e.getKeyCode() == KeyEvent.VK_S) {
+            System.out.println(getMap().toString());
+        }
 
     }
 
