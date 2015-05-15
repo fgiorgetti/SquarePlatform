@@ -132,7 +132,7 @@ public class MapEditorStateManager implements GameState {
         } else if ( e.getKeyCode() == KeyEvent.VK_T ) {
 
             // Get next tile within same tileset
-            if ( currentTileSet.getNumTiles() >= ++curTilePos ) {
+            if ( currentTileSet.getNumTiles() > ++curTilePos ) {
                 currentTile = currentTileSet.getTile(curTilePos);
             // Go to next tileset (if any)
             } else {
@@ -152,7 +152,7 @@ public class MapEditorStateManager implements GameState {
             }
             System.out.println("curtileset = " + curTileSetPos + " - curtilepos = " + curTilePos);
 
-        } else if ( e.getKeyCode() == KeyEvent.VK_T ) {
+        } else if ( e.getKeyCode() == KeyEvent.VK_Y ) {
 
             Tile.TileType[] types = Tile.TileType.values();
 
