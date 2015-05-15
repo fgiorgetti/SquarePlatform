@@ -223,6 +223,8 @@ public class MapEditorStateManager implements GameState {
                         out.close();
                         messages.addMessage("Map has been saved");
                     } catch (Exception e1) {
+                        messages.addMessage("Error saving map");
+                        messages.addMessage(e1.getMessage());
                         dialog.enable();
                     }
                 }
