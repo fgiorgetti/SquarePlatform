@@ -1,6 +1,8 @@
 package br.com.giorgetti.games.squareplatform.gamestate.editor;
 
 import br.com.giorgetti.games.squareplatform.gamestate.GameState;
+import br.com.giorgetti.games.squareplatform.gamestate.interaction.DialogCallbackHandler;
+import br.com.giorgetti.games.squareplatform.gamestate.interaction.DialogGameState;
 import br.com.giorgetti.games.squareplatform.gamestate.interaction.MessageGameState;
 import br.com.giorgetti.games.squareplatform.main.GamePanel;
 import br.com.giorgetti.games.squareplatform.tiles.Tile;
@@ -17,6 +19,8 @@ import java.util.LinkedList;
 
 
 /**
+ * Controls the tile map editor and handle commands.
+ *
  * Created by fgiorgetti on 5/1/15.
  */
 public class MapEditorStateManager implements GameState {
@@ -30,6 +34,7 @@ public class MapEditorStateManager implements GameState {
     private int curTilePos = 0;
     private int curTileType = 0;
     private MessageGameState messages = null;
+    private DialogGameState dialog = null;
 
     public MapEditorStateManager(String mapPath) {
 
@@ -50,12 +55,15 @@ public class MapEditorStateManager implements GameState {
                                         1
                 );
 
+        this.dialog = new DialogGameState(200, 100, 300, 50);
+
     }
 
     public void update() {
 
         map.update();
         messages.update();;
+        dialog.update();
 
     }
 
@@ -63,23 +71,30 @@ public class MapEditorStateManager implements GameState {
 
         map.draw(g);
         messages.draw(g);
-
-        //g.setColor(Color.BLACK);
-        //g.drawRect(map.getPlayerX()-1-map.getX(), GamePanel.HEIGHT-map.getPlayerY()-1+map.getY(), 3, 3);
+        dialog.draw(g);
 
         // Draw currently selected tile on screen
         g.drawImage(currentTile.getTileImage(),
-                    map.getPlayerX()-map.getX()-map.getWidth()/2,
+                map.getPlayerX()-map.getX()-map.getWidth()/2,
+                GamePanel.HEIGHT-map.getPlayerY()+map.getY()-map.getHeight()/2,
+                null);
+
+        // Draw a yellow rectangle over the tile
+        g.setColor(Color.YELLOW);
+        g.drawRect( map.getPlayerX()-map.getX()-map.getWidth()/2,
                     GamePanel.HEIGHT-map.getPlayerY()+map.getY()-map.getHeight()/2,
-                    null);
+                    map.getWidth(), map.getHeight());
 
     }
 
-    public void keyTyped(KeyEvent e) {
-
-    }
+    public void keyTyped(KeyEvent e) {  }
 
     public void keyPressed(KeyEvent e) {
+
+        if ( dialog.isEnabled() ) {
+            dialog.keyPressed(e);
+            return;
+        }
 
         // detect row and column
         int row = getMap().getPlayerRow();
@@ -197,22 +212,26 @@ public class MapEditorStateManager implements GameState {
 
         // Output map content
         if ( e.getKeyCode() == KeyEvent.VK_S) {
-            System.out.println(getMap().toString());
-            try {
-                BufferedWriter out = new BufferedWriter(new FileWriter(new File(getClass().getResource("/maps/level1.dat").toURI())));
-                out.write(getMap().toString());
-                out.flush();
-                out.close();
-            } catch (Exception e1) {
-                e1.printStackTrace();
-            }
+
+            dialog.createDialog("Enter file name", new DialogCallbackHandler() {
+                @Override
+                public void handle(String userInput) {
+                    try {
+                        BufferedWriter out = new BufferedWriter(new FileWriter(new File(userInput)));
+                        out.write(getMap().toString());
+                        out.flush();
+                        out.close();
+                        messages.addMessage("Map has been saved");
+                    } catch (Exception e1) {
+                        dialog.enable();
+                    }
+                }
+            });
         }
 
     }
 
-    public void keyReleased(KeyEvent e) {
-
-    }
+    public void keyReleased(KeyEvent e) {  }
 
     public TileMap getMap() {
         return map;
