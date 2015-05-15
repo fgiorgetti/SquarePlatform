@@ -451,7 +451,9 @@ public class TileMap {
                 String[] info = getMap().get(line).get(col);
                 s.append(TileMap.INFO_SEPARATOR);
                 for ( int i = 0 ; i < info.length ; i++ ) {
-                    s.append(info[i]).append(TileMap.PROP_SEPARATOR);
+                    if ( i > 0 )
+                        s.append(TileMap.PROP_SEPARATOR);
+                    s.append(info[i]);
                 }
             }
             s.append("\n");

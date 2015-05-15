@@ -11,8 +11,11 @@ import java.awt.event.KeyListener;
  */
 public class GameStateManager implements KeyListener {
 
-    public GameState currentState = new LevelStateManager("/maps/level1.dat");
+    public GameState currentState = null;
 
+    public GameStateManager(GameState initialGameState) {
+        this.currentState = initialGameState;
+    }
     public void gameLoop(Graphics2D g) {
 
         currentState.update();

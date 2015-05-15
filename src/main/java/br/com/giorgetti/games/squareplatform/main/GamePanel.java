@@ -1,5 +1,6 @@
 package br.com.giorgetti.games.squareplatform.main;
 
+import br.com.giorgetti.games.squareplatform.gamestate.GameState;
 import br.com.giorgetti.games.squareplatform.gamestate.GameStateManager;
 
 import javax.swing.*;
@@ -28,11 +29,11 @@ public class GamePanel extends JPanel implements Runnable {
 
     private Thread thread = null;
 
-    public GamePanel() {
+    public GamePanel(GameState gs) {
         setPreferredSize(new Dimension(WIDTH * SCALE, HEIGHT * SCALE));
         setFocusable(true);
         requestFocus();
-        gsm = new GameStateManager();
+        gsm = new GameStateManager(gs);
     }
 
 
