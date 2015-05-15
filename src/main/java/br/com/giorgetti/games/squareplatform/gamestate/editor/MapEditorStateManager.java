@@ -1,6 +1,7 @@
 package br.com.giorgetti.games.squareplatform.gamestate.editor;
 
 import br.com.giorgetti.games.squareplatform.gamestate.GameState;
+import br.com.giorgetti.games.squareplatform.gamestate.interaction.MessageGameState;
 import br.com.giorgetti.games.squareplatform.main.GamePanel;
 import br.com.giorgetti.games.squareplatform.tiles.Tile;
 import br.com.giorgetti.games.squareplatform.tiles.TileMap;
@@ -8,12 +9,11 @@ import br.com.giorgetti.games.squareplatform.tiles.TileSet;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
-import java.awt.image.BufferedImageOp;
-import java.io.*;
-import java.net.URISyntaxException;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
 import java.util.HashMap;
 import java.util.LinkedList;
-import java.util.TreeSet;
 
 
 /**
@@ -29,8 +29,10 @@ public class MapEditorStateManager implements GameState {
     private int curTileSetPos = 0;
     private int curTilePos = 0;
     private int curTileType = 0;
+    private MessageGameState messages = null;
 
     public MapEditorStateManager(String mapPath) {
+
         this.map = new TileMap();
         this.map.loadTileMap(mapPath);
         this.map.setPlayerX(map.getWidth() / 2);
@@ -41,17 +43,26 @@ public class MapEditorStateManager implements GameState {
         currentTileSet = tileSetList.get(curTileSetPos);
         currentTile = currentTileSet.getTile(curTilePos);
 
+        messages = new MessageGameState(GamePanel.WIDTH - 128,
+                                        GamePanel.HEIGHT - 64,
+                                        128,
+                                        128,
+                                        1
+                );
+
     }
 
     public void update() {
 
         map.update();
+        messages.update();;
 
     }
 
     public void draw(Graphics2D g) {
 
         map.draw(g);
+        messages.draw(g);
 
         //g.setColor(Color.BLACK);
         //g.drawRect(map.getPlayerX()-1-map.getX(), GamePanel.HEIGHT-map.getPlayerY()-1+map.getY(), 3, 3);
@@ -163,6 +174,8 @@ public class MapEditorStateManager implements GameState {
                 curTileType = 0;
             }
 
+
+            messages.addMessage(Tile.TileType.fromType(curTileType).name());
             System.out.println(Tile.TileType.fromType(curTileType));
 
         // delete a tile from the map
