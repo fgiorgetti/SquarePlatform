@@ -24,6 +24,12 @@ public class Tile {
            this.type = type;
         }
 
+        public static TileType fromType(int type) {
+            if ( type == 0 )
+                return NORMAL;
+            else
+                return BLOCKED;
+        }
         public static TileType fromType(String type) {
             if ( "0".equals(type) ) {
                 return NORMAL;

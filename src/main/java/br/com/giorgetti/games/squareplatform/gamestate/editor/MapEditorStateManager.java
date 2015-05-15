@@ -2,14 +2,16 @@ package br.com.giorgetti.games.squareplatform.gamestate.editor;
 
 import br.com.giorgetti.games.squareplatform.gamestate.GameState;
 import br.com.giorgetti.games.squareplatform.main.GamePanel;
-import br.com.giorgetti.games.squareplatform.tiles.Background;
 import br.com.giorgetti.games.squareplatform.tiles.Tile;
-import br.com.giorgetti.games.squareplatform.tiles.Tile.TileType;
 import br.com.giorgetti.games.squareplatform.tiles.TileMap;
+import br.com.giorgetti.games.squareplatform.tiles.TileSet;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
+import java.awt.image.BufferedImageOp;
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.TreeSet;
 
 
 /**
@@ -19,56 +21,44 @@ public class MapEditorStateManager implements GameState {
 
     protected TileMap map;
 
+    private Tile currentTile = null;
+    private TileSet currentTileSet = null;
+    private LinkedList<TileSet> tileSetList = null;
+    private int curTileSetPos = 0;
+    private int curTilePos = 0;
+    private int curTileType = 0;
+
     public MapEditorStateManager(String mapPath) {
         this.map = new TileMap();
         this.map.loadTileMap(mapPath);
         this.map.setPlayerX(map.getWidth() / 2);
         this.map.setPlayerY(map.getHeight() / 2);
+
+
+        tileSetList = new LinkedList<TileSet>(getMap().getTileSetMap().values());
+        currentTileSet = tileSetList.get(curTileSetPos);
+        currentTile = currentTileSet.getTile(curTilePos);
+
     }
 
     public void update() {
 
-        map.setX(map.getPlayerX() - GamePanel.WIDTH / 2);
-        map.setY(map.getPlayerY() - GamePanel.HEIGHT / 2);
-        map.setColOffset(map.getX() / map.getWidth());
-        map.setRowOffset(map.getY() / map.getHeight() + 1);
+        map.update();
 
     }
 
     public void draw(Graphics2D g) {
 
-        // Drawing backgrounds
-        // TODO Consider current position and move speed
-        for ( Background bg : map.getBackgrounds() ) {
-            g.drawImage(bg.getImage(), 0, 0, null);
-            //g.drawImage(bg.getImage().getScaledInstance(GamePanel.WIDTH, GamePanel.HEIGHT, 0), 0, 0, null);
-        }
+        map.draw(g);
 
-        // Drawing map on the screen...
-        for ( int row : map.getMap().keySet() ) {
+        //g.setColor(Color.BLACK);
+        //g.drawRect(map.getPlayerX()-1-map.getX(), GamePanel.HEIGHT-map.getPlayerY()-1+map.getY(), 3, 3);
 
-            if ( row < map.getRowOffset() || row > map.getRowOffset() + map.getMaxRowsOnScreen() )
-                continue;
-
-            for ( int col : map.getMap().get(row).keySet() ) {
-
-                if ( col < map.getColOffset() || col > map.getColOffset() + map.getMaxColsOnScreen()+1 )
-                    continue;
-
-                // Drawing the tile map
-                String[] arr = map.getMap().get(row).get(col);
-                Tile t = map.getTileSetMap().get(arr[TileMap.POS_MAP_TILESET_ID]).getTile(arr[TileMap.POS_MAP_TILEPOS_ID]);
-                t.setType(TileType.fromType(arr[TileMap.POS_MAP_TILE_TYPE]));
-                g.drawImage(t.getTileImage(),
-                        col * map.getWidth() - map.getX(),
-                        GamePanel.HEIGHT - row * map.getHeight() + map.getY(),
-                        null);
-
-            }
-        }
-
-        g.setColor(Color.BLACK);
-        g.drawRect(map.getPlayerX()-1-map.getX(), GamePanel.HEIGHT-map.getPlayerY()-1+map.getY(), 3, 3);
+        // Draw currently selected tile on screen
+        g.drawImage(currentTile.getTileImage(),
+                    map.getPlayerX()-map.getX()-map.getWidth()/2,
+                    GamePanel.HEIGHT-map.getPlayerY()+map.getY()-map.getHeight()/2,
+                    null);
 
     }
 
@@ -78,47 +68,117 @@ public class MapEditorStateManager implements GameState {
 
     public void keyPressed(KeyEvent e) {
 
+        // detect row and column
+        int row = getMap().getPlayerRow();
+        int col = getMap().getPlayerCol();
+
+        // go right a tile
         if ( e.getKeyCode() == KeyEvent.VK_RIGHT ) {
+
             getMap().setPlayerX(getMap().getPlayerX()+map.getWidth());
-            // if reached right
+
+            // if reached right of map
             if ( getMap().getPlayerX() == getMap().getCols() * getMap().getWidth() ) {
                 getMap().setPlayerX(getMap().getPlayerX() - map.getWidth() / 2);
             }
+
+        // go left a tile
         } else if ( e.getKeyCode() == KeyEvent.VK_LEFT ) {
+
             getMap().setPlayerX(getMap().getPlayerX()-map.getWidth());
-            // if reached left
+
+            // if reached left of map
             if ( getMap().getPlayerX() == 0 ) {
                 getMap().setPlayerX(map.getWidth() / 2);
             }
+
         }
 
+        // go up a tile
         if ( e.getKeyCode() == KeyEvent.VK_UP ) {
+
             getMap().setPlayerY(getMap().getPlayerY() + map.getHeight());
 
-            // if reached top
+            // if reached top of map
             if ( getMap().getPlayerY() == getMap().getRows() * getMap().getHeight() ) {
                 getMap().setPlayerY(getMap().getPlayerY() - map.getHeight() / 2);
             }
+
+        // go down a tile
         } else if ( e.getKeyCode() == KeyEvent.VK_DOWN ) {
+
             getMap().setPlayerY(getMap().getPlayerY() - map.getHeight());
-            // if reached bottom
+
+            // if reached bottom of map
             if ( getMap().getPlayerY() == 0 ) {
                 getMap().setPlayerY(map.getHeight() / 2);
             }
+
         // Add selected tile to the selected row/column
         } else if ( e.getKeyCode() == KeyEvent.VK_SPACE ) {
 
-            int row = (( getMap().getPlayerY() ) / getMap().getHeight()) + 1;
-            int col = ( getMap().getPlayerX() ) / getMap().getWidth();
-
+            // If row does not exist on the map, add it
             if (!getMap().getMap().containsKey(row))
                 getMap().getMap().put(row, new HashMap<Integer, String[]>());
 
-            // TODO add key listener to select tile to add and use it below...
-            // TODO select tile type
-            getMap().getMap().get(row).put(col, (col + ",1,1,0").split(","));
+            // Add selected tile to the selected position on the map
+            getMap().getMap().get(row).put(col,
+                    (col + TileMap.PROP_SEPARATOR +
+                            (curTileSetPos+1) + TileMap.PROP_SEPARATOR +
+                            curTilePos + TileMap.PROP_SEPARATOR +
+                            curTileType).split(","));
+
+        // Change tile
+        } else if ( e.getKeyCode() == KeyEvent.VK_T ) {
+
+            // Get next tile within same tileset
+            if ( currentTileSet.getNumTiles() >= ++curTilePos ) {
+                currentTile = currentTileSet.getTile(curTilePos);
+            // Go to next tileset (if any)
+            } else {
+
+                // Use the first tile of the next tileset
+                curTilePos = 0;
+
+                // If already on last tile set, go back to first
+                if ( tileSetList.size() == ++curTileSetPos ) {
+                    curTileSetPos = 0;
+                } else {
+                    currentTileSet = tileSetList.get(curTileSetPos);
+                }
+
+                currentTile = currentTileSet.getTile(curTilePos);
+
+            }
+            System.out.println("curtileset = " + curTileSetPos + " - curtilepos = " + curTilePos);
+
+        } else if ( e.getKeyCode() == KeyEvent.VK_T ) {
+
+            Tile.TileType[] types = Tile.TileType.values();
+
+            if ( ++curTileType >= types.length ) {
+                curTileType = 0;
+            }
+
+            System.out.println(Tile.TileType.fromType(curTileType));
+
+        } else if ( e.getKeyCode() == KeyEvent.VK_X ) {
+
+            // Remove selected tile
+            if ( getMap().getMap().containsKey(row) &&
+                    getMap().getMap().get(row).containsKey(col) ) {
+                getMap().getMap().get(row).remove(col);
+
+                // If row is empty, remove row
+                if ( getMap().getMap().get(row).isEmpty() ) {
+                    getMap().getMap().remove(row);
+                }
+
+            }
+
         }
 
+        // Output map content
         if ( e.getKeyCode() == KeyEvent.VK_S) {
             System.out.println(getMap().toString());
         }

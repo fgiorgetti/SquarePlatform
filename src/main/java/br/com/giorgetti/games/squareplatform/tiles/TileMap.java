@@ -3,11 +3,13 @@ package br.com.giorgetti.games.squareplatform.tiles;
 import br.com.giorgetti.games.squareplatform.exception.ErrorConstants;
 import br.com.giorgetti.games.squareplatform.main.GamePanel;
 
+import java.awt.*;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.*;
+import java.util.List;
 
 /**
  * Created by fgiorgetti on 5/1/15.
@@ -528,6 +530,56 @@ public class TileMap {
             }
         }
         return s.append("\n").toString();
+
+    }
+
+    public int getPlayerRow() {
+        return (( getPlayerY() ) / getHeight()) + 1;
+    }
+
+    public int getPlayerCol() {
+        return ( getPlayerX() ) / getWidth();
+    }
+
+    public void update() {
+
+        setX(getPlayerX() - GamePanel.WIDTH / 2);
+        setY(getPlayerY() - GamePanel.HEIGHT / 2);
+        setColOffset(getX() / getWidth());
+        setRowOffset(getY() / getHeight() + 1);
+
+    }
+    public void draw(Graphics2D g) {
+
+        // Drawing backgrounds
+        // TODO Consider current position and move speed
+        for ( Background bg : getBackgrounds() ) {
+            g.drawImage(bg.getImage(), 0, 0, null);
+            //g.drawImage(bg.getImage().getScaledInstance(GamePanel.WIDTH, GamePanel.HEIGHT, 0), 0, 0, null);
+        }
+
+        // Drawing map on the screen...
+        for ( int row : getMap().keySet() ) {
+
+            if ( row < getRowOffset() || row > getRowOffset() + getMaxRowsOnScreen() )
+                continue;
+
+            for ( int col : getMap().get(row).keySet() ) {
+
+                if ( col < getColOffset() || col > getColOffset() + getMaxColsOnScreen()+1 )
+                    continue;
+
+                // Drawing the tile map
+                String[] arr = getMap().get(row).get(col);
+                Tile t = getTileSetMap().get(arr[TileMap.POS_MAP_TILESET_ID]).getTile(arr[TileMap.POS_MAP_TILEPOS_ID]);
+                t.setType(Tile.TileType.fromType(arr[TileMap.POS_MAP_TILE_TYPE]));
+                g.drawImage(t.getTileImage(),
+                        col * getWidth() - getX(),
+                        GamePanel.HEIGHT - row * getHeight() + getY(),
+                        null);
+
+            }
+        }
 
     }
 
