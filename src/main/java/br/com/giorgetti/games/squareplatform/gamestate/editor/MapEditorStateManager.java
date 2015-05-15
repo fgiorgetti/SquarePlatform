@@ -9,6 +9,8 @@ import br.com.giorgetti.games.squareplatform.tiles.TileSet;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImageOp;
+import java.io.*;
+import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.TreeSet;
@@ -35,7 +37,7 @@ public class MapEditorStateManager implements GameState {
         this.map.setPlayerY(map.getHeight() / 2);
 
 
-        tileSetList = new LinkedList<TileSet>(getMap().getTileSetMap().values());
+        tileSetList = new LinkedList<>(getMap().getTileSetMap().values());
         currentTileSet = tileSetList.get(curTileSetPos);
         currentTile = currentTileSet.getTile(curTilePos);
 
@@ -152,6 +154,7 @@ public class MapEditorStateManager implements GameState {
             }
             System.out.println("curtileset = " + curTileSetPos + " - curtilepos = " + curTilePos);
 
+        // change tile type
         } else if ( e.getKeyCode() == KeyEvent.VK_Y ) {
 
             Tile.TileType[] types = Tile.TileType.values();
@@ -162,6 +165,7 @@ public class MapEditorStateManager implements GameState {
 
             System.out.println(Tile.TileType.fromType(curTileType));
 
+        // delete a tile from the map
         } else if ( e.getKeyCode() == KeyEvent.VK_X ) {
 
             // Remove selected tile
@@ -181,6 +185,14 @@ public class MapEditorStateManager implements GameState {
         // Output map content
         if ( e.getKeyCode() == KeyEvent.VK_S) {
             System.out.println(getMap().toString());
+            try {
+                BufferedWriter out = new BufferedWriter(new FileWriter(new File(getClass().getResource("/maps/level1.dat").toURI())));
+                out.write(getMap().toString());
+                out.flush();
+                out.close();
+            } catch (Exception e1) {
+                e1.printStackTrace();
+            }
         }
 
     }
