@@ -74,7 +74,7 @@ public class DialogGameState implements GameState {
         g.fillRect(x, y, width, height);
         g.setColor(fgColor);
 
-        g.drawString(message.toString(), 2 + x, 10 + y);
+        g.drawString(message.toString()+"|", 2 + x, 10 + y);
 
     }
 
@@ -97,6 +97,10 @@ public class DialogGameState implements GameState {
     @Override
     public void keyPressed(KeyEvent e) {
 
+        // Ignore keys
+        if ( e.getKeyCode() == KeyEvent.VK_SHIFT || e.getKeyCode() == KeyEvent.VK_CONTROL )
+            return;
+
         if ( e.getKeyCode() == KeyEvent.VK_ENTER || !enabled ) {
             this.enabled = false;
             handler.handle(input.toString());
@@ -104,6 +108,16 @@ public class DialogGameState implements GameState {
             return;
         } else if ( e.getKeyCode() == KeyEvent.VK_ESCAPE ) {
             disable();
+        } else if ( e.getKeyCode() == KeyEvent.VK_BACK_SPACE ||
+                    e.getKeyCode() == KeyEvent.VK_DELETE ) {
+
+            if ( this.input.length() > 0 ) {
+                this.input.deleteCharAt(input.length() - 1);
+                this.message.deleteCharAt(message.length() - 1);
+            }
+
+            return;
+
         }
 
         message.append(e.getKeyChar());

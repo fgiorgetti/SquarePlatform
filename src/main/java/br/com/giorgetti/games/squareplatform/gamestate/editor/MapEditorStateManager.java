@@ -55,7 +55,7 @@ public class MapEditorStateManager implements GameState {
                                         1
                 );
 
-        this.dialog = new DialogGameState(200, 100, 300, 50);
+        this.dialog = new DialogGameState(50, 100, 250, 30);
 
     }
 
@@ -224,6 +224,7 @@ public class MapEditorStateManager implements GameState {
                         messages.addMessage("Map has been saved");
                     } catch (Exception e1) {
                         messages.addMessage("Error saving map");
+                        try { Thread.sleep(1); } catch (InterruptedException e2) { e2.printStackTrace(); }
                         messages.addMessage(e1.getMessage());
                         dialog.enable();
                     }
