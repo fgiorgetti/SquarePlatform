@@ -32,7 +32,7 @@ public class MapEditorStateManager implements GameState {
     private LinkedList<TileSet> tileSetList = null;
     private int curTileSetPos = 0;
     private int curTilePos = 0;
-    private int curTileType = 0;
+    private int curTileType = Tile.TileType.BLOCKED.getType();
     private MessageGameState messages = null;
     private DialogGameState dialog = null;
 
@@ -48,9 +48,9 @@ public class MapEditorStateManager implements GameState {
         currentTileSet = tileSetList.get(curTileSetPos);
         currentTile = currentTileSet.getTile(curTilePos);
 
-        messages = new MessageGameState(GamePanel.WIDTH - 128,
+        messages = new MessageGameState(GamePanel.WIDTH - 160,
                                         GamePanel.HEIGHT - 64,
-                                        128,
+                                        160,
                                         128,
                                         1
                 );

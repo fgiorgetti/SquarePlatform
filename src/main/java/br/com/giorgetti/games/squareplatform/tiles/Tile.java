@@ -37,6 +37,11 @@ public class Tile {
 
             return BLOCKED;
         }
+
+        public int getType() {
+            return this.type;
+        }
+
     }
 
     public Tile(BufferedImage image, TileType type) {

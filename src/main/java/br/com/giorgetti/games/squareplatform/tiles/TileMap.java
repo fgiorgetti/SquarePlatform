@@ -552,10 +552,21 @@ public class TileMap {
     public void draw(Graphics2D g) {
 
         // Drawing backgrounds
-        // TODO Consider current position and move speed
         for ( Background bg : getBackgrounds() ) {
-            g.drawImage(bg.getImage(), 0, 0, null);
-            //g.drawImage(bg.getImage().getScaledInstance(GamePanel.WIDTH, GamePanel.HEIGHT, 0), 0, 0, null);
+
+            int bgWidth = bg.getImage().getWidth();
+            int bgHeigth = bg.getImage().getHeight();
+
+            int bgX = (- getX() / 100 * bg.getSpeedPct() % bgWidth );
+            int bgY = (  getY() % bgHeigth);
+            //int bgY = (  getY() / 100 * bg.getSpeedPct()  % bgHeigth);//when moving Y axis slowly, it gets weird
+
+            // Consider X offset as map.x / 100 * bg.speed
+            g.drawImage(bg.getImage(), null, bgX, bgY);
+            g.drawImage(bg.getImage(), null, bgX + bgWidth, bgY);
+
+            g.drawImage(bg.getImage(), null, bgX, bgY - bgHeigth);
+            g.drawImage(bg.getImage(), null, bgX + bgWidth, bgY - bgHeigth);
         }
 
         // Drawing map on the screen...
@@ -573,6 +584,7 @@ public class TileMap {
                 String[] arr = getMap().get(row).get(col);
                 Tile t = getTileSetMap().get(arr[TileMap.POS_MAP_TILESET_ID]).getTile(arr[TileMap.POS_MAP_TILEPOS_ID]);
                 t.setType(Tile.TileType.fromType(arr[TileMap.POS_MAP_TILE_TYPE]));
+
                 g.drawImage(t.getTileImage(),
                         col * getWidth() - getX(),
                         GamePanel.HEIGHT - row * getHeight() + getY(),
