@@ -79,6 +79,7 @@ public class TileMap {
     private static final int POS_PLAYER_X = 0;
     private static final int POS_PLAYER_Y = 1;
     private int playerX, playerY;
+    private int playerXSpeed, playerYSpeed;
 
     // Stores identification for each sprite on the map
     private List<String[]> sprites;
@@ -316,6 +317,19 @@ public class TileMap {
         }
     }
 
+    public int getPlayerXSpeed() {
+        return this.playerXSpeed;
+    }
+    public int getPlayerYSpeed() {
+        return this.playerYSpeed;
+    }
+    public void setPlayerXSpeed(int xSpeed) {
+        this.playerXSpeed = xSpeed;
+    }
+    public void setPlayerYSpeed(int ySpeed) {
+        this.playerYSpeed = ySpeed;
+    }
+
     public List<String[]> getSprites() {
         return sprites;
     }
@@ -543,8 +557,12 @@ public class TileMap {
 
     public void update() {
 
+        setPlayerX(getPlayerX() + getPlayerXSpeed());
+        setPlayerY(getPlayerY() + getPlayerYSpeed());
+
         setX(getPlayerX() - GamePanel.WIDTH / 2);
         setY(getPlayerY() - GamePanel.HEIGHT / 2);
+
         setColOffset(getX() / getWidth());
         setRowOffset(getY() / getHeight() + 1);
 
@@ -557,9 +575,8 @@ public class TileMap {
             int bgWidth = bg.getImage().getWidth();
             int bgHeigth = bg.getImage().getHeight();
 
-            int bgX = (- getX() / 100 * bg.getSpeedPct() % bgWidth );
+            int bgX = (int) (- getX() / 100.00 * bg.getSpeedPct() % bgWidth);
             int bgY = (  getY() % bgHeigth);
-            //int bgY = (  getY() / 100 * bg.getSpeedPct()  % bgHeigth);//when moving Y axis slowly, it gets weird
 
             // Consider X offset as map.x / 100 * bg.speed
             g.drawImage(bg.getImage(), null, bgX, bgY);

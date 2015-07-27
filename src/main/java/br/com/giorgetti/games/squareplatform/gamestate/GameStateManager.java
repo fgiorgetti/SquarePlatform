@@ -39,6 +39,8 @@ public class GameStateManager implements KeyListener {
 
     public void keyReleased(KeyEvent e) {
 
+        currentState.keyReleased(e);
+
     }
 
 }

@@ -42,20 +42,32 @@ public class LevelStateManager implements GameState {
     public void keyPressed(KeyEvent e) {
 
         if ( e.getKeyCode() == KeyEvent.VK_RIGHT ) {
-            getMap().setPlayerX(getMap().getPlayerX()+4);
+            getMap().setPlayerXSpeed(4);
         } else if ( e.getKeyCode() == KeyEvent.VK_LEFT ) {
-            getMap().setPlayerX(getMap().getPlayerX()-4);
+            getMap().setPlayerXSpeed(-4);
         }
 
         if ( e.getKeyCode() == KeyEvent.VK_UP ) {
-            getMap().setPlayerY(getMap().getPlayerY()+4);
+            getMap().setPlayerYSpeed(+4);
         } else if ( e.getKeyCode() == KeyEvent.VK_DOWN ) {
-            getMap().setPlayerY(getMap().getPlayerY()-4);
+            getMap().setPlayerYSpeed(-4);
         }
 
     }
 
     public void keyReleased(KeyEvent e) {
+
+        if ( e.getKeyCode() == KeyEvent.VK_RIGHT ) {
+            getMap().setPlayerXSpeed(0);
+        } else if ( e.getKeyCode() == KeyEvent.VK_LEFT ) {
+            getMap().setPlayerXSpeed(0);
+        }
+
+        if ( e.getKeyCode() == KeyEvent.VK_UP ) {
+            getMap().setPlayerYSpeed(0);
+        } else if ( e.getKeyCode() == KeyEvent.VK_DOWN ) {
+            getMap().setPlayerYSpeed(0);
+        }
 
     }
 
