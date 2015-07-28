@@ -568,6 +568,9 @@ public class TileMap {
 
     }
     public void draw(Graphics2D g) {
+       draw(g, false);
+    }
+    public void draw(Graphics2D g, boolean editMode) {
 
         // Drawing backgrounds
         for ( Background bg : getBackgrounds() ) {
@@ -607,6 +610,19 @@ public class TileMap {
                         GamePanel.HEIGHT - row * getHeight() + getY(),
                         null);
 
+                if ( editMode && t.getType() == Tile.TileType.BLOCKED ) {
+                    g.setColor(Color.black);
+                    g.fillRect(
+                            col * getWidth() - getX() + (getWidth() / 2) - 2,
+                            GamePanel.HEIGHT - row * getHeight() + getY() + (getHeight() / 2) - 10,
+                            10, 15
+                    );
+                    g.setColor(Color.white);
+                    g.drawString("B",
+                            col * getWidth() - getX() + (getWidth() / 2),
+                            GamePanel.HEIGHT - row * getHeight() + getY() + (getHeight() / 2)
+                    );
+                }
             }
         }
 

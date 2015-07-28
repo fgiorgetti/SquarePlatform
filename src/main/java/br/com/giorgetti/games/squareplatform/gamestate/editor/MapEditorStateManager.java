@@ -69,21 +69,37 @@ public class MapEditorStateManager implements GameState {
 
     public void draw(Graphics2D g) {
 
-        map.draw(g);
+        map.draw(g, true);
         messages.draw(g);
         dialog.draw(g);
 
         // Draw currently selected tile on screen
         g.drawImage(currentTile.getTileImage(),
-                map.getPlayerX()-map.getX()-map.getWidth()/2,
-                GamePanel.HEIGHT-map.getPlayerY()+map.getY()-map.getHeight()/2,
+                map.getPlayerX() - map.getX() - map.getWidth() / 2,
+                GamePanel.HEIGHT - map.getPlayerY() + map.getY() - map.getHeight() / 2,
                 null);
 
-        // Draw a yellow rectangle over the tile
+        // Draw a yellow rectangle around the tile
         g.setColor(Color.YELLOW);
-        g.drawRect( map.getPlayerX()-map.getX()-map.getWidth()/2,
-                    GamePanel.HEIGHT-map.getPlayerY()+map.getY()-map.getHeight()/2,
-                    map.getWidth(), map.getHeight());
+        g.drawRect(map.getPlayerX() - map.getX() - map.getWidth() / 2,
+                GamePanel.HEIGHT - map.getPlayerY() + map.getY() - map.getHeight() / 2,
+                map.getWidth(), map.getHeight());
+
+
+        // Draw a B on current tile
+        if ( curTileType == Tile.TileType.BLOCKED.getType() ) {
+            g.setColor(Color.black);
+            g.fillRect(
+                    map.getPlayerX() - map.getX() - 2,
+                    GamePanel.HEIGHT - map.getPlayerY() + map.getY() - 10,
+                    10, 15
+            );
+            g.setColor(Color.white);
+            g.drawString("B",
+                    map.getPlayerX() - map.getX(),
+                    GamePanel.HEIGHT - map.getPlayerY() + map.getY()
+            );
+        }
 
     }
 
@@ -113,7 +129,7 @@ public class MapEditorStateManager implements GameState {
         // go left a tile
         } else if ( e.getKeyCode() == KeyEvent.VK_LEFT ) {
 
-            getMap().setPlayerX(getMap().getPlayerX()-map.getWidth());
+            getMap().setPlayerX(getMap().getPlayerX() - map.getWidth());
 
             // if reached left of map
             if ( getMap().getPlayerX() == 0 ) {
@@ -189,9 +205,8 @@ public class MapEditorStateManager implements GameState {
                 curTileType = 0;
             }
 
-
             messages.addMessage(Tile.TileType.fromType(curTileType).name());
-            System.out.println(Tile.TileType.fromType(curTileType));
+            System.out.println("TESTE = " + Tile.TileType.fromType(curTileType));
 
         // delete a tile from the map
         } else if ( e.getKeyCode() == KeyEvent.VK_X ) {
@@ -234,7 +249,24 @@ public class MapEditorStateManager implements GameState {
 
     }
 
-    public void keyReleased(KeyEvent e) {  }
+    public void keyReleased(KeyEvent e) {
+
+        // go right a tile
+        if ( e.getKeyCode() == KeyEvent.VK_RIGHT ) {
+            getMap().setPlayerXSpeed(0);
+        } else if ( e.getKeyCode() == KeyEvent.VK_LEFT ) {
+            getMap().setPlayerXSpeed(0);
+        }
+
+        // go up a tile
+        if ( e.getKeyCode() == KeyEvent.VK_UP ) {
+            getMap().setPlayerYSpeed(0);
+        // go down a tile
+        } else if ( e.getKeyCode() == KeyEvent.VK_DOWN ) {
+            getMap().setPlayerYSpeed(0);
+        }
+
+    }
 
     public TileMap getMap() {
         return map;
