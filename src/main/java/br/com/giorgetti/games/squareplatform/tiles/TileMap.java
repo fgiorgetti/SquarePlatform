@@ -579,7 +579,8 @@ public class TileMap {
             int bgHeigth = bg.getImage().getHeight();
 
             int bgX = (int) (- getX() / 100.00 * bg.getSpeedPct() % bgWidth);
-            int bgY = (  getY() % bgHeigth);
+            int bgY = (int) ( (getY()/100.00 * bg.getSpeedPct()/2) % bgHeigth);
+            //int bgY = (  getY() % bgHeigth);
 
             // Consider X offset as map.x / 100 * bg.speed
             g.drawImage(bg.getImage(), null, bgX, bgY);
