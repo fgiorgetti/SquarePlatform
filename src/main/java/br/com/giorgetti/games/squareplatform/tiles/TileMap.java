@@ -107,7 +107,7 @@ public class TileMap {
     public static final int POS_MAP_TILEPOS_ID = 2;
     public static final int POS_MAP_TILE_TYPE  = 3;
 
-    private Map<Integer,Map<Integer,String[]>> map = new HashMap<Integer, Map<Integer, String[]>>();
+    private Map<Integer,Map<Integer,String[]>> map = new HashMap<>();
 
     /**
      * Loads the tile map from the given path. First attempts to
@@ -325,9 +325,17 @@ public class TileMap {
     }
     public void setPlayerXSpeed(int xSpeed) {
         this.playerXSpeed = xSpeed;
+        if ( playerXSpeed > 4 )
+            this.playerXSpeed = 4;
+        else if ( playerXSpeed < -4 )
+            this.playerXSpeed = -4;
     }
     public void setPlayerYSpeed(int ySpeed) {
         this.playerYSpeed = ySpeed;
+        if ( playerYSpeed > 4 )
+            playerYSpeed = 4;
+        else if ( playerYSpeed < -4 )
+            playerYSpeed = -4;
     }
 
     public List<String[]> getSprites() {
