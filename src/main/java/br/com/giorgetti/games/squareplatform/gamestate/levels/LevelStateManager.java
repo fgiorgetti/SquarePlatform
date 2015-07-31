@@ -2,6 +2,7 @@ package br.com.giorgetti.games.squareplatform.gamestate.levels;
 
 import br.com.giorgetti.games.squareplatform.gamestate.GameState;
 import br.com.giorgetti.games.squareplatform.main.GamePanel;
+import br.com.giorgetti.games.squareplatform.sprites.Player;
 import br.com.giorgetti.games.squareplatform.tiles.TileMap;
 
 import java.awt.*;
@@ -19,10 +20,12 @@ public class LevelStateManager implements GameState {
     protected TileMap map;
     protected boolean [] keyMap = new boolean[255];
     protected ArrayList<Integer> supportedKeys = new ArrayList<>();
+    protected Player player;
 
-    public LevelStateManager(String mapPath) {
+    public LevelStateManager(String mapPath, Player p) {
         this.map = new TileMap();
-        this.map.loadTileMap(mapPath);
+        this.map.loadTileMap(mapPath, p);
+        this.player = p;
 
         keyMap[KeyEvent.VK_UP] = false;
         keyMap[KeyEvent.VK_DOWN] = false;
@@ -45,13 +48,13 @@ public class LevelStateManager implements GameState {
 
     private void updatePlayer() {
 
-        getMap().setPlayerXSpeed(
+        player.setPlayerXSpeed(
                 keyMap[KeyEvent.VK_RIGHT]? +4:
                 keyMap[KeyEvent.VK_LEFT]?  -4:
                         0
         );
 
-        getMap().setPlayerYSpeed(
+        player.setPlayerYSpeed(
                 keyMap[KeyEvent.VK_UP]? +4:
                         keyMap[KeyEvent.VK_DOWN]?  -4:
                                 0
@@ -64,7 +67,7 @@ public class LevelStateManager implements GameState {
         map.draw(g);
 
         g.setColor(Color.BLACK);
-        g.drawRect(map.getPlayerX()-2-map.getX(), GamePanel.HEIGHT-map.getPlayerY()-2+map.getY(), 4, 4);
+        g.drawRect(player.getPlayerX()-2-map.getX(), GamePanel.HEIGHT-player.getPlayerY()-2+map.getY(), 4, 4);
 
     }
 

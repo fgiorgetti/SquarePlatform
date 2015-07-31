@@ -2,6 +2,7 @@ package br.com.giorgetti.games.squareplatform.tiles;
 
 import br.com.giorgetti.games.squareplatform.exception.ErrorConstants;
 import br.com.giorgetti.games.squareplatform.main.GamePanel;
+import br.com.giorgetti.games.squareplatform.sprites.Player;
 
 import java.awt.*;
 import java.io.BufferedReader;
@@ -78,8 +79,8 @@ public class TileMap {
     // Player initial position
     private static final int POS_PLAYER_X = 0;
     private static final int POS_PLAYER_Y = 1;
-    private int playerX, playerY;
-    private int playerXSpeed, playerYSpeed;
+
+    private Player player;
 
     // Stores identification for each sprite on the map
     private List<String[]> sprites;
@@ -128,12 +129,13 @@ public class TileMap {
      *
      * @param tileMapPath
      */
-    public void loadTileMap(String tileMapPath) {
+    public void loadTileMap(String tileMapPath, Player player) {
 
         // Opening the tile map file
         BufferedReader reader = null;
         try {
             reader = new BufferedReader(new FileReader(new File(getClass().getResource(tileMapPath).toURI())));
+            this.player = player;
         } catch (Exception e1) {
             System.err.println("Unable to load tile map: " + tileMapPath);
             System.exit(ErrorConstants.INVALID_TILE_MAP_PATH);
@@ -162,8 +164,6 @@ public class TileMap {
             System.err.println("I/O Error while reading: " + tileMapPath);
             System.exit(ErrorConstants.IO_ERROR_READING_TILE_MAP);
         }
-
-
 
     }
 
@@ -226,8 +226,8 @@ public class TileMap {
                 break;
             case "PLAYER":
                 arr = value.split(PROP_SEPARATOR);
-                playerX = Integer.parseInt(arr[POS_PLAYER_X]);
-                playerY = Integer.parseInt(arr[POS_PLAYER_Y]);
+                player.setPlayerX(Integer.parseInt(arr[POS_PLAYER_X]));
+                player.setPlayerY(Integer.parseInt(arr[POS_PLAYER_Y]));
                 break;
         }
     }
@@ -287,55 +287,6 @@ public class TileMap {
 
     public void setBackgrounds(List<Background> backgrounds) {
         this.backgrounds = backgrounds;
-    }
-
-    public int getPlayerX() {
-        return playerX;
-    }
-
-    public void setPlayerX(int playerX) {
-        if ( playerX > cols * width ) {
-            this.playerX = cols * width;
-        } else if ( playerX < 0 ) {
-            this.playerX = 0;
-        } else {
-            this.playerX = playerX;
-        }
-    }
-
-    public int getPlayerY() {
-        return playerY;
-    }
-
-    public void setPlayerY(int playerY) {
-        if ( playerY > rows * height) {
-            this.playerY = rows * height;
-        } else if ( playerY < 0 ) {
-            this.playerY = 0;
-        } else {
-            this.playerY = playerY;
-        }
-    }
-
-    public int getPlayerXSpeed() {
-        return this.playerXSpeed;
-    }
-    public int getPlayerYSpeed() {
-        return this.playerYSpeed;
-    }
-    public void setPlayerXSpeed(int xSpeed) {
-        this.playerXSpeed = xSpeed;
-        if ( playerXSpeed > 4 )
-            this.playerXSpeed = 4;
-        else if ( playerXSpeed < -4 )
-            this.playerXSpeed = -4;
-    }
-    public void setPlayerYSpeed(int ySpeed) {
-        this.playerYSpeed = ySpeed;
-        if ( playerYSpeed > 4 )
-            playerYSpeed = 4;
-        else if ( playerYSpeed < -4 )
-            playerYSpeed = -4;
     }
 
     public List<String[]> getSprites() {
@@ -454,7 +405,7 @@ public class TileMap {
                 .append("BG=").append(getBackgroundsAsString()).append("\n")
                 .append("TS=").append(getTileSetsAsString()).append("\n")
                 .append("SPRITES=").append(getSpritesAsString())
-                .append("PLAYER=").append(getPlayerX()).append(PROP_SEPARATOR).append(getPlayerY()).append("\n")
+                .append("PLAYER=").append(player.getPlayerX()).append(PROP_SEPARATOR).append(player.getPlayerY()).append("\n")
                 .append(getMapAsString());
         
 
@@ -556,20 +507,19 @@ public class TileMap {
     }
 
     public int getPlayerRow() {
-        return (( getPlayerY() ) / getHeight()) + 1;
+        return (( player.getPlayerY() ) / getHeight()) + 1;
     }
 
     public int getPlayerCol() {
-        return ( getPlayerX() ) / getWidth();
+        return ( player.getPlayerX() ) / getWidth();
     }
 
     public void update() {
 
-        setPlayerX(getPlayerX() + getPlayerXSpeed());
-        setPlayerY(getPlayerY() + getPlayerYSpeed());
+        player.update(this);
 
-        setX(getPlayerX() - GamePanel.WIDTH / 2);
-        setY(getPlayerY() - GamePanel.HEIGHT / 2);
+        setX(player.getPlayerX() - GamePanel.WIDTH / 2);
+        setY(player.getPlayerY() - GamePanel.HEIGHT / 2);
 
         setColOffset(getX() / getWidth());
         setRowOffset(getY() / getHeight() + 1);

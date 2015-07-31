@@ -5,6 +5,7 @@ import br.com.giorgetti.games.squareplatform.gamestate.interaction.DialogCallbac
 import br.com.giorgetti.games.squareplatform.gamestate.interaction.DialogGameState;
 import br.com.giorgetti.games.squareplatform.gamestate.interaction.MessageGameState;
 import br.com.giorgetti.games.squareplatform.main.GamePanel;
+import br.com.giorgetti.games.squareplatform.sprites.Player;
 import br.com.giorgetti.games.squareplatform.tiles.Tile;
 import br.com.giorgetti.games.squareplatform.tiles.TileMap;
 import br.com.giorgetti.games.squareplatform.tiles.TileSet;
@@ -26,6 +27,7 @@ import java.util.LinkedList;
 public class MapEditorStateManager implements GameState {
 
     protected TileMap map;
+    protected Player player;
 
     private Tile currentTile = null;
     private TileSet currentTileSet = null;
@@ -36,13 +38,13 @@ public class MapEditorStateManager implements GameState {
     private MessageGameState messages = null;
     private DialogGameState dialog = null;
 
-    public MapEditorStateManager(String mapPath) {
+    public MapEditorStateManager(String mapPath, Player p) {
 
         this.map = new TileMap();
-        this.map.loadTileMap(mapPath);
-        this.map.setPlayerX(map.getWidth() / 2);
-        this.map.setPlayerY(map.getHeight() / 2);
-
+        this.map.loadTileMap(mapPath, p);
+        this.player = p;
+        player.setPlayerX(map.getWidth() / 2);
+        player.setPlayerY(map.getHeight() / 2);
 
         tileSetList = new LinkedList<>(getMap().getTileSetMap().values());
         currentTileSet = tileSetList.get(curTileSetPos);
@@ -75,14 +77,14 @@ public class MapEditorStateManager implements GameState {
 
         // Draw currently selected tile on screen
         g.drawImage(currentTile.getTileImage(),
-                map.getPlayerX() - map.getX() - map.getWidth() / 2,
-                GamePanel.HEIGHT - map.getPlayerY() + map.getY() - map.getHeight() / 2,
+                player.getPlayerX() - map.getX() - map.getWidth() / 2,
+                GamePanel.HEIGHT - player.getPlayerY() + map.getY() - map.getHeight() / 2,
                 null);
 
         // Draw a yellow rectangle around the tile
         g.setColor(Color.YELLOW);
-        g.drawRect(map.getPlayerX() - map.getX() - map.getWidth() / 2,
-                GamePanel.HEIGHT - map.getPlayerY() + map.getY() - map.getHeight() / 2,
+        g.drawRect(player.getPlayerX() - map.getX() - map.getWidth() / 2,
+                GamePanel.HEIGHT - player.getPlayerY() + map.getY() - map.getHeight() / 2,
                 map.getWidth(), map.getHeight());
 
 
@@ -90,14 +92,14 @@ public class MapEditorStateManager implements GameState {
         if ( curTileType == Tile.TileType.BLOCKED.getType() ) {
             g.setColor(Color.black);
             g.fillRect(
-                    map.getPlayerX() - map.getX() - 2,
-                    GamePanel.HEIGHT - map.getPlayerY() + map.getY() - 10,
+                    player.getPlayerX() - map.getX() - 2,
+                    GamePanel.HEIGHT - player.getPlayerY() + map.getY() - 10,
                     10, 15
             );
             g.setColor(Color.white);
             g.drawString("B",
-                    map.getPlayerX() - map.getX(),
-                    GamePanel.HEIGHT - map.getPlayerY() + map.getY()
+                    player.getPlayerX() - map.getX(),
+                    GamePanel.HEIGHT - player.getPlayerY() + map.getY()
             );
         }
 
@@ -119,21 +121,21 @@ public class MapEditorStateManager implements GameState {
         // go right a tile
         if ( e.getKeyCode() == KeyEvent.VK_RIGHT ) {
 
-            getMap().setPlayerX(getMap().getPlayerX()+map.getWidth());
+            player.setPlayerX(player.getPlayerX()+map.getWidth());
 
             // if reached right of map
-            if ( getMap().getPlayerX() == getMap().getCols() * getMap().getWidth() ) {
-                getMap().setPlayerX(getMap().getPlayerX() - map.getWidth() / 2);
+            if ( player.getPlayerX() == getMap().getCols() * getMap().getWidth() ) {
+                player.setPlayerX(player.getPlayerX() - map.getWidth() / 2);
             }
 
         // go left a tile
         } else if ( e.getKeyCode() == KeyEvent.VK_LEFT ) {
 
-            getMap().setPlayerX(getMap().getPlayerX() - map.getWidth());
+            player.setPlayerX(player.getPlayerX() - map.getWidth());
 
             // if reached left of map
-            if ( getMap().getPlayerX() == 0 ) {
-                getMap().setPlayerX(map.getWidth() / 2);
+            if ( player.getPlayerX() == 0 ) {
+                player.setPlayerX(map.getWidth() / 2);
             }
 
         }
@@ -141,21 +143,21 @@ public class MapEditorStateManager implements GameState {
         // go up a tile
         if ( e.getKeyCode() == KeyEvent.VK_UP ) {
 
-            getMap().setPlayerY(getMap().getPlayerY() + map.getHeight());
+            player.setPlayerY(player.getPlayerY() + map.getHeight());
 
             // if reached top of map
-            if ( getMap().getPlayerY() == getMap().getRows() * getMap().getHeight() ) {
-                getMap().setPlayerY(getMap().getPlayerY() - map.getHeight() / 2);
+            if ( player.getPlayerY() == getMap().getRows() * getMap().getHeight() ) {
+                player.setPlayerY(player.getPlayerY() - map.getHeight() / 2);
             }
 
         // go down a tile
         } else if ( e.getKeyCode() == KeyEvent.VK_DOWN ) {
 
-            getMap().setPlayerY(getMap().getPlayerY() - map.getHeight());
+            player.setPlayerY(player.getPlayerY() - map.getHeight());
 
             // if reached bottom of map
-            if ( getMap().getPlayerY() == 0 ) {
-                getMap().setPlayerY(map.getHeight() / 2);
+            if ( player.getPlayerY() == 0 ) {
+                player.setPlayerY(map.getHeight() / 2);
             }
 
         // Add selected tile to the selected row/column
@@ -253,17 +255,17 @@ public class MapEditorStateManager implements GameState {
 
         // go right a tile
         if ( e.getKeyCode() == KeyEvent.VK_RIGHT ) {
-            getMap().setPlayerXSpeed(0);
+            player.setPlayerXSpeed(0);
         } else if ( e.getKeyCode() == KeyEvent.VK_LEFT ) {
-            getMap().setPlayerXSpeed(0);
+            player.setPlayerXSpeed(0);
         }
 
         // go up a tile
         if ( e.getKeyCode() == KeyEvent.VK_UP ) {
-            getMap().setPlayerYSpeed(0);
+            player.setPlayerYSpeed(0);
         // go down a tile
         } else if ( e.getKeyCode() == KeyEvent.VK_DOWN ) {
-            getMap().setPlayerYSpeed(0);
+            player.setPlayerYSpeed(0);
         }
 
     }
