@@ -6,6 +6,9 @@ import br.com.giorgetti.games.squareplatform.tiles.TileMap;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 
 /**
@@ -14,15 +17,45 @@ import java.awt.event.KeyEvent;
 public class LevelStateManager implements GameState {
 
     protected TileMap map;
+    protected boolean [] keyMap = new boolean[255];
+    protected ArrayList<Integer> supportedKeys = new ArrayList<>();
 
     public LevelStateManager(String mapPath) {
         this.map = new TileMap();
         this.map.loadTileMap(mapPath);
+
+        keyMap[KeyEvent.VK_UP] = false;
+        keyMap[KeyEvent.VK_DOWN] = false;
+        keyMap[KeyEvent.VK_LEFT] = false;
+        keyMap[KeyEvent.VK_RIGHT] = false;
+
+        this.supportedKeys.add(KeyEvent.VK_UP);
+        this.supportedKeys.add(KeyEvent.VK_DOWN);
+        this.supportedKeys.add(KeyEvent.VK_LEFT);
+        this.supportedKeys.add(KeyEvent.VK_RIGHT);
+
     }
 
     public void update() {
 
         map.update();
+        updatePlayer();
+
+    }
+
+    private void updatePlayer() {
+
+        getMap().setPlayerXSpeed(
+                keyMap[KeyEvent.VK_RIGHT]? +4:
+                keyMap[KeyEvent.VK_LEFT]?  -4:
+                        0
+        );
+
+        getMap().setPlayerYSpeed(
+                keyMap[KeyEvent.VK_UP]? +4:
+                        keyMap[KeyEvent.VK_DOWN]?  -4:
+                                0
+        );
 
     }
 
@@ -35,39 +68,21 @@ public class LevelStateManager implements GameState {
 
     }
 
-    public void keyTyped(KeyEvent e) {
-
-    }
+    public void keyTyped(KeyEvent e) { }
 
     public void keyPressed(KeyEvent e) {
 
-        if ( e.getKeyCode() == KeyEvent.VK_RIGHT ) {
-            getMap().setPlayerXSpeed(4);
-        } else if ( e.getKeyCode() == KeyEvent.VK_LEFT ) {
-            getMap().setPlayerXSpeed(-4);
-        }
-
-        if ( e.getKeyCode() == KeyEvent.VK_UP ) {
-            getMap().setPlayerYSpeed(+4);
-        } else if ( e.getKeyCode() == KeyEvent.VK_DOWN ) {
-            getMap().setPlayerYSpeed(-4);
-        }
+        if ( supportedKeys.contains(e.getKeyCode()) == false )
+            return;
+        keyMap[e.getKeyCode()] = true;
 
     }
 
     public void keyReleased(KeyEvent e) {
 
-        if ( e.getKeyCode() == KeyEvent.VK_RIGHT ) {
-            getMap().setPlayerXSpeed(0);
-        } else if ( e.getKeyCode() == KeyEvent.VK_LEFT ) {
-            getMap().setPlayerXSpeed(0);
-        }
-
-        if ( e.getKeyCode() == KeyEvent.VK_UP ) {
-            getMap().setPlayerYSpeed(0);
-        } else if ( e.getKeyCode() == KeyEvent.VK_DOWN ) {
-            getMap().setPlayerYSpeed(0);
-        }
+        if ( supportedKeys.contains(e.getKeyCode()) == false )
+            return;
+        keyMap[e.getKeyCode()] = false;
 
     }
 
