@@ -131,7 +131,7 @@ public class TileMap {
         // Opening the tile map file
         BufferedReader reader = null;
         try {
-            reader = new BufferedReader(new FileReader(new File(getClass().getResource(tileMapPath).toURI()))
+            reader = new BufferedReader(new FileReader(new File(getClass().getResource(tileMapPath).toURI())));
             this.player = player;
         } catch (Exception e1) {
             System.err.println("Unable to load tile map: " + tileMapPath);
