@@ -13,7 +13,7 @@ public class TileMapEditor {
     public static void main(String [] args ) {
 
         JFrame window = new JFrame("TileMap Editor");
-        window.setContentPane(new GamePanel(new MapEditorStateManager("/maps/level1.dat", new Player())));
+        window.setContentPane(new GamePanel(new MapEditorStateManager("maps/level1.dat", new Player())));
 
         window.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         window.setResizable(false);
