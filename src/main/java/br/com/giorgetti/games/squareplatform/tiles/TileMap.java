@@ -5,10 +5,7 @@ import br.com.giorgetti.games.squareplatform.main.GamePanel;
 import br.com.giorgetti.games.squareplatform.sprites.Player;
 
 import java.awt.*;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.util.*;
 import java.util.List;
 
@@ -134,10 +131,11 @@ public class TileMap {
         // Opening the tile map file
         BufferedReader reader = null;
         try {
-            reader = new BufferedReader(new FileReader(new File(getClass().getResource(tileMapPath).toURI())));
+            reader = new BufferedReader(new FileReader(new File(getClass().getResource(tileMapPath).toURI()))
             this.player = player;
         } catch (Exception e1) {
             System.err.println("Unable to load tile map: " + tileMapPath);
+            e1.printStackTrace();
             System.exit(ErrorConstants.INVALID_TILE_MAP_PATH);
         }
 
