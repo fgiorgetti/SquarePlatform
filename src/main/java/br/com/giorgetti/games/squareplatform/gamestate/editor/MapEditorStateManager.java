@@ -17,6 +17,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.concurrent.ConcurrentHashMap;
 
 
 /**
@@ -37,6 +38,10 @@ public class MapEditorStateManager implements GameState {
     private int curTileType = Tile.TileType.BLOCKED.getType();
     private MessageGameState messages = null;
     private DialogGameState dialog = null;
+
+    private enum TileIndex {
+        PREV, NEXT;
+    }
 
     public MapEditorStateManager(String mapPath, Player p) {
 
@@ -165,7 +170,7 @@ public class MapEditorStateManager implements GameState {
 
             // If row does not exist on the map, add it
             if (!getMap().getMap().containsKey(row))
-                getMap().getMap().put(row, new HashMap<Integer, String[]>());
+                getMap().getMap().put(row, new ConcurrentHashMap<Integer, String[]>());
 
             // Add selected tile to the selected position on the map
             getMap().getMap().get(row).put(col,
@@ -175,30 +180,12 @@ public class MapEditorStateManager implements GameState {
                             curTileType).split(","));
 
         // Change tile
+        } else if ( e.getKeyCode() == KeyEvent.VK_R ) {
+            changeSelectedTile(TileIndex.PREV);
+            // change tile type
         } else if ( e.getKeyCode() == KeyEvent.VK_T ) {
-
-            // Get next tile within same tileset
-            if ( currentTileSet.getNumTiles() > ++curTilePos ) {
-                currentTile = currentTileSet.getTile(curTilePos);
-            // Go to next tileset (if any)
-            } else {
-
-                // Use the first tile of the next tileset
-                curTilePos = 0;
-
-                // If already on last tile set, go back to first
-                if ( tileSetList.size() == ++curTileSetPos ) {
-                    curTileSetPos = 0;
-                } else {
-                    currentTileSet = tileSetList.get(curTileSetPos);
-                }
-
-                currentTile = currentTileSet.getTile(curTilePos);
-
-            }
-            System.out.println("curtileset = " + curTileSetPos + " - curtilepos = " + curTilePos);
-
-        // change tile type
+            changeSelectedTile(TileIndex.NEXT);
+            // change tile type
         } else if ( e.getKeyCode() == KeyEvent.VK_Y ) {
 
             Tile.TileType[] types = Tile.TileType.values();
@@ -249,6 +236,45 @@ public class MapEditorStateManager implements GameState {
             });
         }
 
+    }
+
+    private void changeSelectedTile(TileIndex tileIndex) {
+
+        if (tileIndex == TileIndex.NEXT) {
+            curTilePos++;
+        } else {
+            curTilePos--;
+        }
+
+        if ( curTilePos < 0 ) {
+
+            // If on first tile set, go back to last
+            if ( --curTileSetPos < 0 ) {
+                curTileSetPos = tileSetList.size() -1;
+            }
+
+            currentTileSet = tileSetList.get(curTileSetPos);
+
+            // Use the last tile of the previous tileset
+            curTilePos = currentTileSet.getNumTiles() - 1;
+
+        // Go to next tileset (if any)
+        } else if ( curTilePos >= currentTileSet.getNumTiles() ) {
+
+            // Use the first tile of the next tileset
+            curTilePos = 0;
+
+            // If already on last tile set, go back to first
+            if ( tileSetList.size() == ++curTileSetPos ) {
+                curTileSetPos = 0;
+            }
+
+            currentTileSet = tileSetList.get(curTileSetPos);
+
+        }
+
+        currentTile = currentTileSet.getTile(curTilePos);
+        System.out.println("curtileset = " + curTileSetPos + " - curtilepos = " + curTilePos);
     }
 
     public void keyReleased(KeyEvent e) {
