@@ -1,5 +1,5 @@
-ROWS=20
-COLS=50
+ROWS=12
+COLS=100
 WIDTH=32
 HEIGHT=32
 BG=25,/backgrounds/bgsky.png

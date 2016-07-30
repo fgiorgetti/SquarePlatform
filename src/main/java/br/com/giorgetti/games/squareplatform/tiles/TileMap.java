@@ -532,18 +532,18 @@ public class TileMap {
         for ( Background bg : getBackgrounds() ) {
 
             int bgWidth = bg.getImage().getWidth();
-            int bgHeigth = bg.getImage().getHeight();
+            int bgHeigth = GamePanel.HEIGHT - bg.getImage().getHeight();
 
             int bgX = (int) (- getX() / 100.00 * bg.getSpeedPct() % bgWidth);
-            int bgY = (int) ( (getY()/100.00 * bg.getSpeedPct()/2) % bgHeigth);
-            //int bgY = (  getY() % bgHeigth);
+            int bgY = (int) ( getY() / 100.00 * (bg.getSpeedPct()/2) % bgHeigth);
+            //System.out.printf("bgX = %d - bgY = %d\n", bgX, bgY);
 
             // Consider X offset as map.x / 100 * bg.speed
             g.drawImage(bg.getImage(), null, bgX, bgY);
             g.drawImage(bg.getImage(), null, bgX + bgWidth, bgY);
 
-            g.drawImage(bg.getImage(), null, bgX, bgY - bgHeigth);
-            g.drawImage(bg.getImage(), null, bgX + bgWidth, bgY - bgHeigth);
+            g.drawImage(bg.getImage(), null, bgX, bgY + bgHeigth);
+            g.drawImage(bg.getImage(), null, bgX + bgWidth, bgY + bgHeigth);
         }
 
         // Drawing map on the screen...
