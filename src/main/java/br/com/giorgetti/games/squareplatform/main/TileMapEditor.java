@@ -1,7 +1,7 @@
 package br.com.giorgetti.games.squareplatform.main;
 
+import br.com.giorgetti.games.squareplatform.gameobjects.Player;
 import br.com.giorgetti.games.squareplatform.gamestate.editor.MapEditorStateManager;
-import br.com.giorgetti.games.squareplatform.sprites.Player;
 
 import javax.swing.*;
 

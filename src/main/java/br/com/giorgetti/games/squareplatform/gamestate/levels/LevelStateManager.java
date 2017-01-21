@@ -1,15 +1,16 @@
 package br.com.giorgetti.games.squareplatform.gamestate.levels;
 
-import br.com.giorgetti.games.squareplatform.gamestate.GameState;
-import br.com.giorgetti.games.squareplatform.main.GamePanel;
-import br.com.giorgetti.games.squareplatform.sprites.Player;
-import br.com.giorgetti.games.squareplatform.tiles.TileMap;
-
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+
+import br.com.giorgetti.games.squareplatform.gameobjects.Player;
+import br.com.giorgetti.games.squareplatform.gameobjects.SpriteDirection;
+import br.com.giorgetti.games.squareplatform.gamestate.GameState;
+import br.com.giorgetti.games.squareplatform.main.GamePanel;
+import br.com.giorgetti.games.squareplatform.tiles.TileMap;
+import br.com.giorgetti.games.squareplatform.tiles.Tile.TileType;
 
 
 /**
@@ -21,7 +22,12 @@ public class LevelStateManager implements GameState {
     protected boolean [] keyMap = new boolean[255];
     protected ArrayList<Integer> supportedKeys = new ArrayList<>();
     protected Player player;
-
+    
+    protected long realTimeElapsed;
+	protected boolean showFps = false;
+	private int fps = 0;
+	private long lastDrawFps;
+    
     public LevelStateManager(String mapPath, Player p) {
         this.map = new TileMap();
         this.map.loadTileMap(mapPath, p);
@@ -31,34 +37,51 @@ public class LevelStateManager implements GameState {
         keyMap[KeyEvent.VK_DOWN] = false;
         keyMap[KeyEvent.VK_LEFT] = false;
         keyMap[KeyEvent.VK_RIGHT] = false;
+        keyMap[KeyEvent.VK_F12] = false;
 
         this.supportedKeys.add(KeyEvent.VK_UP);
         this.supportedKeys.add(KeyEvent.VK_DOWN);
         this.supportedKeys.add(KeyEvent.VK_LEFT);
         this.supportedKeys.add(KeyEvent.VK_RIGHT);
-
+        this.supportedKeys.add(KeyEvent.VK_F12);
+        
     }
 
     public void update() {
 
         map.update();
         updatePlayer();
+        checkTileMapColision();
 
     }
 
+    private void checkTileMapColision() {
+    	
+    	
+    	
+		
+	}
+
+	/**
+     * Updates player info based on keys.
+     */
     private void updatePlayer() {
 
-        player.setPlayerXSpeed(
-                keyMap[KeyEvent.VK_RIGHT]? +4:
-                keyMap[KeyEvent.VK_LEFT]?  -4:
-                        0
-        );
-
-        player.setPlayerYSpeed(
-                keyMap[KeyEvent.VK_UP]? +4:
-                        keyMap[KeyEvent.VK_DOWN]?  -4:
-                                0
-        );
+    	if ( keyMap[KeyEvent.VK_RIGHT] ) {
+    		player.setDirection(SpriteDirection.RIGHT);
+    		player.accelerate();
+    	} else if ( keyMap[KeyEvent.VK_LEFT] ) {
+    		player.setDirection(SpriteDirection.LEFT);
+    		player.accelerate();
+    	} else {
+    		player.deaccelerate();
+    	}
+    	
+       player.setPlayerYSpeed(
+               keyMap[KeyEvent.VK_UP]? +2:
+                       keyMap[KeyEvent.VK_DOWN]?  -2:
+                               0
+       );
 
     }
 
@@ -66,10 +89,104 @@ public class LevelStateManager implements GameState {
 
         map.draw(g);
 
-        g.setColor(Color.BLACK);
-        g.drawRect(player.getPlayerX()-2-map.getX(), GamePanel.HEIGHT-player.getPlayerY()-2+map.getY(), 4, 4);
+        // Drawing player
+        player.draw(g);
+        drawFps(g);
+
+        // Following code is a test to check for collision
+        // Cur player x and y on map/screen
+        int curX = (player.getPlayerX() - map.getX());
+        int curY = GamePanel.HEIGHT-player.getPlayerY()+map.getY();
+        g.setColor(Color.RED);
+        g.drawRect(
+        		curX,
+        		curY,
+        		1, 
+        		1);
+        
+        // Draw tile on left to check for collision
+        Color color = null;
+        if ( map.getTile(map.getPlayerRow(), map.getPlayerCol() - 1).getType() == TileType.BLOCKED ) {
+        	color = Color.RED;
+        } else {
+        	color = Color.BLUE;
+        }
+        g.setColor(color);
+        g.drawRect(
+        		(map.getPlayerCol()-1) * map.getWidth() - map.getX(),
+        		GamePanel.HEIGHT - map.getPlayerRow() * map.getHeight() + map.getY(),
+        		map.getWidth(), 
+        		map.getHeight());
+
+        // Draw tile on right to check for collision
+        if ( map.getTile(map.getPlayerRow(), map.getPlayerCol() + 1).getType() == TileType.BLOCKED ) {
+        	color = Color.RED;
+        } else {
+        	color = Color.BLUE;
+        }
+        g.setColor(color);
+        g.drawRect(
+        		(map.getPlayerCol()+1) * map.getWidth() - map.getX(),
+        		GamePanel.HEIGHT - map.getPlayerRow() * map.getHeight() + map.getY(),
+        		map.getWidth(), 
+        		map.getHeight());
+
+        // Draw tile on top to check for collision
+        if ( map.getTile(map.getPlayerRow() +1, map.getPlayerCol()).getType() == TileType.BLOCKED ) {
+        	color = Color.RED;
+        } else {
+        	color = Color.BLUE;
+        }
+        g.setColor(color);
+        g.drawRect(
+        		map.getPlayerCol() * map.getWidth() - map.getX(),
+        		GamePanel.HEIGHT - (map.getPlayerRow() + 1) * map.getHeight() + map.getY(),
+        		map.getWidth(), 
+        		map.getHeight());
+
+        // Draw tile on bottom to check for collision
+        if ( map.getTile(map.getPlayerRow() - 1, map.getPlayerCol()).getType() == TileType.BLOCKED ) {
+        	color = Color.RED;
+        } else {
+        	color = Color.BLUE;
+        }
+        g.setColor(color);
+        g.drawRect(
+        		map.getPlayerCol() * map.getWidth() - map.getX(),
+        		GamePanel.HEIGHT - (map.getPlayerRow() - 1) * map.getHeight() + map.getY(),
+        		map.getWidth(), 
+        		map.getHeight());
 
     }
+
+    /**
+     * Draw the FPS box
+     * @param g
+     */
+	private void drawFps(Graphics2D g) {
+		
+		if ( !showFps  ) {
+			return;
+		}
+		
+		g.setColor(Color.BLACK);
+		g.drawRect(GamePanel.WIDTH - 21, 0, 20, 12);
+
+		if ( realTimeElapsed == 0 ) {
+			realTimeElapsed = System.currentTimeMillis();
+		} else {
+
+			// Recalculate after 1 sec elapsed only
+			if ( System.currentTimeMillis() - lastDrawFps > 500 ) {
+				this.fps = (int) (1000 / (System.currentTimeMillis() - realTimeElapsed));
+				lastDrawFps = realTimeElapsed;
+			}
+			realTimeElapsed = System.currentTimeMillis();
+			g.drawString(fps+"", GamePanel.WIDTH - 18, 11);
+
+		}
+		
+	}
 
     public void keyTyped(KeyEvent e) { }
 
@@ -79,6 +196,10 @@ public class LevelStateManager implements GameState {
             return;
         keyMap[e.getKeyCode()] = true;
 
+        // Show FPS
+        if ( keyMap[KeyEvent.VK_F12] ) {
+        	showFps = !showFps;
+        }
     }
 
     public void keyReleased(KeyEvent e) {

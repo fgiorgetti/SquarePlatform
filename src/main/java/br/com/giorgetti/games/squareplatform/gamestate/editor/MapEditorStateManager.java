@@ -1,11 +1,11 @@
 package br.com.giorgetti.games.squareplatform.gamestate.editor;
 
+import br.com.giorgetti.games.squareplatform.gameobjects.Player;
 import br.com.giorgetti.games.squareplatform.gamestate.GameState;
 import br.com.giorgetti.games.squareplatform.gamestate.interaction.DialogCallbackHandler;
 import br.com.giorgetti.games.squareplatform.gamestate.interaction.DialogGameState;
 import br.com.giorgetti.games.squareplatform.gamestate.interaction.MessageGameState;
 import br.com.giorgetti.games.squareplatform.main.GamePanel;
-import br.com.giorgetti.games.squareplatform.sprites.Player;
 import br.com.giorgetti.games.squareplatform.tiles.Tile;
 import br.com.giorgetti.games.squareplatform.tiles.TileMap;
 import br.com.giorgetti.games.squareplatform.tiles.TileSet;

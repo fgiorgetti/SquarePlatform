@@ -1,8 +1,9 @@
 package br.com.giorgetti.games.squareplatform.tiles;
 
 import br.com.giorgetti.games.squareplatform.exception.ErrorConstants;
+import br.com.giorgetti.games.squareplatform.gameobjects.Player;
 import br.com.giorgetti.games.squareplatform.main.GamePanel;
-import br.com.giorgetti.games.squareplatform.sprites.Player;
+import br.com.giorgetti.games.squareplatform.tiles.Tile.TileType;
 
 import java.awt.*;
 import java.io.*;
@@ -558,9 +559,7 @@ public class TileMap {
                     continue;
 
                 // Drawing the tile map
-                String[] arr = getMap().get(row).get(col);
-                Tile t = getTileSetMap().get(arr[TileMap.POS_MAP_TILESET_ID]).getTile(arr[TileMap.POS_MAP_TILEPOS_ID]);
-                t.setType(Tile.TileType.fromType(arr[TileMap.POS_MAP_TILE_TYPE]));
+                Tile t = getTile(row, col);
 
                 g.drawImage(t.getTileImage(),
                         col * getWidth() - getX(),
@@ -584,5 +583,21 @@ public class TileMap {
         }
 
     }
+
+	public Tile getTile(int row, int col) {
+
+		try {
+			String[] arr = getMap().get(row).get(col);
+	
+			Tile t = getTileSetMap().get(arr[TileMap.POS_MAP_TILESET_ID]).getTile(arr[TileMap.POS_MAP_TILEPOS_ID]);
+			t.setType(Tile.TileType.fromType(arr[TileMap.POS_MAP_TILE_TYPE]));
+			
+			return t;
+		} catch (Exception e) {
+			Tile t = new Tile(null, TileType.NORMAL);
+			return t;
+		}
+		
+	}
 
 }
