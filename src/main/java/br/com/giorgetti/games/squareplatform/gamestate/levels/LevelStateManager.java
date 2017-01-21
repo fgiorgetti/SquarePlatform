@@ -49,17 +49,22 @@ public class LevelStateManager implements GameState {
 
     public void update() {
 
+    	checkTileMapColision();
         map.update();
         updatePlayer();
-        checkTileMapColision();
 
     }
 
     private void checkTileMapColision() {
     	
-    	
-    	
-		
+        // Following code is a test to check for collision
+
+        //System.out.printf("left = %s - right = %s - top = %s - bottom = %s\n", leftBlocked, rightBlocked, topBlocked, bottomBlocked);
+        //System.out.printf("player left = %03d - right = %03d - top = %03d - bottom = %03d\n",
+        //		player.getPlayerLeftX(), player.getPlayerRightX(), player.getPlayerTopY(), player.getPlayerBottomY());
+        //System.out.printf("tile   left = %03d - right = %03d - top = %03d - bottom = %03d\n",
+        //		leftX, rightX, topY, bottomY);
+        
 	}
 
 	/**
@@ -93,17 +98,12 @@ public class LevelStateManager implements GameState {
         player.draw(g);
         drawFps(g);
 
-        // Following code is a test to check for collision
-        // Cur player x and y on map/screen
-        int curX = (player.getPlayerX() - map.getX());
-        int curY = GamePanel.HEIGHT-player.getPlayerY()+map.getY();
-        g.setColor(Color.RED);
-        g.drawRect(
-        		curX,
-        		curY,
-        		1, 
-        		1);
-        
+        drawCollision(g);
+                
+    }
+
+    private void drawCollision(Graphics2D g) {
+
         // Draw tile on left to check for collision
         Color color = null;
         if ( map.getTile(map.getPlayerRow(), map.getPlayerCol() - 1).getType() == TileType.BLOCKED ) {
@@ -157,9 +157,9 @@ public class LevelStateManager implements GameState {
         		map.getWidth(), 
         		map.getHeight());
 
-    }
+	}
 
-    /**
+	/**
      * Draw the FPS box
      * @param g
      */

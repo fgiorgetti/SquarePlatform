@@ -3,6 +3,7 @@ package br.com.giorgetti.games.squareplatform.gameobjects;
 import br.com.giorgetti.games.squareplatform.gameobjects.player.PlayerState;
 import br.com.giorgetti.games.squareplatform.main.GamePanel;
 import br.com.giorgetti.games.squareplatform.tiles.TileMap;
+import br.com.giorgetti.games.squareplatform.tiles.Tile.TileType;
 
 import java.awt.*;
 
@@ -11,7 +12,6 @@ import java.awt.*;
  */
 public class Player extends Sprite {
 
-	
     private static final int MAX_XSPEED = 8;
 	private int playerX, playerY;
     private int playerXSpeed, playerYSpeed;
@@ -26,7 +26,6 @@ public class Player extends Sprite {
     private Animation[] animations; // Animation indexed by state
     
     private TileMap map = null;
-
     
     // DONE -> Handle acceleration and deacceleration X
     // DONE -> Added player height and width
@@ -41,8 +40,18 @@ public class Player extends Sprite {
     public void update(TileMap map) {
 
         this.map = map;
-        setPlayerX(getPlayerX() + getPlayerXSpeed());
-        setPlayerY(getPlayerY() + getPlayerYSpeed());
+        
+        // If not blocked right and moving right or 
+        // if not blocked left and moving left
+        if ( ( !isBlockedRight() && getPlayerXSpeed() > 0 )
+        		|| ( !isBlockedLeft() && getPlayerXSpeed() < 0 )) {
+        	setPlayerX(getPlayerX() + getPlayerXSpeed());
+        }
+        
+        if ( ( !isBlockedTop() && getPlayerYSpeed() > 0 )
+        		|| ( !isBlockedBottom() && getPlayerYSpeed() < 0 ) ) {
+        	setPlayerY(getPlayerY() + getPlayerYSpeed());
+        }
 
     }
 
@@ -54,20 +63,20 @@ public class Player extends Sprite {
 
     }
 
-	private int getPlayerTopY() {
-		return GamePanel.HEIGHT-getPlayerY()-getHalfPlayerHeight()+map.getY();
+	public int getPlayerTopY() {
+		return GamePanel.HEIGHT-getPlayerY()-getHalfPlayerHeight()-1+map.getY();
 	}
 
-	private int getPlayerLeftX() {
-		return getPlayerX()-getHalfPlayerWidth()-map.getX();
+	public int getPlayerLeftX() {
+		return getPlayerX()-getHalfPlayerWidth()-map.getX()-1;
 	}
 	
-	private int getPlayerBottomY() {
-		return getPlayerTopY() + getPlayerHeight();
+	public int getPlayerBottomY() {
+		return getPlayerTopY() + getPlayerHeight() + 1;
 	}
 
-	private int getPlayerRightX() {
-		return getPlayerLeftX() + getPlayerWidth();
+	public int getPlayerRightX() {
+		return getPlayerX() + getHalfPlayerWidth() + 1 - map.getX();
 	}
 
     private int getHalfPlayerHeight() {
@@ -220,6 +229,46 @@ public class Player extends Sprite {
 		
 		return 0;
 		
+	}
+
+	private boolean isBlockedLeft() {
+	
+        // Draw tile on left to check for collision
+        boolean leftBlocked = map.getTile(map.getPlayerRow(), map.getPlayerCol() - 1).getType() == TileType.BLOCKED;
+        int leftX = (map.getPlayerCol()-1) * map.getWidth() - map.getX() + map.getWidth(); // right side of the left tile
+
+        return leftBlocked && getPlayerLeftX() <= leftX + 2;
+        
+	}
+	
+	private boolean isBlockedRight() {
+
+        // Draw tile on right to check for collision
+        boolean rightBlocked = map.getTile(map.getPlayerRow(), map.getPlayerCol() + 1).getType() == TileType.BLOCKED;
+        int rightX = (map.getPlayerCol()+1) * map.getWidth() - map.getX(); // left side of right tile
+
+        return rightBlocked && getPlayerRightX() >= rightX - 2;
+        
+	}
+	
+	private boolean isBlockedTop() {
+		
+        // Draw tile on top to check for collision
+        boolean topBlocked = map.getTile(map.getPlayerRow() +1, map.getPlayerCol()).getType() == TileType.BLOCKED;
+        int topY = GamePanel.HEIGHT - (map.getPlayerRow() + 1) * map.getHeight() + map.getY() + map.getHeight(); // bottom point of top tile
+
+        return topBlocked && getPlayerTopY() <= topY + 2;
+        
+	}
+	
+	private boolean isBlockedBottom() {
+		
+        // Draw tile on bottom to check for collision
+        boolean bottomBlocked = map.getTile(map.getPlayerRow() - 1, map.getPlayerCol()).getType() == TileType.BLOCKED;
+        int bottomY = GamePanel.HEIGHT - (map.getPlayerRow() - 1) * map.getHeight() + map.getY() + 2; // top of bottom tile
+
+        return bottomBlocked && getPlayerBottomY() >= bottomY - 2;
+        
 	}
 	
 }
