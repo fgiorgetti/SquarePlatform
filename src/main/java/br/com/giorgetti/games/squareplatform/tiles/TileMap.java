@@ -509,8 +509,16 @@ public class TileMap {
         return (( player.getPlayerY() ) / getHeight()) + 1;
     }
 
+    public int getPlayerRowAt(int y) {
+        return (( y ) / getHeight()) + 1;
+    }
+
     public int getPlayerCol() {
-        return ( player.getPlayerX() ) / getWidth();
+        return player.getPlayerX() / getWidth();
+    }
+
+    public int getPlayerColAt(int x) {
+        return x  / getWidth();
     }
 
     public void update() {

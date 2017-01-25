@@ -104,59 +104,38 @@ public class LevelStateManager implements GameState {
 
     private void drawCollision(Graphics2D g) {
 
-        // Draw tile on left to check for collision
-        Color color = null;
-        if ( map.getTile(map.getPlayerRow(), map.getPlayerCol() - 1).getType() == TileType.BLOCKED ) {
+        // Draw tile borders (top left, bottom left, top right, bottom right)
+		drawTileBorders(g, map.getPlayerRow() + 1, map.getPlayerCol() - 1);
+		drawTileBorders(g, map.getPlayerRow() - 1, map.getPlayerCol() - 1);
+		drawTileBorders(g, map.getPlayerRow() + 1, map.getPlayerCol() + 1);
+		drawTileBorders(g, map.getPlayerRow() - 1, map.getPlayerCol() + 1);
+
+	}
+
+    /**
+     * Draw the borders of a tile based on the given row and col.
+     * If tile is a blocked tile, then border color will be red.
+     * Otherwise blue.
+     * 
+     * @param g
+     * @param row
+     * @param col
+     */
+	public void drawTileBorders(Graphics2D g, int row, int col) {
+		/*
+		Color color = null;
+        if ( map.getTile(row, col).getType() == TileType.BLOCKED ) {
         	color = Color.RED;
         } else {
         	color = Color.BLUE;
         }
         g.setColor(color);
         g.drawRect(
-        		(map.getPlayerCol()-1) * map.getWidth() - map.getX(),
-        		GamePanel.HEIGHT - map.getPlayerRow() * map.getHeight() + map.getY(),
+        		(col) * map.getWidth() - map.getX(),
+        		GamePanel.HEIGHT - (row) * map.getHeight() + map.getY(),
         		map.getWidth(), 
         		map.getHeight());
-
-        // Draw tile on right to check for collision
-        if ( map.getTile(map.getPlayerRow(), map.getPlayerCol() + 1).getType() == TileType.BLOCKED ) {
-        	color = Color.RED;
-        } else {
-        	color = Color.BLUE;
-        }
-        g.setColor(color);
-        g.drawRect(
-        		(map.getPlayerCol()+1) * map.getWidth() - map.getX(),
-        		GamePanel.HEIGHT - map.getPlayerRow() * map.getHeight() + map.getY(),
-        		map.getWidth(), 
-        		map.getHeight());
-
-        // Draw tile on top to check for collision
-        if ( map.getTile(map.getPlayerRow() +1, map.getPlayerCol()).getType() == TileType.BLOCKED ) {
-        	color = Color.RED;
-        } else {
-        	color = Color.BLUE;
-        }
-        g.setColor(color);
-        g.drawRect(
-        		map.getPlayerCol() * map.getWidth() - map.getX(),
-        		GamePanel.HEIGHT - (map.getPlayerRow() + 1) * map.getHeight() + map.getY(),
-        		map.getWidth(), 
-        		map.getHeight());
-
-        // Draw tile on bottom to check for collision
-        if ( map.getTile(map.getPlayerRow() - 1, map.getPlayerCol()).getType() == TileType.BLOCKED ) {
-        	color = Color.RED;
-        } else {
-        	color = Color.BLUE;
-        }
-        g.setColor(color);
-        g.drawRect(
-        		map.getPlayerCol() * map.getWidth() - map.getX(),
-        		GamePanel.HEIGHT - (map.getPlayerRow() - 1) * map.getHeight() + map.getY(),
-        		map.getWidth(), 
-        		map.getHeight());
-
+        */
 	}
 
 	/**
