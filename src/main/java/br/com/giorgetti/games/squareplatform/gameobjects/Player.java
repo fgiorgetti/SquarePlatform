@@ -13,13 +13,16 @@ import java.awt.*;
 public class Player extends Sprite {
 
     private static final int MAX_XSPEED = 8;
+    private static final int FALL_SPEED = -6, JUMP_SPEED = +18;
 	private int playerX, playerY;
-    private int playerXSpeed, playerYSpeed;
-    private long accelerationStarted, deaccelerationStarted;
-    private static int ACCELERATION_DELAY = 100, DEACCELERATION_DELAY = 50;
-    private static int ACCELERATION_RATE = 2, DEACCELERATION_RATE = 4;
+    private int playerXSpeed, playerYSpeed = FALL_SPEED;
+    private long accelerationStarted, deaccelerationStarted, jumpingStarted;
+    private static int ACCELERATION_DELAY = 100, DEACCELERATION_DELAY = 50, FALL_DELAY = 50;
+    private static int ACCELERATION_RATE = 2, DEACCELERATION_RATE = 4, FALL_RATE = -4;
+    private static final int PLAYER_HEIGHT_UP = 20, PLAYER_HEIGHT_CROUCH = 10;
+    private static final int PLAYER_WIDTH = 16;
     
-    private int playerWidth = 16, playerHeight = 20;
+    private int playerWidth = PLAYER_WIDTH, playerHeight = PLAYER_HEIGHT_UP;
 
     private PlayerState state;
     private SpriteDirection direction;
@@ -29,9 +32,9 @@ public class Player extends Sprite {
     
     // DONE -> Handle acceleration and deacceleration X
     // DONE -> Added player height and width
-    // Handle movement from player class, not level state...
-    // Collision as player moves
-    // Block if in contact with Block tile
+    // DONE -> Handle movement from player class, not level state...
+    // DONE -> Collision as player moves
+    // DONE -> Block if in contact with Block tile
     // Gravity
     // Jumping
     // Crouching
@@ -151,11 +154,32 @@ public class Player extends Sprite {
         	return;
         }
         
-        // Moving up
-        if ( this.playerY > oldPlayerY ) {
-        	isBlockedTop();
-        } else if ( this.playerY < oldPlayerY ) {
-        	isBlockedBottom();
+        // Jumping
+        //System.out.printf("PYSpeed = %d - STATE = %s\n", this.playerYSpeed, this.state);
+        if ( this.playerYSpeed > 0 ) {
+        	
+        	if ( isBlockedTop() ) {
+        		setPlayerYSpeed(0); // stop jumping
+        	}
+        	        	
+        	fall();
+        	
+        // Falling
+        } else if ( this.playerYSpeed < 0 ) {
+        	
+        	if ( !isBlockedBottom() ) {
+        		this.state = PlayerState.FALLING;
+        		System.out.println("I am falllingggggg !!!!!");
+        	} else if ( this.state == PlayerState.FALLING ) {
+        		this.state = PlayerState.IDLE;
+        		this.playerYSpeed = FALL_SPEED;
+        	}
+        	if ( this.playerY-1 == getHalfPlayerHeight() ) {
+        		System.out.println("You lose"); // Fell in a hole
+        	}
+        	
+        } else if ( this.state == PlayerState.JUMPING ) {
+    		fall();
         }
         
     }
@@ -186,10 +210,10 @@ public class Player extends Sprite {
     		this.playerYSpeed = 0;
     	}
         
-        if ( playerYSpeed > 12 )
-            playerYSpeed = 12;
-        else if ( playerYSpeed < -12 )
-            playerYSpeed = -12;
+        if ( playerYSpeed > JUMP_SPEED )
+            playerYSpeed = JUMP_SPEED;
+        else if ( playerYSpeed < FALL_SPEED )
+            playerYSpeed = FALL_SPEED;
         
     }
 
@@ -203,10 +227,6 @@ public class Player extends Sprite {
 
 	public int getPlayerHeight() {
 		return playerHeight;
-	}
-
-	public void setPlayerHeight(int playerHeight) {
-		this.playerHeight = playerHeight;
 	}
 
 	public PlayerState getState() {
@@ -269,6 +289,53 @@ public class Player extends Sprite {
 		
 	}
 	
+	public void crouch() {
+		
+		if ( this.playerHeight == PLAYER_HEIGHT_CROUCH ) {
+			return;
+		}
+		
+		this.playerHeight = PLAYER_HEIGHT_CROUCH;
+		this.playerY -= PLAYER_HEIGHT_CROUCH / 2;
+		
+	}
+	
+	public void standup() {
+
+		if ( this.playerHeight == PLAYER_HEIGHT_UP ) {
+			return;
+		}
+
+		this.playerHeight = PLAYER_HEIGHT_UP;
+		this.playerY += PLAYER_HEIGHT_CROUCH / 2;
+		
+	}
+	
+	public void jump() {
+		
+		if ( this.state == PlayerState.JUMPING || 
+				this.state == PlayerState.FALLING ) {
+			return;
+		}
+		
+		setPlayerYSpeed(JUMP_SPEED);
+		this.jumpingStarted = System.currentTimeMillis();
+		this.state = PlayerState.JUMPING;
+		
+	}
+	
+	public void fall() {
+		
+		long elapsed = System.currentTimeMillis() - jumpingStarted;
+		if ( elapsed < FALL_DELAY ) {
+			return;
+		}
+		
+		setPlayerYSpeed(FALL_RATE);
+		this.jumpingStarted = System.currentTimeMillis();
+		
+	}
+	
 	/**
 	 * Returns 1 if going right or -1 if left.
 	 * @return
@@ -280,7 +347,7 @@ public class Player extends Sprite {
 			return -1;
 		}
 	}
-
+	
 	/**
 	 * If speed positive, returns 1 meaning going right.
 	 * If negative, returns -1 meaning its going left.

@@ -68,11 +68,24 @@ public class LevelStateManager implements GameState {
     		player.deaccelerate();
     	}
     	
-       player.setPlayerYSpeed(
-               keyMap[KeyEvent.VK_UP]? +2:
-                       keyMap[KeyEvent.VK_DOWN]?  -2:
-                               0
-       );
+
+    	// Crouch
+    	if ( keyMap[KeyEvent.VK_DOWN] ) {
+    		player.crouch();
+    	} else {
+    		player.standup();
+    	}
+    	
+    	// Jump
+    	if ( keyMap[KeyEvent.VK_UP] ) {
+    		player.jump();
+    	}
+    	
+//       player.setPlayerYSpeed(
+//               keyMap[KeyEvent.VK_UP]? +2:
+//                       keyMap[KeyEvent.VK_DOWN]?  -2:
+//                               0
+//       );
 
     }
 
