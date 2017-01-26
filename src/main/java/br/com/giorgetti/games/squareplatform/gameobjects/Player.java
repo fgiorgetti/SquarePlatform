@@ -52,50 +52,43 @@ public class Player extends Sprite {
     public void draw(Graphics2D g) {
 
     	// Left line on player
-        g.setColor(isBlockedLeftTopCorner()||isBlockedLeftBottomCorner()? Color.RED : Color.BLACK);
+        g.setColor(isBlockedLeft()? Color.RED : Color.BLACK);
         g.drawLine(getPlayerLeftX(), getPlayerTopY(), getPlayerLeftX(), getPlayerBottomY());
 
         // Right line
-        g.setColor(isBlockedRightTopCorner() || isBlockedRightBottomCorner()? Color.RED : Color.BLACK);
+        g.setColor(isBlockedRight()? Color.RED : Color.BLACK);
         g.drawLine(getPlayerRightX(), getPlayerTopY(), getPlayerRightX(), getPlayerBottomY());
         
         // Top line
-        //g.setColor(isBlockedTopLeftCorner() || isBlockedTopRightCorner()? Color.RED : Color.BLACK);
-        g.setColor(isBlockedLeftTopCorner() || isBlockedRightTopCorner()? Color.RED : Color.BLACK);
+        g.setColor(isBlockedTop()? Color.RED : Color.BLACK);
         g.drawLine(getPlayerLeftX(), getPlayerTopY(), getPlayerRightX(), getPlayerTopY());
 
         // Bottom line
-        //g.setColor(isBlockedBottomLeftCorner() || isBlockedBottomRightCorner()? Color.RED : Color.BLACK);
-        g.setColor(isBlockedLeftBottomCorner() || isBlockedRightBottomCorner()? Color.RED : Color.BLACK);
+        g.setColor(isBlockedBottom()? Color.RED : Color.BLACK);
         g.drawLine(getPlayerLeftX(), getPlayerBottomY(), getPlayerRightX(), getPlayerBottomY());
 
-        //g.drawRect(getPlayerLeftX(), getPlayerTopY(), getPlayerWidth(), getPlayerHeight());
-        
         g.setColor(Color.GREEN);
         g.drawOval(getPlayerLeftX()-1, getPlayerTopY()-1, 1, 1);
         g.drawOval(getPlayerRightX()-1, getPlayerTopY()-1, 1, 1);
         g.drawOval(getPlayerLeftX()-1, getPlayerBottomY()-1, 1, 1);
         g.drawOval(getPlayerRightX()-1, getPlayerBottomY()-1, 1, 1);
+        
     }
 
 	public int getPlayerTopY() {
 		return GamePanel.HEIGHT-getPlayerY()-getHalfPlayerHeight()+map.getY();
-		//return getPlayerY()-getHalfPlayerHeight()-1;
 	}
 
 	public int getPlayerBottomY() {
-		return getPlayerTopY() + getPlayerHeight()-1;
-		//return getPlayerTopY() + getPlayerHeight() + 1;
+		return getPlayerTopY() + getPlayerHeight();//-1;
 	}
 
 	public int getPlayerLeftX() {
 		return getPlayerX()-getHalfPlayerWidth()-map.getX();
-		//return getPlayerX()-getHalfPlayerWidth();
 	}
 	
 	public int getPlayerRightX() {
 		return getPlayerX() + getHalfPlayerWidth() - map.getX();
-		//return getPlayerX() + getHalfPlayerWidth();
 	}
 
     private int getHalfPlayerHeight() {
@@ -122,9 +115,17 @@ public class Player extends Sprite {
             this.playerX = playerX;
         }
         
-        if ( !isAllowedToMoveX() ) {
-        	System.out.println("not allowed to move");
-        	this.playerX = oldPlayerX;
+        // If map not yet provided
+        if ( this.map == null ) {
+        	return;
+        }
+        
+        // Moving right
+        if ( this.playerX > oldPlayerX ) {
+        	isBlockedRight();
+    	// Moving left
+        } else if ( this.playerX < oldPlayerX ) {
+        	isBlockedLeft();
         }
         
     }
@@ -134,6 +135,9 @@ public class Player extends Sprite {
     }
 
     public void setPlayerY(int playerY) {
+    	
+    	int oldPlayerY = this.playerY;
+    	
         if ( map != null && playerY > map.getRows() * map.getHeight() - getHalfPlayerHeight()) {
             this.playerY = map.getRows() * map.getHeight() - getHalfPlayerHeight();
         } else if ( playerY < getHalfPlayerHeight() + 1) {
@@ -141,6 +145,18 @@ public class Player extends Sprite {
         } else {
             this.playerY = playerY;
         }
+        
+        if ( this.map == null ) {
+        	return;
+        }
+        
+        // Moving up
+        if ( this.playerY > oldPlayerY ) {
+        	isBlockedTop();
+        } else if ( this.playerY < oldPlayerY ) {
+        	isBlockedBottom();
+        }
+        
     }
 
     public int getPlayerXSpeed() {
@@ -162,11 +178,9 @@ public class Player extends Sprite {
     		this.playerYSpeed = 0;
     	}
     	
-//    	if ( ( ySpeed > 0 && !isBlockedTopLeftCorner() && !isBlockedTopRightCorner() ) 
-//    			|| ( ySpeed < 0 && !isBlockedBottomLeftCorner() && !isBlockedBottomRightCorner() ) ) {
-    	if ( ( ySpeed > 0 && !isBlockedLeftTopCorner() && !isBlockedRightTopCorner() ) 
-    			|| ( ySpeed < 0 && !isBlockedLeftBottomCorner() && !isBlockedRightBottomCorner() ) ) {
-    		this.playerYSpeed = ySpeed;
+    	if ( ( ySpeed > 0 ) 
+    			|| ( ySpeed < 0 ) ) {
+    		this.playerYSpeed += ySpeed;
     	} else {
     		this.playerYSpeed = 0;
     	}
@@ -175,6 +189,7 @@ public class Player extends Sprite {
             playerYSpeed = 12;
         else if ( playerYSpeed < -12 )
             playerYSpeed = -12;
+        
     }
 
 	public int getPlayerWidth() {
@@ -211,10 +226,6 @@ public class Player extends Sprite {
 
 	public void accelerate() {
 
-		if ( !isAllowedToMoveX() ) {
-			return;
-		}
-		
 		long elapsed = System.currentTimeMillis() - accelerationStarted;
 		
 		// If player inverted the direction, reset the speed to 0
@@ -224,43 +235,20 @@ public class Player extends Sprite {
 			this.playerXSpeed = 0;
 		}
 		
-		// Increase speed now
-		if ( elapsed > ACCELERATION_DELAY ) {
-			this.playerXSpeed += ACCELERATION_RATE * getDirectionFactor();
-			if ( this.playerXSpeed * getDirectionFactor() > MAX_XSPEED ) {
-				this.playerXSpeed = MAX_XSPEED * getDirectionFactor();
-			}
-			this.accelerationStarted = System.currentTimeMillis();
+		// Not enough time passed
+		if ( elapsed < ACCELERATION_DELAY ) {
+			return;
 		}
+
+		// Accelerate
+		this.playerXSpeed += ACCELERATION_RATE * getDirectionFactor();
+		if ( this.playerXSpeed * getDirectionFactor() > MAX_XSPEED ) {
+			this.playerXSpeed = MAX_XSPEED * getDirectionFactor();
+		}
+		this.accelerationStarted = System.currentTimeMillis();
 		
 	}
 
-	public boolean isAllowedToMoveX() {
-		
-		if ( map == null ) {
-			return true;
-		}
-		
-		// On the ground
-//		boolean onTheGround = (!isBlockedBottomLeftCorner() || !isBlockedBottomRightCorner())
-//							&& !isBlockedTopLeftCorner() && !isBlockedTopRightCorner();
-//		
-//		if ( onTheGround ) {
-//			return true;
-//		}
-		
-		// tells if player is allowed to proceed to the desired x direction
-		boolean allowedToMoveX = false;
-		
-		if (  this.direction == SpriteDirection.LEFT ) {
-			allowedToMoveX = !isBlockedLeftTopCorner() && !isBlockedLeftBottomCorner();
-		} else {
-			allowedToMoveX = !isBlockedRightTopCorner() && !isBlockedRightBottomCorner();
-		}
-
-		return allowedToMoveX;
-	}
-	
 	public void deaccelerate() {
 
 		if ( this.playerXSpeed == 0 ) {
@@ -268,13 +256,15 @@ public class Player extends Sprite {
 		}
 		
 		long elapsed = System.currentTimeMillis() - deaccelerationStarted;
-		if ( elapsed > DEACCELERATION_DELAY ) {
-			this.playerXSpeed -= DEACCELERATION_RATE * getDeaccelerationFactor();
-			if ( this.playerXSpeed * getDirectionFactor() <= 0 ) {
-				this.playerXSpeed = 0;
-			}
-			this.deaccelerationStarted = System.currentTimeMillis();
+		if ( elapsed < DEACCELERATION_DELAY ) {
+			return;
 		}
+		
+		this.playerXSpeed -= DEACCELERATION_RATE * getDeaccelerationFactor();
+		if ( this.playerXSpeed * getDirectionFactor() <= 0 ) {
+			this.playerXSpeed = 0;
+		}
+		this.deaccelerationStarted = System.currentTimeMillis();
 		
 	}
 	
@@ -309,102 +299,104 @@ public class Player extends Sprite {
 		
 	}
 
-	private boolean isBlockedLeftTopCorner() {
+	/**
+	 * Validates whether player is allowed to move left
+	 * @return
+	 */
+	public boolean isBlockedLeft() {
 	
-		//System.out.printf("Player               row/col: %d/%d\n", map.getPlayerRow(), map.getPlayerCol());
-		//System.out.printf("Player Top Left tile row/col: %d/%d\n", map.getPlayerRowAt(getPlayerY()+getHalfPlayerHeight()+1), map.getPlayerColAt(getPlayerX()-getHalfPlayerWidth()-1));
-
-		//System.out.println("Player row/col tile type   : " + map.getTile(map.getPlayerRow(), map.getPlayerCol()).getType());
-		//System.out.println("Top left corner tile type  : " + map.getTile(map.getPlayerRowAt(getPlayerY()+getHalfPlayerHeight()+1), map.getPlayerColAt(getPlayerX()-getHalfPlayerWidth()-1)).getType());
-		
-		// Draw tile on left to check for collision
-        boolean leftTopBlocked = map.getTile(map.getPlayerRowAt(getPlayerY()+getHalfPlayerHeight()), map.getPlayerColAt(getPlayerX()-getHalfPlayerWidth())).getType() == TileType.BLOCKED;
-        int leftX = (map.getPlayerColAt(getPlayerX()-getHalfPlayerWidth())-1) * map.getWidth() - map.getX() + map.getWidth(); // right side of the left tile
-
-        //System.out.printf("Left top blocked            : %s\n", leftTopBlocked);
-        //System.out.printf("Player LeftX / LeftX        : %d/%d\n", getPlayerX()-getHalfPlayerWidth(), leftX);
-        
-        //return false;
-//        return leftTopBlocked && getPlayerX()-getHalfPlayerWidth() <= leftX;
-        return leftTopBlocked;
-        
-	}
-
-	private boolean isBlockedLeftBottomCorner() {
-		
-        // Draw tile on left to check for collision
+        // Checks if right corners of player are blocked
+        boolean leftTopBlocked    = map.getTile(map.getPlayerRowAt(getPlayerY()+getHalfPlayerHeight()), map.getPlayerColAt(getPlayerX()-getHalfPlayerWidth())).getType() == TileType.BLOCKED;
         boolean leftBottomBlocked = map.getTile(map.getPlayerRowAt(getPlayerY()-getHalfPlayerHeight()), map.getPlayerColAt(getPlayerX()-getHalfPlayerWidth())).getType() == TileType.BLOCKED;
-        int bottomY = GamePanel.HEIGHT - (map.getPlayerRowAt(getPlayerY()-getHalfPlayerHeight()) * map.getHeight()) + map.getY() + 5; // top of bottom left tile
-
-        return leftBottomBlocked && getPlayerBottomY() >= bottomY;
         
-        //return leftBottomBlocked;
-	}
-	
-
-	private boolean isBlockedRightTopCorner() {
-
-        // Draw tile on right to check for collision
-        boolean rightTopBlocked = map.getTile(map.getPlayerRowAt(getPlayerY()+getHalfPlayerHeight()), map.getPlayerColAt(getPlayerX()+getHalfPlayerWidth())).getType() == TileType.BLOCKED;
-        //int rightX = (map.getPlayerColAt(getPlayerRightX())+1) * map.getWidth() - map.getX(); // left side of right tile
-
-        //return rightTopBlocked && getPlayerRightX() >= rightX - 1;
+        // If tiles at left corners are not blocking tiles, then it is ok to move left
+        if ( !leftTopBlocked && !leftBottomBlocked ) {
+        	return false;
+        }
         
-        return rightTopBlocked;
+        // Right X for tile on left side
+        int tileRx = (map.getPlayerColAt(getPlayerX()-getHalfPlayerWidth())) * map.getWidth() + map.getWidth();// left side of tile on the right
+        
+        // Sets player X based on right side of blocking tile on the left
+        this.playerX = (tileRx + getHalfPlayerWidth());
+        
+        return true;
+        
 	}
-	
-	private boolean isBlockedRightBottomCorner() {
 
-        // Draw tile on right to check for collision
+	/**
+	 * Validates whether player is allowed to move right
+	 * @return
+	 */
+	public boolean isBlockedRight() {
+
+        // Checks if right corners of player are blocked
+        boolean rightTopBlocked    = map.getTile(map.getPlayerRowAt(getPlayerY()+getHalfPlayerHeight()), map.getPlayerColAt(getPlayerX()+getHalfPlayerWidth())).getType() == TileType.BLOCKED;
         boolean rightBottomBlocked = map.getTile(map.getPlayerRowAt(getPlayerY()-getHalfPlayerHeight()), map.getPlayerColAt(getPlayerX()+getHalfPlayerWidth())).getType() == TileType.BLOCKED;
-        int bottomY = GamePanel.HEIGHT - (map.getPlayerRowAt(getPlayerY()-getHalfPlayerHeight()) * map.getHeight()) + map.getY() + 5; // top of bottom left tile
-        //int rightX = (map.getPlayerColAt(getPlayerRightX())+1) * map.getWidth() - map.getX(); // left side of right tile
-
-        System.out.println(getPlayerBottomY() + " / " + bottomY);
-        return rightBottomBlocked && getPlayerBottomY() >= bottomY;
-        //return rightBottomBlocked;
+        
+        // If tiles at right corners are not blocking tiles, then it is ok to move right
+        if ( !rightTopBlocked && !rightBottomBlocked ) {
+        	return false;
+        }
+        
+        // Left X for tile on right side
+        int tileLx = (map.getPlayerColAt(getPlayerX()+getHalfPlayerWidth())) * map.getWidth()-1;// left side of tile on the right
+        
+        // Sets player X based on left side of blocking tile on the right
+        this.playerX = (tileLx - getHalfPlayerWidth());
+        
+        return true;
         
 	}
-	/*
-	private boolean isBlockedTopLeftCorner() {
-		
-        // Draw tile on top to check for collision
-        boolean topLeftBlocked = map.getTile(map.getPlayerRowAt(getPlayerY()+getHalfPlayerHeight()), map.getPlayerColAt(getPlayerX()-getHalfPlayerWidth())).getType() == TileType.BLOCKED;
-        //int topY = GamePanel.HEIGHT - (map.getPlayerRowAt(getPlayerTopY()) + 1) * map.getHeight() + map.getY() + map.getHeight(); // bottom point of top tile on left corner
 
-        //return topLeftBlocked && getPlayerTopY() <= topY + 1;
-        return topLeftBlocked;
-	}
-	
-	private boolean isBlockedTopRightCorner() {
+	/**
+	 * Validates whether player is allowed to move up
+	 * @return
+	 */
+	public boolean isBlockedTop() {
 		
-        // Draw tile on top to check for collision
-        boolean topRightBlocked = map.getTile(map.getPlayerRowAt(getPlayerY()+getHalfPlayerHeight()), map.getPlayerColAt(getPlayerX()+getHalfPlayerWidth())).getType() == TileType.BLOCKED;
-        //int topY = GamePanel.HEIGHT - (map.getPlayerRowAt(getPlayerTopY()) + 1) * map.getHeight() + map.getY() + map.getHeight(); // bottom point of top tile on left corner
-
-        //return topRightBlocked && getPlayerTopY() <= topY + 1;
-        return topRightBlocked;
-	}
-	
-	private boolean isBlockedBottomLeftCorner() {
-		
-        // Draw tile on bottom to check for collision
-        boolean bottomLeftBlocked = map.getTile(map.getPlayerRowAt(getPlayerY()-getHalfPlayerHeight()), map.getPlayerColAt(getPlayerX()-getHalfPlayerWidth())).getType() == TileType.BLOCKED;
-        int bottomY = GamePanel.HEIGHT - (map.getPlayerRowAt(getPlayerY()-getHalfPlayerHeight()) * map.getHeight()) + map.getY() + 2; // top of bottom left tile
-
-        System.out.printf("Player Y = %d / Bottom Y = %d\n", getPlayerBottomY(), bottomY);
-        return bottomLeftBlocked && getPlayerBottomY() >= bottomY + 2;
-        //return bottomLeftBlocked;
+        // Checks if top corners of player are blocked
+        boolean leftTopBlocked    = map.getTile(map.getPlayerRowAt(getPlayerY()+getHalfPlayerHeight()), map.getPlayerColAt(getPlayerX()-getHalfPlayerWidth())).getType() == TileType.BLOCKED;
+        boolean rightTopBlocked   = map.getTile(map.getPlayerRowAt(getPlayerY()+getHalfPlayerHeight()), map.getPlayerColAt(getPlayerX()+getHalfPlayerWidth())).getType() == TileType.BLOCKED;
+        
+        // If tiles at top corners are not blocking tiles, then it is ok to move up
+        if ( !leftTopBlocked && !rightTopBlocked ) {
+        	return false;
+        }
+        
+        // Bottom Y for tile on upper side
+        int tileBy = (map.getPlayerRowAt(getPlayerY() + getHalfPlayerHeight())) * map.getHeight() - map.getHeight() - 1;// bottom y of upper tile
+        
+        // Sets player Y based on bottom side of blocking tile on the top
+        this.playerY = (tileBy - getHalfPlayerHeight());
+        
+        return true;
+        
 	}
 
-	private boolean isBlockedBottomRightCorner() {
+	/**
+	 * Validates whether player is allowed to move down
+	 * @return
+	 */
+	public boolean isBlockedBottom() {
 		
-        // Draw tile on bottom to check for collision
-        boolean bottomRightBlocked = map.getTile(map.getPlayerRowAt(getPlayerY()-getHalfPlayerHeight()), map.getPlayerColAt(getPlayerX()+getHalfPlayerWidth())).getType() == TileType.BLOCKED;
-        int bottomY = GamePanel.HEIGHT - (map.getPlayerRowAt(getPlayerY()-getHalfPlayerHeight()) * map.getHeight()) + map.getY() + 2; // top of bottom tile
-
-        return bottomRightBlocked && getPlayerBottomY() >= bottomY + 2;
-        //return bottomRightBlocked;
+        // Checks if bottom corners of player are blocked
+        boolean leftBottomBlocked    = map.getTile(map.getPlayerRowAt(getPlayerY()-getHalfPlayerHeight()), map.getPlayerColAt(getPlayerX()-getHalfPlayerWidth())).getType() == TileType.BLOCKED;
+        boolean rightBottomBlocked   = map.getTile(map.getPlayerRowAt(getPlayerY()-getHalfPlayerHeight()), map.getPlayerColAt(getPlayerX()+getHalfPlayerWidth())).getType() == TileType.BLOCKED;
+        
+        // If tiles at bottom corners are not blocking tiles, then it is ok to move down
+        if ( !leftBottomBlocked && !rightBottomBlocked ) {
+        	return false;
+        }
+        
+        // Top Y for tile on bottom side
+        int tileTy = (map.getPlayerRowAt(getPlayerY() - getHalfPlayerHeight())) * map.getHeight();// top y of bottom tile
+        
+        // Sets player Y based on bottom side of blocking tile on the top
+        this.playerY = (tileTy + getHalfPlayerHeight());
+        
+        return true;
+        
 	}
-*/
+
 }

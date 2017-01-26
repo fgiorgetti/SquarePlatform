@@ -10,7 +10,6 @@ import br.com.giorgetti.games.squareplatform.gameobjects.SpriteDirection;
 import br.com.giorgetti.games.squareplatform.gamestate.GameState;
 import br.com.giorgetti.games.squareplatform.main.GamePanel;
 import br.com.giorgetti.games.squareplatform.tiles.TileMap;
-import br.com.giorgetti.games.squareplatform.tiles.Tile.TileType;
 
 
 /**
@@ -49,23 +48,10 @@ public class LevelStateManager implements GameState {
 
     public void update() {
 
-    	checkTileMapColision();
         map.update();
         updatePlayer();
 
     }
-
-    private void checkTileMapColision() {
-    	
-        // Following code is a test to check for collision
-
-        //System.out.printf("left = %s - right = %s - top = %s - bottom = %s\n", leftBlocked, rightBlocked, topBlocked, bottomBlocked);
-        //System.out.printf("player left = %03d - right = %03d - top = %03d - bottom = %03d\n",
-        //		player.getPlayerLeftX(), player.getPlayerRightX(), player.getPlayerTopY(), player.getPlayerBottomY());
-        //System.out.printf("tile   left = %03d - right = %03d - top = %03d - bottom = %03d\n",
-        //		leftX, rightX, topY, bottomY);
-        
-	}
 
 	/**
      * Updates player info based on keys.
