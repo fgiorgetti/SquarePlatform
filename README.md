@@ -1,12 +1,17 @@
 # SquarePlatform
-#
-# Simple 2D scrolling game created with the purpose of learning
-# game development, and also sharing with other people who wants
-# to learn as well.
-#
-# Author: Fernando Giorgetti
-# Status: Under development
 
+
+## Description and inspiration
+
+Simple 2D scrolling game created with the purpose of learning
+game development, and also sharing with other people who wants
+to learn as well.
+
+# Author and Status
+Author: Fernando Giorgetti
+Status: Under development
+
+# Plans
 A 2D scrolling game created for learning about 2D game development,
 using nothing but Java SE.
 
