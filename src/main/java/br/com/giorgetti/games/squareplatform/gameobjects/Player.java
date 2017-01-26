@@ -46,6 +46,7 @@ public class Player extends Sprite {
         setPlayerX(getPlayerX() + getPlayerXSpeed());
         setPlayerY(getPlayerY() + getPlayerYSpeed());
 
+        //System.out.printf("Player X / Y = %d / %d\n", getPlayerX(), getPlayerY());
     }
 
     @Override
