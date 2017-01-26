@@ -12,7 +12,7 @@ import java.awt.*;
  */
 public class Player extends Sprite {
 
-    private static final int MAX_XSPEED = 8;
+    private static final int MAX_XSPEED = 6;
     private static final int FALL_SPEED = -6, JUMP_SPEED = +18;
 	private int playerX, playerY;
     private int playerXSpeed, playerYSpeed = FALL_SPEED;
@@ -21,6 +21,8 @@ public class Player extends Sprite {
     private static int ACCELERATION_RATE = 2, DEACCELERATION_RATE = 4, FALL_RATE = -4;
     private static final int PLAYER_HEIGHT_UP = 20, PLAYER_HEIGHT_CROUCH = 10;
     private static final int PLAYER_WIDTH = 16;
+    
+    private boolean jumping;
     
     private int playerWidth = PLAYER_WIDTH, playerHeight = PLAYER_HEIGHT_UP;
 
@@ -155,7 +157,7 @@ public class Player extends Sprite {
         }
         
         // Jumping
-        //System.out.printf("PYSpeed = %d - STATE = %s\n", this.playerYSpeed, this.state);
+        System.out.printf("PYSpeed = %d - STATE = %s\n", this.playerYSpeed, this.state);
         if ( this.playerYSpeed > 0 ) {
         	
         	if ( isBlockedTop() ) {
@@ -321,7 +323,12 @@ public class Player extends Sprite {
 		setPlayerYSpeed(JUMP_SPEED);
 		this.jumpingStarted = System.currentTimeMillis();
 		this.state = PlayerState.JUMPING;
+		this.jumping = true;
 		
+	}
+	
+	public void jumpReleased() {
+		this.jumping = false;
 	}
 	
 	public void fall() {
@@ -465,6 +472,14 @@ public class Player extends Sprite {
         
         return true;
         
+	}
+
+	public boolean isJumping() {
+		return jumping;
+	}
+
+	public void setJumping(boolean jumping) {
+		this.jumping = jumping;
 	}
 
 }

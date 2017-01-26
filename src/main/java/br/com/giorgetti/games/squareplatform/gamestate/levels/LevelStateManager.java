@@ -77,8 +77,10 @@ public class LevelStateManager implements GameState {
     	}
     	
     	// Jump
-    	if ( keyMap[KeyEvent.VK_UP] ) {
+    	if ( keyMap[KeyEvent.VK_UP] && !player.isJumping() ) {
     		player.jump();
+    	} else if ( !keyMap[KeyEvent.VK_UP] && player.isJumping() ) {
+    		player.jumpReleased();
     	}
     	
 //       player.setPlayerYSpeed(
