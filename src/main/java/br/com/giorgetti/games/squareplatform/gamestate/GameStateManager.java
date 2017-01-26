@@ -1,8 +1,6 @@
 package br.com.giorgetti.games.squareplatform.gamestate;
 
-import br.com.giorgetti.games.squareplatform.gamestate.levels.LevelStateManager;
-
-import java.awt.*;
+import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 

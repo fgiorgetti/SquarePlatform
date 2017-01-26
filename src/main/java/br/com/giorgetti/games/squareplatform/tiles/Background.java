@@ -1,16 +1,8 @@
 package br.com.giorgetti.games.squareplatform.tiles;
 
-import br.com.giorgetti.games.squareplatform.main.GamePanel;
+import java.awt.image.BufferedImage;
 
 import javax.imageio.ImageIO;
-import java.awt.geom.AffineTransform;
-import java.awt.image.AffineTransformOp;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.Buffer;
 
 /**
  * Created by fgiorgetti on 5/9/15.
@@ -27,7 +19,6 @@ public class Background {
 
             this.bgPath = bgPath;
             this.image = ImageIO.read(getClass().getResourceAsStream(bgPath));
-            System.out.printf("BG WIDTH = %d - HEIGHT = %d\n", this.image.getWidth(), this.image.getHeight());
 
         } catch (Exception e) {
             e.printStackTrace();

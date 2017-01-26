@@ -1,12 +1,13 @@
 package br.com.giorgetti.games.squareplatform.gamestate.interaction;
 
-import br.com.giorgetti.games.squareplatform.gamestate.GameState;
-
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
 import java.util.LinkedHashMap;
-import java.util.LinkedList;
 import java.util.TreeSet;
+
+import br.com.giorgetti.games.squareplatform.gamestate.GameState;
 
 /**
  * Created by fgiorgetti on 5/15/15.

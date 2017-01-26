@@ -1,17 +1,19 @@
 package br.com.giorgetti.games.squareplatform.main;
 
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
+
+import javax.swing.JPanel;
+
 import br.com.giorgetti.games.squareplatform.gamestate.GameState;
 import br.com.giorgetti.games.squareplatform.gamestate.GameStateManager;
-
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.awt.image.BufferedImage;
 
 /**
  * Created by fgiorgetti on 5/1/15.
  */
+@SuppressWarnings("serial")
 public class GamePanel extends JPanel implements Runnable {
 
     // Game panel dimensions
