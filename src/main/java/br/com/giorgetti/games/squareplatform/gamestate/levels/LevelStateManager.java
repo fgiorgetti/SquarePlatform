@@ -1,6 +1,7 @@
 package br.com.giorgetti.games.squareplatform.gamestate.levels;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
@@ -13,14 +14,20 @@ import br.com.giorgetti.games.squareplatform.tiles.TileMap;
 
 
 /**
+ * Manages user events on the loaded Map, and updates
+ * map, player and all the states needed for the game to run.
+ * 
  * Created by fgiorgetti on 5/1/15.
  */
 public class LevelStateManager implements GameState {
 
-    protected TileMap map;
+	private boolean initString = false;
+    private static final Font GAME_OVER_FONT = Font.getFont(Font.DIALOG_INPUT);
+	protected TileMap map;
     protected boolean [] keyMap = new boolean[255];
     protected ArrayList<Integer> supportedKeys = new ArrayList<>();
     protected Player player;
+    protected boolean gameOver = false;
     
     protected long realTimeElapsed;
 	protected boolean showFps = false;
@@ -48,8 +55,18 @@ public class LevelStateManager implements GameState {
 
     public void update() {
 
+    	// Need to send back to a final score page or main menu
+    	if ( gameOver ) {
+    		return;
+    	}
+    	
         map.update();
         updatePlayer();
+
+        // Testing when player falls in a hole
+    	if ( player.getY()-1 == player.getHalfHeight() ) {
+    		gameOver = true; // lose one life instead
+    	}
 
     }
 
@@ -58,6 +75,7 @@ public class LevelStateManager implements GameState {
      */
     private void updatePlayer() {
 
+    	// Move right or left
     	if ( keyMap[KeyEvent.VK_RIGHT] ) {
     		player.setDirection(SpriteDirection.RIGHT);
     		player.accelerate();
@@ -83,24 +101,39 @@ public class LevelStateManager implements GameState {
     		player.jumpReleased();
     	}
     	
-//       player.setPlayerYSpeed(
-//               keyMap[KeyEvent.VK_UP]? +2:
-//                       keyMap[KeyEvent.VK_DOWN]?  -2:
-//                               0
-//       );
-
     }
 
-    public void draw(Graphics2D g) {
+    public void draw(Graphics2D g) {        
 
+    	// If we dont do it, then if we write anything, we observe a delay...
+    	// Need to research if there is a better approach.
+    	if ( !initString ) {
+            g.drawString("", 0, 0);	
+            initString = true;
+    	}
+    	
         map.draw(g);
 
         // Drawing player
         player.draw(g);
         drawFps(g);
 
-        drawCollision(g);
+        // Enable for debugging purposes.
+        //drawCollision(g);
                 
+        if ( gameOver ) {
+        	
+        	int panelX = GamePanel.WIDTH/2-40;
+        	int panelY = GamePanel.HEIGHT/2-15;
+        	
+            g.setColor(Color.BLACK);
+            g.setFont(GAME_OVER_FONT);
+            g.fillRect(panelX, panelY, 80, 30);
+            g.setColor(Color.WHITE);
+            g.drawString("Game Over", panelX + 5, panelY + 20);
+
+        }
+        
     }
 
     private void drawCollision(Graphics2D g) {

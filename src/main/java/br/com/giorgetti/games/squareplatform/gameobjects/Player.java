@@ -1,44 +1,32 @@
 package br.com.giorgetti.games.squareplatform.gameobjects;
 
-import br.com.giorgetti.games.squareplatform.gameobjects.player.PlayerState;
-import br.com.giorgetti.games.squareplatform.main.GamePanel;
+import br.com.giorgetti.games.squareplatform.gameobjects.sprite.SpriteState;
 import br.com.giorgetti.games.squareplatform.tiles.TileMap;
-import br.com.giorgetti.games.squareplatform.tiles.Tile.TileType;
+
+import static br.com.giorgetti.games.squareplatform.gameobjects.sprite.SpriteConstants.*;
 
 import java.awt.*;
 
 /**
+ * Defines the player customizations over the Sprite base class.
+ * Provides methods to be called by LevelStateManager, so it can interact
+ * with player.
+ * 
  * Created by fgiorgetti on 7/30/15.
  */
 public class Player extends Sprite {
 
-    private static final int MAX_XSPEED = 6;
-    private static final int FALL_SPEED = -6, JUMP_SPEED = +18;
-	private int playerX, playerY;
-    private int playerXSpeed, playerYSpeed = FALL_SPEED;
-    private long accelerationStarted, deaccelerationStarted, jumpingStarted;
-    private static int ACCELERATION_DELAY = 100, DEACCELERATION_DELAY = 50, FALL_DELAY = 50;
-    private static int ACCELERATION_RATE = 2, DEACCELERATION_RATE = 4, FALL_RATE = -4;
-    private static final int PLAYER_HEIGHT_UP = 20, PLAYER_HEIGHT_CROUCH = 10;
-    private static final int PLAYER_WIDTH = 16;
+	private long accelerationStarted, deaccelerationStarted, jumpingStarted;
+    private boolean jumping; // Set to true while key is pressed
     
-    private boolean jumping;
-    
-    private int playerWidth = PLAYER_WIDTH, playerHeight = PLAYER_HEIGHT_UP;
-
-    private PlayerState state;
-    private SpriteDirection direction;
-    private Animation[] animations; // Animation indexed by state
-    
-    private TileMap map = null;
     
     // DONE -> Handle acceleration and deacceleration X
     // DONE -> Added player height and width
     // DONE -> Handle movement from player class, not level state...
     // DONE -> Collision as player moves
     // DONE -> Block if in contact with Block tile
-    // Gravity
-    // Jumping
+    // DONE -> Gravity (can be improved)
+    // DONE -> Jumping (can be improved - acceleration)
     // Crouching
     
     @Override
@@ -46,10 +34,8 @@ public class Player extends Sprite {
 
         this.map = map;
         
-        // If not blocked right and moving right or 
-        // if not blocked left and moving left
-        setPlayerX(getPlayerX() + getPlayerXSpeed());
-        setPlayerY(getPlayerY() + getPlayerYSpeed());
+        setX(getX() + getXSpeed());
+        setY(getY() + getYSpeed());
 
         //System.out.printf("Player X / Y = %d / %d\n", getPlayerX(), getPlayerY());
     }
@@ -59,192 +45,73 @@ public class Player extends Sprite {
 
     	// Left line on player
         g.setColor(isBlockedLeft()? Color.RED : Color.BLACK);
-        g.drawLine(getPlayerLeftX(), getPlayerTopY(), getPlayerLeftX(), getPlayerBottomY());
+        g.drawLine(getLeftX(), getTopY(), getLeftX(), getBottomY());
 
         // Right line
         g.setColor(isBlockedRight()? Color.RED : Color.BLACK);
-        g.drawLine(getPlayerRightX(), getPlayerTopY(), getPlayerRightX(), getPlayerBottomY());
+        g.drawLine(getRightX(), getTopY(), getRightX(), getBottomY());
         
         // Top line
         g.setColor(isBlockedTop()? Color.RED : Color.BLACK);
-        g.drawLine(getPlayerLeftX(), getPlayerTopY(), getPlayerRightX(), getPlayerTopY());
+        g.drawLine(getLeftX(), getTopY(), getRightX(), getTopY());
 
         // Bottom line
         g.setColor(isBlockedBottom()? Color.RED : Color.BLACK);
-        g.drawLine(getPlayerLeftX(), getPlayerBottomY(), getPlayerRightX(), getPlayerBottomY());
+        g.drawLine(getLeftX(), getBottomY(), getRightX(), getBottomY());
 
         g.setColor(Color.GREEN);
-        g.drawOval(getPlayerLeftX()-1, getPlayerTopY()-1, 1, 1);
-        g.drawOval(getPlayerRightX()-1, getPlayerTopY()-1, 1, 1);
-        g.drawOval(getPlayerLeftX()-1, getPlayerBottomY()-1, 1, 1);
-        g.drawOval(getPlayerRightX()-1, getPlayerBottomY()-1, 1, 1);
+        g.drawOval(getLeftX()-1, getTopY()-1, 1, 1);
+        g.drawOval(getRightX()-1, getTopY()-1, 1, 1);
+        g.drawOval(getLeftX()-1, getBottomY()-1, 1, 1);
+        g.drawOval(getRightX()-1, getBottomY()-1, 1, 1);
         
     }
 
-	public int getPlayerTopY() {
-		return GamePanel.HEIGHT-getPlayerY()-getHalfPlayerHeight()+map.getY();
-	}
-
-	public int getPlayerBottomY() {
-		return getPlayerTopY() + getPlayerHeight();//-1;
-	}
-
-	public int getPlayerLeftX() {
-		return getPlayerX()-getHalfPlayerWidth()-map.getX();
-	}
-	
-	public int getPlayerRightX() {
-		return getPlayerX() + getHalfPlayerWidth() - map.getX();
-	}
-
-    private int getHalfPlayerHeight() {
-		return getPlayerHeight() / 2;
-	}
-
-	private int getHalfPlayerWidth() {
-		return getPlayerWidth() / 2;
-	}
-
-	public int getPlayerX() {
-        return playerX;
-    }
-
-    public void setPlayerX(int playerX) {
+    @Override
+    public void setY(int newY) {
     	
-    	int oldPlayerX = this.playerX;
+    	// Use the common logic
+    	super.setY(newY);
     	
-        if ( map != null && playerX > map.getCols() * map.getWidth() - getHalfPlayerWidth() - 1 ) {
-            this.playerX = map.getCols() * map.getWidth() - getHalfPlayerWidth() - 1;
-        } else if ( playerX < getHalfPlayerWidth() ) {
-            this.playerX = getHalfPlayerWidth();
-        } else {
-            this.playerX = playerX;
-        }
-        
-        // If map not yet provided
         if ( this.map == null ) {
         	return;
         }
-        
-        // Moving right
-        if ( this.playerX > oldPlayerX ) {
-        	isBlockedRight();
-    	// Moving left
-        } else if ( this.playerX < oldPlayerX ) {
-        	isBlockedLeft();
-        }
-        
-    }
 
-    public int getPlayerY() {
-        return playerY;
-    }
-
-    public void setPlayerY(int playerY) {
+    	// Player customization for Y
     	
-    	int oldPlayerY = this.playerY;
-    	
-        if ( map != null && playerY > map.getRows() * map.getHeight() - getHalfPlayerHeight()) {
-            this.playerY = map.getRows() * map.getHeight() - getHalfPlayerHeight();
-        } else if ( playerY < getHalfPlayerHeight() + 1) {
-            this.playerY = getHalfPlayerHeight() + 1;
-        } else {
-            this.playerY = playerY;
-        }
-        
-        if ( this.map == null ) {
-        	return;
-        }
-        
         // Jumping
-        System.out.printf("PYSpeed = %d - STATE = %s\n", this.playerYSpeed, this.state);
-        if ( this.playerYSpeed > 0 ) {
+        //System.out.printf("YSpeed = %d - STATE = %s\n", this.ySpeed, this.state);
+        if ( this.ySpeed > 0 ) {
         	
         	if ( isBlockedTop() ) {
-        		setPlayerYSpeed(0); // stop jumping
+        		setYSpeed(0); // stop jumping
         	}
         	        	
         	fall();
         	
         // Falling
-        } else if ( this.playerYSpeed < 0 ) {
+        } else if ( this.ySpeed < 0 ) {
         	
         	if ( !isBlockedBottom() ) {
-        		this.state = PlayerState.FALLING;
-        		System.out.println("I am falllingggggg !!!!!");
-        	} else if ( this.state == PlayerState.FALLING ) {
-        		this.state = PlayerState.IDLE;
-        		this.playerYSpeed = FALL_SPEED;
-        	}
-        	if ( this.playerY-1 == getHalfPlayerHeight() ) {
-        		System.out.println("You lose"); // Fell in a hole
+        		this.state = SpriteState.FALLING;
+        		//System.out.println("I am falllingggggg !!!!!");
+        	} else if ( this.state == SpriteState.FALLING ) {
+        		this.state = SpriteState.IDLE;
+        		this.ySpeed = FALL_SPEED;
         	}
         	
-        } else if ( this.state == PlayerState.JUMPING ) {
+        } else if ( this.state == SpriteState.JUMPING ) {
     		fall();
         }
         
     }
 
-    public int getPlayerXSpeed() {
-        return this.playerXSpeed;
-    }
-    public int getPlayerYSpeed() {
-        return this.playerYSpeed;
-    }
-    public void setPlayerXSpeed(int xSpeed) {
-        this.playerXSpeed += xSpeed;
-        if ( playerXSpeed > MAX_XSPEED )
-            this.playerXSpeed = MAX_XSPEED;
-        else if ( playerXSpeed < -MAX_XSPEED )
-            this.playerXSpeed = -MAX_XSPEED;
-    }
-    public void setPlayerYSpeed(int ySpeed) {
-    	
-    	if ( ySpeed == 0 ) {
-    		this.playerYSpeed = 0;
-    	}
-    	
-    	if ( ( ySpeed > 0 ) 
-    			|| ( ySpeed < 0 ) ) {
-    		this.playerYSpeed += ySpeed;
-    	} else {
-    		this.playerYSpeed = 0;
-    	}
-        
-        if ( playerYSpeed > JUMP_SPEED )
-            playerYSpeed = JUMP_SPEED;
-        else if ( playerYSpeed < FALL_SPEED )
-            playerYSpeed = FALL_SPEED;
-        
-    }
-
-	public int getPlayerWidth() {
-		return playerWidth;
-	}
-
-	public void setPlayerWidth(int playerWidth) {
-		this.playerWidth = playerWidth;
-	}
-
-	public int getPlayerHeight() {
-		return playerHeight;
-	}
-
-	public PlayerState getState() {
+    public SpriteState getState() {
 		return state;
 	}
 
-	public void setState(PlayerState state) {
+	public void setState(SpriteState state) {
 		this.state = state;
-	}
-
-	public SpriteDirection getDirection() {
-		return direction;
-	}
-
-	public void setDirection(SpriteDirection direction) {
-		this.direction = direction;
 	}
 
 	public void accelerate() {
@@ -252,10 +119,10 @@ public class Player extends Sprite {
 		long elapsed = System.currentTimeMillis() - accelerationStarted;
 		
 		// If player inverted the direction, reset the speed to 0
-		if ( this.playerXSpeed > 0 && this.direction == SpriteDirection.LEFT ) {
-			this.playerXSpeed = 0;
-		} else if ( this.playerXSpeed < 0 && this.direction == SpriteDirection.RIGHT ) {
-			this.playerXSpeed = 0;
+		if ( this.xSpeed > 0 && this.direction == SpriteDirection.LEFT ) {
+			this.xSpeed = 0;
+		} else if ( this.xSpeed < 0 && this.direction == SpriteDirection.RIGHT ) {
+			this.xSpeed = 0;
 		}
 		
 		// Not enough time passed
@@ -264,9 +131,9 @@ public class Player extends Sprite {
 		}
 
 		// Accelerate
-		this.playerXSpeed += ACCELERATION_RATE * getDirectionFactor();
-		if ( this.playerXSpeed * getDirectionFactor() > MAX_XSPEED ) {
-			this.playerXSpeed = MAX_XSPEED * getDirectionFactor();
+		this.xSpeed += ACCELERATION_RATE * getDirectionFactor();
+		if ( this.xSpeed * getDirectionFactor() > MAX_XSPEED ) {
+			this.xSpeed = MAX_XSPEED * getDirectionFactor();
 		}
 		this.accelerationStarted = System.currentTimeMillis();
 		
@@ -274,7 +141,7 @@ public class Player extends Sprite {
 
 	public void deaccelerate() {
 
-		if ( this.playerXSpeed == 0 ) {
+		if ( this.xSpeed == 0 ) {
 			return;
 		}
 		
@@ -283,9 +150,9 @@ public class Player extends Sprite {
 			return;
 		}
 		
-		this.playerXSpeed -= DEACCELERATION_RATE * getDeaccelerationFactor();
-		if ( this.playerXSpeed * getDirectionFactor() <= 0 ) {
-			this.playerXSpeed = 0;
+		this.xSpeed -= DEACCELERATION_RATE * getDeaccelerationFactor();
+		if ( this.xSpeed * getDirectionFactor() <= 0 ) {
+			this.xSpeed = 0;
 		}
 		this.deaccelerationStarted = System.currentTimeMillis();
 		
@@ -293,36 +160,38 @@ public class Player extends Sprite {
 	
 	public void crouch() {
 		
-		if ( this.playerHeight == PLAYER_HEIGHT_CROUCH ) {
+		if ( this.height == PLAYER_HEIGHT_CROUCH ) {
 			return;
 		}
 		
-		this.playerHeight = PLAYER_HEIGHT_CROUCH;
-		this.playerY -= PLAYER_HEIGHT_CROUCH / 2;
+		this.height = PLAYER_HEIGHT_CROUCH;
+		this.y -= PLAYER_HEIGHT_CROUCH / 2;
+		this.state = SpriteState.CROUCHING;
 		
 	}
 	
 	public void standup() {
 
-		if ( this.playerHeight == PLAYER_HEIGHT_UP ) {
+		if ( this.height == PLAYER_HEIGHT_UP ) {
 			return;
 		}
 
-		this.playerHeight = PLAYER_HEIGHT_UP;
-		this.playerY += PLAYER_HEIGHT_CROUCH / 2;
+		this.height = PLAYER_HEIGHT_UP;
+		this.y += PLAYER_HEIGHT_CROUCH / 2;
+		this.state = SpriteState.IDLE;
 		
 	}
 	
 	public void jump() {
 		
-		if ( this.state == PlayerState.JUMPING || 
-				this.state == PlayerState.FALLING ) {
+		if ( this.state == SpriteState.JUMPING || 
+				this.state == SpriteState.FALLING ) {
 			return;
 		}
 		
-		setPlayerYSpeed(JUMP_SPEED);
+		setYSpeed(JUMP_SPEED);
 		this.jumpingStarted = System.currentTimeMillis();
-		this.state = PlayerState.JUMPING;
+		this.state = SpriteState.JUMPING;
 		this.jumping = true;
 		
 	}
@@ -338,142 +207,11 @@ public class Player extends Sprite {
 			return;
 		}
 		
-		setPlayerYSpeed(FALL_RATE);
+		setYSpeed(FALL_RATE);
 		this.jumpingStarted = System.currentTimeMillis();
 		
 	}
 	
-	/**
-	 * Returns 1 if going right or -1 if left.
-	 * @return
-	 */
-	public int getDirectionFactor() {
-		if ( direction == SpriteDirection.RIGHT ) {
-			return 1;
-		} else {
-			return -1;
-		}
-	}
-	
-	/**
-	 * If speed positive, returns 1 meaning going right.
-	 * If negative, returns -1 meaning its going left.
-	 * If zero, then return 0, meaning it is idle.
-	 * 
-	 * @return
-	 */
-	public int getDeaccelerationFactor() {
-		
-		if ( playerXSpeed > 0 ) {
-			return 1;
-		} else if ( playerXSpeed < 0 ) {
-			return -1;
-		}
-		
-		return 0;
-		
-	}
-
-	/**
-	 * Validates whether player is allowed to move left
-	 * @return
-	 */
-	public boolean isBlockedLeft() {
-	
-        // Checks if right corners of player are blocked
-        boolean leftTopBlocked    = map.getTile(map.getPlayerRowAt(getPlayerY()+getHalfPlayerHeight()), map.getPlayerColAt(getPlayerX()-getHalfPlayerWidth())).getType() == TileType.BLOCKED;
-        boolean leftBottomBlocked = map.getTile(map.getPlayerRowAt(getPlayerY()-getHalfPlayerHeight()), map.getPlayerColAt(getPlayerX()-getHalfPlayerWidth())).getType() == TileType.BLOCKED;
-        
-        // If tiles at left corners are not blocking tiles, then it is ok to move left
-        if ( !leftTopBlocked && !leftBottomBlocked ) {
-        	return false;
-        }
-        
-        // Right X for tile on left side
-        int tileRx = (map.getPlayerColAt(getPlayerX()-getHalfPlayerWidth())) * map.getWidth() + map.getWidth();// left side of tile on the right
-        
-        // Sets player X based on right side of blocking tile on the left
-        this.playerX = (tileRx + getHalfPlayerWidth());
-        
-        return true;
-        
-	}
-
-	/**
-	 * Validates whether player is allowed to move right
-	 * @return
-	 */
-	public boolean isBlockedRight() {
-
-        // Checks if right corners of player are blocked
-        boolean rightTopBlocked    = map.getTile(map.getPlayerRowAt(getPlayerY()+getHalfPlayerHeight()), map.getPlayerColAt(getPlayerX()+getHalfPlayerWidth())).getType() == TileType.BLOCKED;
-        boolean rightBottomBlocked = map.getTile(map.getPlayerRowAt(getPlayerY()-getHalfPlayerHeight()), map.getPlayerColAt(getPlayerX()+getHalfPlayerWidth())).getType() == TileType.BLOCKED;
-        
-        // If tiles at right corners are not blocking tiles, then it is ok to move right
-        if ( !rightTopBlocked && !rightBottomBlocked ) {
-        	return false;
-        }
-        
-        // Left X for tile on right side
-        int tileLx = (map.getPlayerColAt(getPlayerX()+getHalfPlayerWidth())) * map.getWidth()-1;// left side of tile on the right
-        
-        // Sets player X based on left side of blocking tile on the right
-        this.playerX = (tileLx - getHalfPlayerWidth());
-        
-        return true;
-        
-	}
-
-	/**
-	 * Validates whether player is allowed to move up
-	 * @return
-	 */
-	public boolean isBlockedTop() {
-		
-        // Checks if top corners of player are blocked
-        boolean leftTopBlocked    = map.getTile(map.getPlayerRowAt(getPlayerY()+getHalfPlayerHeight()), map.getPlayerColAt(getPlayerX()-getHalfPlayerWidth())).getType() == TileType.BLOCKED;
-        boolean rightTopBlocked   = map.getTile(map.getPlayerRowAt(getPlayerY()+getHalfPlayerHeight()), map.getPlayerColAt(getPlayerX()+getHalfPlayerWidth())).getType() == TileType.BLOCKED;
-        
-        // If tiles at top corners are not blocking tiles, then it is ok to move up
-        if ( !leftTopBlocked && !rightTopBlocked ) {
-        	return false;
-        }
-        
-        // Bottom Y for tile on upper side
-        int tileBy = (map.getPlayerRowAt(getPlayerY() + getHalfPlayerHeight())) * map.getHeight() - map.getHeight() - 1;// bottom y of upper tile
-        
-        // Sets player Y based on bottom side of blocking tile on the top
-        this.playerY = (tileBy - getHalfPlayerHeight());
-        
-        return true;
-        
-	}
-
-	/**
-	 * Validates whether player is allowed to move down
-	 * @return
-	 */
-	public boolean isBlockedBottom() {
-		
-        // Checks if bottom corners of player are blocked
-        boolean leftBottomBlocked    = map.getTile(map.getPlayerRowAt(getPlayerY()-getHalfPlayerHeight()), map.getPlayerColAt(getPlayerX()-getHalfPlayerWidth())).getType() == TileType.BLOCKED;
-        boolean rightBottomBlocked   = map.getTile(map.getPlayerRowAt(getPlayerY()-getHalfPlayerHeight()), map.getPlayerColAt(getPlayerX()+getHalfPlayerWidth())).getType() == TileType.BLOCKED;
-        
-        // If tiles at bottom corners are not blocking tiles, then it is ok to move down
-        if ( !leftBottomBlocked && !rightBottomBlocked ) {
-        	return false;
-        }
-        
-        // Top Y for tile on bottom side
-        int tileTy = (map.getPlayerRowAt(getPlayerY() - getHalfPlayerHeight())) * map.getHeight();// top y of bottom tile
-        
-        // Sets player Y based on bottom side of blocking tile on the top
-        this.playerY = (tileTy + getHalfPlayerHeight());
-        
-        return true;
-        
-	}
-
 	public boolean isJumping() {
 		return jumping;
 	}

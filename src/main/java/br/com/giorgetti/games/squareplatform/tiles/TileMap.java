@@ -1,7 +1,7 @@
 package br.com.giorgetti.games.squareplatform.tiles;
 
 import br.com.giorgetti.games.squareplatform.exception.ErrorConstants;
-import br.com.giorgetti.games.squareplatform.gameobjects.Player;
+import br.com.giorgetti.games.squareplatform.gameobjects.Sprite;
 import br.com.giorgetti.games.squareplatform.main.GamePanel;
 import br.com.giorgetti.games.squareplatform.tiles.Tile.TileType;
 
@@ -11,6 +11,10 @@ import java.util.*;
 import java.util.List;
 
 /**
+ * This class stores the current tile map definition, allowing the map
+ * to be drawn on the screen, serialized into a String, and loaded from 
+ * a Text File.
+ * 
  * Created by fgiorgetti on 5/1/15.
  */
 public class TileMap {
@@ -78,7 +82,7 @@ public class TileMap {
     private static final int POS_PLAYER_X = 0;
     private static final int POS_PLAYER_Y = 1;
 
-    private Player player;
+    private Sprite player;
 
     // Stores identification for each sprite on the map
     private List<String[]> sprites;
@@ -127,7 +131,7 @@ public class TileMap {
      *
      * @param tileMapPath
      */
-    public void loadTileMap(String tileMapPath, Player player) {
+    public void loadTileMap(String tileMapPath, Sprite player) {
 
         // Opening the tile map file
         BufferedReader reader = null;
@@ -225,8 +229,8 @@ public class TileMap {
                 break;
             case "PLAYER":
                 arr = value.split(PROP_SEPARATOR);
-                player.setPlayerX(Integer.parseInt(arr[POS_PLAYER_X]));
-                player.setPlayerY(Integer.parseInt(arr[POS_PLAYER_Y]));
+                player.setX(Integer.parseInt(arr[POS_PLAYER_X]));
+                player.setY(Integer.parseInt(arr[POS_PLAYER_Y]));
                 break;
         }
     }
@@ -404,7 +408,7 @@ public class TileMap {
                 .append("BG=").append(getBackgroundsAsString()).append("\n")
                 .append("TS=").append(getTileSetsAsString()).append("\n")
                 .append("SPRITES=").append(getSpritesAsString())
-                .append("PLAYER=").append(player.getPlayerX()).append(PROP_SEPARATOR).append(player.getPlayerY()).append("\n")
+                .append("PLAYER=").append(player.getX()).append(PROP_SEPARATOR).append(player.getY()).append("\n")
                 .append(getMapAsString());
         
 
@@ -506,18 +510,18 @@ public class TileMap {
     }
 
     public int getPlayerRow() {
-        return (( player.getPlayerY() ) / getHeight()) + 1;
+        return (( player.getY() ) / getHeight()) + 1;
     }
 
-    public int getPlayerRowAt(int y) {
+    public int getRowAt(int y) {
         return (( y ) / getHeight()) + 1;
     }
 
     public int getPlayerCol() {
-        return player.getPlayerX() / getWidth();
+        return player.getX() / getWidth();
     }
 
-    public int getPlayerColAt(int x) {
+    public int getColAt(int x) {
         return x  / getWidth();
     }
 
@@ -525,8 +529,8 @@ public class TileMap {
 
         player.update(this);
 
-        setX(player.getPlayerX() - GamePanel.WIDTH / 2);
-        setY(player.getPlayerY() - GamePanel.HEIGHT / 2);
+        setX(player.getX() - GamePanel.WIDTH / 2);
+        setY(player.getY() - GamePanel.HEIGHT / 2);
 
         setColOffset(getX() / getWidth());
         setRowOffset(getY() / getHeight() + 1);
