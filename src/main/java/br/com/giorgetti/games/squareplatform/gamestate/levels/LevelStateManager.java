@@ -8,6 +8,7 @@ import java.util.ArrayList;
 
 import br.com.giorgetti.games.squareplatform.gameobjects.Player;
 import br.com.giorgetti.games.squareplatform.gameobjects.SpriteDirection;
+import br.com.giorgetti.games.squareplatform.gameobjects.sprite.SpriteState;
 import br.com.giorgetti.games.squareplatform.gamestate.GameState;
 import br.com.giorgetti.games.squareplatform.main.GamePanel;
 import br.com.giorgetti.games.squareplatform.tiles.TileMap;
@@ -88,10 +89,12 @@ public class LevelStateManager implements GameState {
     	
 
     	// Crouch
-    	if ( keyMap[KeyEvent.VK_DOWN] ) {
-    		player.crouch();
-    	} else {
-    		player.standup();
+    	if ( !player.isJumpingOrCrouching() ) {
+	    	if ( keyMap[KeyEvent.VK_DOWN] ) {
+	    		player.crouch();
+	    	} else {
+	    		player.standup();
+	    	}
     	}
     	
     	// Jump

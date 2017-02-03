@@ -221,7 +221,9 @@ public class MapEditorStateManager implements GameState {
                 @Override
                 public void handle(String userInput) {
                     try {
-                        BufferedWriter out = new BufferedWriter(new FileWriter(new File(userInput)));
+                    	String baseDir = System.getProperty("user.dir") + "/src/main/resources/maps/";
+                    	System.out.println("Saving file as: " + baseDir + userInput);
+                        BufferedWriter out = new BufferedWriter(new FileWriter(new File(baseDir + userInput)));
                         out.write(getMap().toString());
                         out.flush();
                         out.close();

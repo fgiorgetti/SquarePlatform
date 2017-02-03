@@ -40,6 +40,7 @@ public class SquarePlatform {
     		window.setVisible(true);
     	} else {
     		window.pack();
+    		window.setVisible(true);
     	}
     }
 

@@ -12,6 +12,9 @@ import static br.com.giorgetti.games.squareplatform.gameobjects.sprite.SpriteCon
 import static br.com.giorgetti.games.squareplatform.gameobjects.sprite.SpriteConstants.PLAYER_WIDTH;
 
 import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * General behavior for sprites in the game.
@@ -29,7 +32,8 @@ public abstract class Sprite {
 	protected SpriteDirection direction;
 	protected TileMap map = null;
 	protected SpriteState state;
-	private Animation[] animations;
+	private Animation currentAnimation;
+	private Map<String, Animation> animations = new HashMap<String, Animation>();
 	
 	public abstract void update(TileMap map);
     public abstract void draw(Graphics2D g);
@@ -255,29 +259,40 @@ public abstract class Sprite {
     }
 	public void setXSpeed(int xSpeed) {
 	    this.xSpeed += xSpeed;
-	    if ( xSpeed > MAX_XSPEED )
+	    if ( this.xSpeed > MAX_XSPEED )
 	        this.xSpeed = MAX_XSPEED;
-	    else if ( xSpeed < -MAX_XSPEED )
+	    else if ( this.xSpeed < -MAX_XSPEED )
 	        this.xSpeed = -MAX_XSPEED;
 	}
 	public void setYSpeed(int ySpeed) {
 		
 		if ( ySpeed == 0 ) {
 			this.ySpeed = 0;
+			return;
 		}
 		
-		if ( ( ySpeed > 0 ) 
-				|| ( ySpeed < 0 ) ) {
-			this.ySpeed += ySpeed;
-		} else {
-			this.ySpeed = 0;
-		}
+		this.ySpeed += ySpeed;
 	    
-	    if ( ySpeed > JUMP_SPEED )
-	        ySpeed = JUMP_SPEED;
-	    else if ( ySpeed < FALL_SPEED )
-	        ySpeed = FALL_SPEED;
+	    if ( this.ySpeed > JUMP_SPEED )
+	        this.ySpeed = JUMP_SPEED;
+	    else if ( this.ySpeed < FALL_SPEED )
+	        this.ySpeed = FALL_SPEED;
 	    
 	}
 
+	public void loadAnimation(Animation animation) {
+		animations.put(animation.getId(), animation);
+	}
+	
+	public void setAnimation(String animationId) {
+		if ( currentAnimation == null || !currentAnimation.getId().equals(animationId) ) {
+			currentAnimation = animations.get(animationId);
+			currentAnimation.reset();
+		}
+	}
+	
+	public BufferedImage getCurrentAnimation() {
+		return currentAnimation == null? null:currentAnimation.getAnimation();
+	}
+	
 }

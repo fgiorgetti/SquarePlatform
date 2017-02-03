@@ -1,11 +1,22 @@
 package br.com.giorgetti.games.squareplatform.gameobjects;
 
+import static br.com.giorgetti.games.squareplatform.gameobjects.sprite.SpriteConstants.ACCELERATION_DELAY;
+import static br.com.giorgetti.games.squareplatform.gameobjects.sprite.SpriteConstants.ACCELERATION_RATE;
+import static br.com.giorgetti.games.squareplatform.gameobjects.sprite.SpriteConstants.DEACCELERATION_DELAY;
+import static br.com.giorgetti.games.squareplatform.gameobjects.sprite.SpriteConstants.DEACCELERATION_RATE;
+import static br.com.giorgetti.games.squareplatform.gameobjects.sprite.SpriteConstants.FALL_DELAY;
+import static br.com.giorgetti.games.squareplatform.gameobjects.sprite.SpriteConstants.FALL_RATE;
+import static br.com.giorgetti.games.squareplatform.gameobjects.sprite.SpriteConstants.FALL_SPEED;
+import static br.com.giorgetti.games.squareplatform.gameobjects.sprite.SpriteConstants.JUMP_SPEED;
+import static br.com.giorgetti.games.squareplatform.gameobjects.sprite.SpriteConstants.MAX_XSPEED;
+import static br.com.giorgetti.games.squareplatform.gameobjects.sprite.SpriteConstants.PLAYER_HEIGHT_CROUCH;
+import static br.com.giorgetti.games.squareplatform.gameobjects.sprite.SpriteConstants.PLAYER_HEIGHT_UP;
+
+import java.awt.Color;
+import java.awt.Graphics2D;
+
 import br.com.giorgetti.games.squareplatform.gameobjects.sprite.SpriteState;
 import br.com.giorgetti.games.squareplatform.tiles.TileMap;
-
-import static br.com.giorgetti.games.squareplatform.gameobjects.sprite.SpriteConstants.*;
-
-import java.awt.*;
 
 /**
  * Defines the player customizations over the Sprite base class.
@@ -27,7 +38,37 @@ public class Player extends Sprite {
     // DONE -> Block if in contact with Block tile
     // DONE -> Gravity (can be improved)
     // DONE -> Jumping (can be improved - acceleration)
-    // Crouching
+    // DONE -> Crouching
+    // Load Sprite Animations
+    // Resize Sprite based on animation scene size
+    
+    public Player() {
+    	    	
+    	loadAnimation(Animation.newAnimation(SpriteState.WALKING.name(),
+    				"/sprites/player/blocky_walkright.png",
+    				14).delay(200));
+
+    	loadAnimation(Animation.newAnimation(SpriteState.IDLE.name(),
+				"/sprites/player/blocky_right.png",
+				16).delay(500));
+
+    	loadAnimation(Animation.newAnimation(SpriteState.JUMPING.name(),
+				"/sprites/player/blocky_right.png",
+				16).delay(500));
+
+    	loadAnimation(Animation.newAnimation(SpriteState.FALLING.name(),
+				"/sprites/player/blocky_right.png",
+				16).delay(500));
+
+    	loadAnimation(Animation.newAnimation(SpriteState.CROUCHING.name(),
+				"/sprites/player/blocky_downedright.png",
+				16).delay(300).onlyOnce());
+
+    	// Setting initial state
+    	setDirection(SpriteDirection.RIGHT);
+    	setState(SpriteState.IDLE);
+    	
+    }
     
     @Override
     public void update(TileMap map) {
@@ -43,7 +84,23 @@ public class Player extends Sprite {
     @Override
     public void draw(Graphics2D g) {
 
-    	// Left line on player
+    	//drawPlayerBorders(g);
+        g.setColor(Color.GREEN);
+        g.drawString("Player State = " + getState(), 10, 10);
+        
+        if ( getCurrentAnimation() != null ) {
+        	if ( getDirection() == SpriteDirection.RIGHT ) {
+        		g.drawImage(getCurrentAnimation(), getLeftX(), getTopY(), getWidth(), getHeight(), null);
+        	} else {
+        		g.drawImage(getCurrentAnimation(), getRightX(), getTopY(), -getWidth(), getHeight(), null);
+        	}
+        }
+    }
+
+    // Draw borders around player ( for debugging )
+	private void drawPlayerBorders(Graphics2D g) {
+		
+		// Left line on player
         g.setColor(isBlockedLeft()? Color.RED : Color.BLACK);
         g.drawLine(getLeftX(), getTopY(), getLeftX(), getBottomY());
 
@@ -65,7 +122,7 @@ public class Player extends Sprite {
         g.drawOval(getLeftX()-1, getBottomY()-1, 1, 1);
         g.drawOval(getRightX()-1, getBottomY()-1, 1, 1);
         
-    }
+	}
 
     @Override
     public void setY(int newY) {
@@ -93,10 +150,11 @@ public class Player extends Sprite {
         } else if ( this.ySpeed < 0 ) {
         	
         	if ( !isBlockedBottom() ) {
-        		this.state = SpriteState.FALLING;
+        		setState(SpriteState.FALLING);
+            	fall();
         		//System.out.println("I am falllingggggg !!!!!");
         	} else if ( this.state == SpriteState.FALLING ) {
-        		this.state = SpriteState.IDLE;
+        		setState(SpriteState.IDLE);
         		this.ySpeed = FALL_SPEED;
         	}
         	
@@ -112,18 +170,12 @@ public class Player extends Sprite {
 
 	public void setState(SpriteState state) {
 		this.state = state;
+		setAnimation(this.state.name());
 	}
 
 	public void accelerate() {
 
 		long elapsed = System.currentTimeMillis() - accelerationStarted;
-		
-		// If player inverted the direction, reset the speed to 0
-		if ( this.xSpeed > 0 && this.direction == SpriteDirection.LEFT ) {
-			this.xSpeed = 0;
-		} else if ( this.xSpeed < 0 && this.direction == SpriteDirection.RIGHT ) {
-			this.xSpeed = 0;
-		}
 		
 		// Not enough time passed
 		if ( elapsed < ACCELERATION_DELAY ) {
@@ -135,6 +187,14 @@ public class Player extends Sprite {
 		if ( this.xSpeed * getDirectionFactor() > MAX_XSPEED ) {
 			this.xSpeed = MAX_XSPEED * getDirectionFactor();
 		}
+		
+		if ( !isJumpingOrCrouching() ) {
+			if ( this.xSpeed != 0 ) {
+				setState(SpriteState.WALKING);
+				setAnimation(this.state.name());
+			}
+		}
+		
 		this.accelerationStarted = System.currentTimeMillis();
 		
 	}
@@ -142,6 +202,9 @@ public class Player extends Sprite {
 	public void deaccelerate() {
 
 		if ( this.xSpeed == 0 ) {
+			if ( !isJumpingOrCrouching() ) {
+				setState(SpriteState.IDLE);
+			}
 			return;
 		}
 		
@@ -154,19 +217,20 @@ public class Player extends Sprite {
 		if ( this.xSpeed * getDirectionFactor() <= 0 ) {
 			this.xSpeed = 0;
 		}
+				
 		this.deaccelerationStarted = System.currentTimeMillis();
 		
 	}
 	
 	public void crouch() {
 		
+		setState(SpriteState.CROUCHING);
 		if ( this.height == PLAYER_HEIGHT_CROUCH ) {
 			return;
 		}
 		
 		this.height = PLAYER_HEIGHT_CROUCH;
 		this.y -= PLAYER_HEIGHT_CROUCH / 2;
-		this.state = SpriteState.CROUCHING;
 		
 	}
 	
@@ -178,7 +242,7 @@ public class Player extends Sprite {
 
 		this.height = PLAYER_HEIGHT_UP;
 		this.y += PLAYER_HEIGHT_CROUCH / 2;
-		this.state = SpriteState.IDLE;
+		setState(SpriteState.IDLE);
 		
 	}
 	
@@ -189,9 +253,10 @@ public class Player extends Sprite {
 			return;
 		}
 		
+		//System.out.println("Before jumping y speed: " + getYSpeed());
 		setYSpeed(JUMP_SPEED);
 		this.jumpingStarted = System.currentTimeMillis();
-		this.state = SpriteState.JUMPING;
+		setState(SpriteState.JUMPING);
 		this.jumping = true;
 		
 	}
@@ -206,8 +271,8 @@ public class Player extends Sprite {
 		if ( elapsed < FALL_DELAY ) {
 			return;
 		}
-		
 		setYSpeed(FALL_RATE);
+		//System.out.println(getYSpeed());
 		this.jumpingStarted = System.currentTimeMillis();
 		
 	}
@@ -220,4 +285,8 @@ public class Player extends Sprite {
 		this.jumping = jumping;
 	}
 
+	public boolean isJumpingOrCrouching() {
+		return getState() == SpriteState.JUMPING 
+				|| getState() == SpriteState.FALLING;
+	}
 }
