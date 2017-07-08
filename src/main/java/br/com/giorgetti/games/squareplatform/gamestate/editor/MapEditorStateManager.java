@@ -1,6 +1,6 @@
 package br.com.giorgetti.games.squareplatform.gamestate.editor;
 
-import br.com.giorgetti.games.squareplatform.gameobjects.Sprite;
+import br.com.giorgetti.games.squareplatform.gameobjects.MovableSprite;
 import br.com.giorgetti.games.squareplatform.gamestate.GameState;
 import br.com.giorgetti.games.squareplatform.gamestate.interaction.DialogCallbackHandler;
 import br.com.giorgetti.games.squareplatform.gamestate.interaction.DialogGameState;
@@ -15,7 +15,6 @@ import java.awt.event.KeyEvent;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -28,7 +27,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public class MapEditorStateManager implements GameState {
 
     protected TileMap map;
-    protected Sprite player;
+    protected MovableSprite player;
 
     private Tile currentTile = null;
     private TileSet currentTileSet = null;
@@ -43,7 +42,7 @@ public class MapEditorStateManager implements GameState {
         PREV, NEXT;
     }
 
-    public MapEditorStateManager(String mapPath, Sprite p) {
+    public MapEditorStateManager(String mapPath, MovableSprite p) {
 
         this.map = new TileMap();
         this.map.loadTileMap(mapPath, p);

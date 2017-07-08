@@ -25,7 +25,7 @@ import br.com.giorgetti.games.squareplatform.tiles.TileMap;
  * 
  * Created by fgiorgetti on 7/30/15.
  */
-public class Player extends Sprite {
+public class Player extends MovableSprite {
 
 	private long accelerationStarted, deaccelerationStarted, jumpingStarted;
     private boolean jumping; // Set to true while key is pressed

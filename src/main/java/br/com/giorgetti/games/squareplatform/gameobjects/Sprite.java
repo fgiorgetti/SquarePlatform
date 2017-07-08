@@ -5,16 +5,12 @@ import br.com.giorgetti.games.squareplatform.main.GamePanel;
 import br.com.giorgetti.games.squareplatform.tiles.Tile.TileType;
 import br.com.giorgetti.games.squareplatform.tiles.TileMap;
 
-import static br.com.giorgetti.games.squareplatform.gameobjects.sprite.SpriteConstants.FALL_SPEED;
-import static br.com.giorgetti.games.squareplatform.gameobjects.sprite.SpriteConstants.JUMP_SPEED;
-import static br.com.giorgetti.games.squareplatform.gameobjects.sprite.SpriteConstants.MAX_XSPEED;
-import static br.com.giorgetti.games.squareplatform.gameobjects.sprite.SpriteConstants.PLAYER_HEIGHT_UP;
-import static br.com.giorgetti.games.squareplatform.gameobjects.sprite.SpriteConstants.PLAYER_WIDTH;
-
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.HashMap;
 import java.util.Map;
+
+import static br.com.giorgetti.games.squareplatform.gameobjects.sprite.SpriteConstants.*;
 
 /**
  * General behavior for sprites in the game.
@@ -25,16 +21,14 @@ public abstract class Sprite {
 
     protected int x;
 	protected int y;
-	protected int xSpeed;
-	protected int ySpeed = FALL_SPEED;
 	protected int width = PLAYER_WIDTH;
 	protected int height = PLAYER_HEIGHT_UP;
-	protected SpriteDirection direction;
 	protected TileMap map = null;
+	protected Animation currentAnimation;
+	protected Map<String, Animation> animations = new HashMap<String, Animation>();
+
 	protected SpriteState state;
-	private Animation currentAnimation;
-	private Map<String, Animation> animations = new HashMap<String, Animation>();
-	
+
 	public abstract void update(TileMap map);
     public abstract void draw(Graphics2D g);
     
@@ -62,12 +56,7 @@ public abstract class Sprite {
 	public int getY() {
 	    return y;
 	}
-	public int getXSpeed() {
-	    return this.xSpeed;
-	}
-	public int getYSpeed() {
-	    return this.ySpeed;
-	}
+
 	public int getWidth() {
 		return width;
 	}
@@ -77,44 +66,7 @@ public abstract class Sprite {
 	public int getHeight() {
 		return height;
 	}
-	public SpriteDirection getDirection() {
-		return direction;
-	}
-	public void setDirection(SpriteDirection direction) {
-		this.direction = direction;
-	}
-	
-	/**
-	 * Returns 1 if going right or -1 if left.
-	 * @return
-	 */
-	public int getDirectionFactor() {
-		if ( direction == SpriteDirection.RIGHT ) {
-			return 1;
-		} else {
-			return -1;
-		}
-	}
-	
-	/**
-	 * If speed positive, returns 1 meaning going right.
-	 * If negative, returns -1 meaning its going left.
-	 * If zero, then return 0, meaning it is idle.
-	 * 
-	 * @return
-	 */
-	public int getDeaccelerationFactor() {
-		
-		if ( xSpeed > 0 ) {
-			return 1;
-		} else if ( xSpeed < 0 ) {
-			return -1;
-		}
-		
-		return 0;
-		
-	}
-	
+
 	/**
 	 * Validates whether player is allowed to move left
 	 * @return
@@ -160,7 +112,7 @@ public abstract class Sprite {
 	    
 	    // Sets player X based on left side of blocking tile on the right
 	    this.x = (tileLx - getHalfWidth());
-	    
+
 	    return true;
 	    
 	}
@@ -257,28 +209,6 @@ public abstract class Sprite {
         }
                 
     }
-	public void setXSpeed(int xSpeed) {
-	    this.xSpeed += xSpeed;
-	    if ( this.xSpeed > MAX_XSPEED )
-	        this.xSpeed = MAX_XSPEED;
-	    else if ( this.xSpeed < -MAX_XSPEED )
-	        this.xSpeed = -MAX_XSPEED;
-	}
-	public void setYSpeed(int ySpeed) {
-		
-		if ( ySpeed == 0 ) {
-			this.ySpeed = 0;
-			return;
-		}
-		
-		this.ySpeed += ySpeed;
-	    
-	    if ( this.ySpeed > JUMP_SPEED )
-	        this.ySpeed = JUMP_SPEED;
-	    else if ( this.ySpeed < FALL_SPEED )
-	        this.ySpeed = FALL_SPEED;
-	    
-	}
 
 	public void loadAnimation(Animation animation) {
 		animations.put(animation.getId(), animation);
