@@ -525,6 +525,30 @@ public class TileMap {
         return x  / getWidth();
     }
 
+    public int getPlayerX() {
+        return this.player.getX();
+    }
+
+    public int getPlayerLeftX() {
+        return this.player.getLeftX();
+    }
+
+    public int getPlayerRightX() {
+        return this.player.getRightX();
+    }
+
+    public int getPlayerY() {
+        return this.player.getY();
+    }
+
+    public int getPlayerTopY() {
+        return this.player.getTopY();
+    }
+
+    public int getPlayerBottomY() {
+        return this.player.getBottomY();
+    }
+
     public void update() {
 
         player.update(this);

@@ -1,22 +1,11 @@
 package br.com.giorgetti.games.squareplatform.gameobjects;
 
-import static br.com.giorgetti.games.squareplatform.gameobjects.sprite.SpriteConstants.ACCELERATION_DELAY;
-import static br.com.giorgetti.games.squareplatform.gameobjects.sprite.SpriteConstants.ACCELERATION_RATE;
-import static br.com.giorgetti.games.squareplatform.gameobjects.sprite.SpriteConstants.DEACCELERATION_DELAY;
-import static br.com.giorgetti.games.squareplatform.gameobjects.sprite.SpriteConstants.DEACCELERATION_RATE;
-import static br.com.giorgetti.games.squareplatform.gameobjects.sprite.SpriteConstants.FALL_DELAY;
-import static br.com.giorgetti.games.squareplatform.gameobjects.sprite.SpriteConstants.FALL_RATE;
-import static br.com.giorgetti.games.squareplatform.gameobjects.sprite.SpriteConstants.FALL_SPEED;
-import static br.com.giorgetti.games.squareplatform.gameobjects.sprite.SpriteConstants.JUMP_SPEED;
-import static br.com.giorgetti.games.squareplatform.gameobjects.sprite.SpriteConstants.MAX_XSPEED;
-import static br.com.giorgetti.games.squareplatform.gameobjects.sprite.SpriteConstants.PLAYER_HEIGHT_CROUCH;
-import static br.com.giorgetti.games.squareplatform.gameobjects.sprite.SpriteConstants.PLAYER_HEIGHT_UP;
-
-import java.awt.Color;
-import java.awt.Graphics2D;
-
 import br.com.giorgetti.games.squareplatform.gameobjects.sprite.SpriteState;
 import br.com.giorgetti.games.squareplatform.tiles.TileMap;
+
+import java.awt.*;
+
+import static br.com.giorgetti.games.squareplatform.gameobjects.sprite.SpriteConstants.*;
 
 /**
  * Defines the player customizations over the Sprite base class.
@@ -74,7 +63,7 @@ public class Player extends MovableSprite {
     public void update(TileMap map) {
 
         this.map = map;
-        
+
         setX(getX() + getXSpeed());
         setY(getY() + getYSpeed());
 
@@ -87,7 +76,7 @@ public class Player extends MovableSprite {
     	//drawPlayerBorders(g);
         g.setColor(Color.GREEN);
         g.drawString("Player State = " + getState(), 10, 10);
-        
+
         if ( getCurrentAnimation() != null ) {
         	if ( getDirection() == SpriteDirection.RIGHT ) {
         		g.drawImage(getCurrentAnimation(), getLeftX(), getTopY(), getWidth(), getHeight(), null);
