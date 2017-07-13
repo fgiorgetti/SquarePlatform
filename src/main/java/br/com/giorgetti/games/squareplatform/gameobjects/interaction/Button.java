@@ -10,6 +10,16 @@ import java.awt.*;
 public class Button extends InteractiveSprite {
 
     @Override
+    public void executeInteraction() {
+
+    }
+
+    @Override
+    public int getInteractionKeyCode() {
+        return 0;
+    }
+
+    @Override
     public void interact() {
 
     }
