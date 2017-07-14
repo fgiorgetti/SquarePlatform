@@ -29,6 +29,10 @@ public abstract class Sprite {
 
 	protected SpriteState state;
 
+	public void setMap(TileMap map) {
+		this.map = map;
+	}
+
 	public abstract void update(TileMap map);
     public abstract void draw(Graphics2D g);
     
@@ -209,6 +213,37 @@ public abstract class Sprite {
         }
                 
     }
+
+	/**
+	 * Returns true if Sprite is on screen
+	 * @return
+	 */
+	public boolean isOnScreen() {
+		return getRightX() >= map.getX() && getLeftX() <= map.getRightX()
+				&& getTopY() >= map.getY() && getBottomY() <= map.getTopY();
+	}
+
+	public boolean hasPlayerCollision() {
+
+		boolean leftCollision = getLeftX() <= this.map.getPlayerRightX() &&
+								(
+								 	 ( getTopY() >= this.map.getPlayerBottomY() && getTopY() <= this.map.getPlayerTopY() ) //top left has collision
+								  || ( getBottomY() <= this.map.getPlayerTopY() && getBottomY() >= this.map.getPlayerBottomY() ) // bottom left has collision
+			  		              || ( getTopY() >= this.map.getPlayerTopY() && getBottomY() <= this.map.getPlayerBottomY() ) // player inside sprite on left
+	                              || ( getBottomY() >= this.map.getPlayerBottomY() && getTopY() <= this.map.getPlayerTopY() ) // sprite inside player on left
+								);
+
+		boolean rightCollision = getRightX() >= this.map.getPlayerLeftX() &&
+				(
+						( getTopY() >= this.map.getPlayerBottomY() && getTopY() <= this.map.getPlayerTopY() ) //top left has collision
+								|| ( getBottomY() <= this.map.getPlayerTopY() && getBottomY() >= this.map.getPlayerBottomY() ) // bottom left has collision
+								|| ( getTopY() >= this.map.getPlayerTopY() && getBottomY() <= this.map.getPlayerBottomY() ) // player inside sprite on left
+								|| ( getBottomY() >= this.map.getPlayerBottomY() && getTopY() <= this.map.getPlayerTopY() ) // sprite inside player on left
+				);
+
+		return leftCollision && rightCollision;
+
+	}
 
 	public void loadAnimation(Animation animation) {
 		animations.put(animation.getId(), animation);

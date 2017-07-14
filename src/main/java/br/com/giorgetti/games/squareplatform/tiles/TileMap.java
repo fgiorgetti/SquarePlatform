@@ -83,8 +83,16 @@ public class TileMap {
     private static final int POS_PLAYER_Y = 1;
 
     private Sprite player;
+    private Sprite[] gameObjects;
 
-    // Stores identification for each sprite on the map
+    /**
+     * Stores identification for each sprite on the map
+     * X,Y,C X,Y,C X,Y,C
+     * | | |-> Implementing Sprite object
+     * | |-> Initial Y coordinate in the map
+     * |-> Initial X coordinate in the map
+     *
+      */
     private List<String[]> sprites;
 
     /**
@@ -221,18 +229,42 @@ public class TileMap {
                 }
                 break;
             case "SPRITES":
+
                 // Loading sprites
                 sprites = new ArrayList<String[]>();
                 for ( String sprite : value.split(INFO_SEPARATOR) ) {
                     sprites.add(sprite.split(PROP_SEPARATOR));
                 }
+
+                loadGameObjects();
+
                 break;
+
             case "PLAYER":
                 arr = value.split(PROP_SEPARATOR);
                 player.setX(Integer.parseInt(arr[POS_PLAYER_X]));
                 player.setY(Integer.parseInt(arr[POS_PLAYER_Y]));
                 break;
         }
+    }
+
+    private void loadGameObjects() {
+
+        // Loading the objects
+        this.gameObjects = new Sprite[sprites.size()];
+        int idx = 0;
+        for ( String[] spriteEntry : sprites ) {
+            try {
+                Sprite s = (Sprite) Class.forName(spriteEntry[POS_SPRITE_CLASS]).newInstance();
+                s.setX(Integer.parseInt(spriteEntry[POS_SPRITE_X]));
+                s.setY(Integer.parseInt(spriteEntry[POS_SPRITE_Y]));
+                gameObjects[idx++] = s;
+                s.setMap(this);
+            } catch (Exception e) {
+                System.err.println("Invalid game object on map: " + spriteEntry[POS_SPRITE_CLASS]);
+            }
+        }
+
     }
 
     private void readMapEntry(String line) {
@@ -293,11 +325,33 @@ public class TileMap {
     }
 
     public List<String[]> getSprites() {
+        if ( sprites == null ) {
+            sprites = new ArrayList<>();
+        }
         return sprites;
     }
 
     public void setSprites(List<String[]> sprites) {
         this.sprites = sprites;
+    }
+
+    public void addSprite(int x, int y, String name) {
+        getSprites().add(new String[]{""+x, ""+y, name});
+        loadGameObjects();
+    }
+
+    public void removeSpriteAtPlayer() {
+
+       if ( gameObjects == null || gameObjects.length == 0 ) {
+           return;
+       }
+
+       for ( Sprite sprite : gameObjects ) {
+           if ( sprite.hasPlayerCollision() ) {
+               System.out.println("Found a sprite to remove... just need to do it now :)");
+           }
+       }
+
     }
 
     public Map<Integer, Map<Integer, String[]>> getMap() {
@@ -360,6 +414,10 @@ public class TileMap {
         return x;
     }
 
+    public int getRightX() {
+        return x + getWidth() + (getWidth() * getMaxColsOnScreen());
+    }
+
     public void setX(int x) {
         if ( x < 0 ) {
             this.x = 0;
@@ -372,6 +430,10 @@ public class TileMap {
 
     public int getY() {
         return y;
+    }
+
+    public int getTopY() {
+        return y + getHeight() + (getHeight() * getMaxRowsOnScreen());
     }
 
     public void setY(int y) {
@@ -559,7 +621,23 @@ public class TileMap {
         setColOffset(getX() / getWidth());
         setRowOffset(getY() / getHeight() + 1);
 
+        updateSprites();
+
     }
+
+    private void updateSprites() {
+
+        // Ignore if no sprites available on the map
+        if ( gameObjects == null || gameObjects.length == 0 ) {
+            return;
+        }
+
+        for ( Sprite sprite : gameObjects ) {
+            sprite.update(this);
+        }
+
+    }
+
     public void draw(Graphics2D g) {
        draw(g, false);
     }
@@ -618,9 +696,25 @@ public class TileMap {
             }
         }
 
+        drawSprites(g);
+
     }
 
-	public Tile getTile(int row, int col) {
+    private void drawSprites(Graphics2D g) {
+
+        // Ignore if no sprites available on the map
+        if ( gameObjects == null || gameObjects.length == 0 ) {
+            return;
+        }
+
+        // Draw the sprite
+        for ( Sprite s : gameObjects ) {
+            s.draw(g);
+        }
+
+    }
+
+    public Tile getTile(int row, int col) {
 
 		try {
 			String[] arr = getMap().get(row).get(col);

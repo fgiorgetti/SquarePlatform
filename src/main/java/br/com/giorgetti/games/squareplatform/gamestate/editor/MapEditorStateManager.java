@@ -1,6 +1,8 @@
 package br.com.giorgetti.games.squareplatform.gamestate.editor;
 
+import br.com.giorgetti.games.squareplatform.gameobjects.GameObjectSelector;
 import br.com.giorgetti.games.squareplatform.gameobjects.MovableSprite;
+import br.com.giorgetti.games.squareplatform.gameobjects.Sprite;
 import br.com.giorgetti.games.squareplatform.gamestate.GameState;
 import br.com.giorgetti.games.squareplatform.gamestate.interaction.DialogCallbackHandler;
 import br.com.giorgetti.games.squareplatform.gamestate.interaction.DialogGameState;
@@ -35,8 +37,11 @@ public class MapEditorStateManager implements GameState {
     private int curTileSetPos = 0;
     private int curTilePos = 0;
     private int curTileType = Tile.TileType.BLOCKED.getType();
+    private String curGameObject = GameObjectSelector.getNextGameObject("");
     private MessageGameState messages = null;
     private DialogGameState dialog = null;
+    private int playerInitialX;
+    private int playerInitialY;
 
     private enum TileIndex {
         PREV, NEXT;
@@ -47,6 +52,8 @@ public class MapEditorStateManager implements GameState {
         this.map = new TileMap();
         this.map.loadTileMap(mapPath, p);
         this.player = p;
+        this.playerInitialX = this.map.getPlayerX();
+        this.playerInitialY = this.map.getPlayerY();
         player.setX(map.getWidth() / 2);
         player.setY(map.getHeight() / 2);
 
@@ -107,6 +114,27 @@ public class MapEditorStateManager implements GameState {
             );
         }
 
+        // Draw selected game object
+        g.setColor(Color.white);
+        g.drawString("GameObject: " + curGameObject, 9, 11);
+        g.setColor(Color.black);
+        g.drawString("GameObject: " + curGameObject, 10, 10);
+
+        // If player's initial position on screen, draw it
+        g.setColor(Color.green);
+        boolean playerPosOnScreen = playerInitialX >= map.getX() && playerInitialX <= map.getRightX()
+                                && playerInitialY >= map.getY() && playerInitialY <= map.getTopY();
+        if ( playerPosOnScreen ) {
+            g.setColor(Color.black);
+            g.drawString("PLAYER", playerInitialX - map.getX() - 1, GamePanel.HEIGHT - playerInitialY + map.getY() + 1);
+            g.setColor(Color.green);
+            g.drawString("PLAYER", playerInitialX - map.getX(), GamePanel.HEIGHT - playerInitialY + map.getY());
+        }
+        //g.drawString("On screen? = " + playerPosOnScreen, 10, 30);
+        //g.drawString("Player X / Y = " + player.getX() + " / " + player.getY(), 10, 50);
+        //g.drawString("Map X / Y = " + map.getX() + " / " + map.getY(), 10, 70);
+        //g.drawString("Right X / Top Y = " + map.getRightX() + " / " + map.getTopY(), 10, 90);
+
     }
 
     public void keyTyped(KeyEvent e) {  }
@@ -138,14 +166,12 @@ public class MapEditorStateManager implements GameState {
             player.setX(player.getX() - map.getWidth());
 
             // if reached left of map
-            if ( player.getX() == 0 ) {
+            if (player.getX() == 0) {
                 player.setX(map.getWidth() / 2);
             }
 
-        }
-
         // go up a tile
-        if ( e.getKeyCode() == KeyEvent.VK_UP ) {
+        } else if ( e.getKeyCode() == KeyEvent.VK_UP ) {
 
             player.setY(player.getY() + map.getHeight());
 
@@ -178,6 +204,16 @@ public class MapEditorStateManager implements GameState {
                             curTilePos + TileMap.PROP_SEPARATOR +
                             curTileType).split(","));
 
+        // Save player position on the map
+        } else if ( e.getKeyCode() == KeyEvent.VK_P ) {
+
+            this.playerInitialX = this.player.getX();
+            this.playerInitialY = this.player.getY();
+            messages.addMessage("Player position defined");
+
+        // Change tile
+        } else if ( e.getKeyCode() == KeyEvent.VK_Q) {
+            System.exit(0);
         // Change tile
         } else if ( e.getKeyCode() == KeyEvent.VK_R ) {
             changeSelectedTile(TileIndex.PREV);
@@ -194,39 +230,51 @@ public class MapEditorStateManager implements GameState {
             }
 
             messages.addMessage(Tile.TileType.fromType(curTileType).name());
-            System.out.println("TESTE = " + Tile.TileType.fromType(curTileType));
 
         // delete a tile from the map
         } else if ( e.getKeyCode() == KeyEvent.VK_X ) {
 
             // Remove selected tile
-            if ( getMap().getMap().containsKey(row) &&
-                    getMap().getMap().get(row).containsKey(col) ) {
+            if (getMap().getMap().containsKey(row) &&
+                    getMap().getMap().get(row).containsKey(col)) {
                 getMap().getMap().get(row).remove(col);
 
                 // If row is empty, remove row
-                if ( getMap().getMap().get(row).isEmpty() ) {
+                if (getMap().getMap().get(row).isEmpty()) {
                     getMap().getMap().remove(row);
                 }
 
             }
 
-        }
+            // Remove sprite at player x,y
+            getMap().removeSpriteAtPlayer();
 
         // Output map content
-        if ( e.getKeyCode() == KeyEvent.VK_S) {
+        } else if ( e.getKeyCode() == KeyEvent.VK_S ) {
 
             dialog.createDialog("Enter file name", new DialogCallbackHandler() {
                 @Override
                 public void handle(String userInput) {
                     try {
-                    	String baseDir = System.getProperty("user.dir") + "/src/main/resources/maps/";
+
+                    	// Saving player current position
+                    	int playerX = player.getX();
+                    	int playerY = player.getY();
+
+                        String baseDir = System.getProperty("user.dir") + "/src/main/resources/maps/";
+                    	// Setting the pre-defined player position
+                        player.setX(playerInitialX);
+                        player.setY(playerInitialY);
                     	System.out.println("Saving file as: " + baseDir + userInput);
                         BufferedWriter out = new BufferedWriter(new FileWriter(new File(baseDir + userInput)));
                         out.write(getMap().toString());
                         out.flush();
                         out.close();
                         messages.addMessage("Map has been saved");
+
+                        // Restoring player position
+                        player.setX(playerX);
+                        player.setY(playerY);
                     } catch (Exception e1) {
                         messages.addMessage("Error saving map");
                         try { Thread.sleep(1); } catch (InterruptedException e2) { e2.printStackTrace(); }
@@ -235,6 +283,14 @@ public class MapEditorStateManager implements GameState {
                     }
                 }
             });
+        } else if ( e.getKeyCode() == KeyEvent.VK_OPEN_BRACKET ) {
+            curGameObject = GameObjectSelector.getPreviousGameObject(curGameObject);
+        } else if ( e.getKeyCode() == KeyEvent.VK_CLOSE_BRACKET ) {
+            curGameObject = GameObjectSelector.getNextGameObject(curGameObject);
+        } else if ( e.getKeyCode() == KeyEvent.VK_ENTER ) {
+            this.map.addSprite(player.getX(), player.getY(), GameObjectSelector.getObjectClassName(curGameObject));
+        } else {
+            messages.addMessage("Invalid key = " + e.getKeyCode());
         }
 
     }

@@ -48,10 +48,12 @@ public class MessageGameState implements GameState {
     public void update() {
 
         // Removing old messages
-        if ( !messages.isEmpty() ) {
-            for (Long startTime : new TreeSet<>(messages.keySet())) {
-                if (System.currentTimeMillis() - startTime > delayInSecs * 1000) {
-                    messages.remove(startTime);
+        synchronized (messages) {
+            if (!messages.isEmpty()) {
+                for (Long startTime : new TreeSet<>(messages.keySet())) {
+                    if (System.currentTimeMillis() - startTime > delayInSecs * 1000) {
+                        messages.remove(startTime);
+                    }
                 }
             }
         }
@@ -62,7 +64,9 @@ public class MessageGameState implements GameState {
     public void draw(Graphics2D g) {
 
         // Handle the list of messages to present
-        handleMessages(g);
+        synchronized (messages) {
+            handleMessages(g);
+        }
     }
 
     /**

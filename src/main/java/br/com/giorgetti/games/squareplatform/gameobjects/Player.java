@@ -35,7 +35,7 @@ public class Player extends MovableSprite {
     	    	
     	loadAnimation(Animation.newAnimation(SpriteState.WALKING.name(),
     				"/sprites/player/blocky_walkright.png",
-    				14).delay(200));
+    				14).delay(100));
 
     	loadAnimation(Animation.newAnimation(SpriteState.IDLE.name(),
 				"/sprites/player/blocky_right.png",
@@ -143,7 +143,11 @@ public class Player extends MovableSprite {
             	fall();
         		//System.out.println("I am falllingggggg !!!!!");
         	} else if ( this.state == SpriteState.FALLING ) {
-        		setState(SpriteState.IDLE);
+        	    if ( this.getXSpeed() != 0 ) {
+        	    	setState(SpriteState.WALKING);
+				} else {
+	        		setState(SpriteState.IDLE);
+				}
         		this.ySpeed = FALL_SPEED;
         	}
         	
