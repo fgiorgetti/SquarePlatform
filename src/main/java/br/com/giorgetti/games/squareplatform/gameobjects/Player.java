@@ -73,9 +73,11 @@ public class Player extends MovableSprite {
     @Override
     public void draw(Graphics2D g) {
 
-    	//drawPlayerBorders(g);
+		/*
+    	drawPlayerBorders(g);
         g.setColor(Color.GREEN);
         g.drawString("Player State = " + getState(), 10, 10);
+        */
 
         if ( getCurrentAnimation() != null ) {
         	if ( getDirection() == SpriteDirection.RIGHT ) {

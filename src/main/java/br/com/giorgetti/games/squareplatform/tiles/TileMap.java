@@ -2,10 +2,12 @@ package br.com.giorgetti.games.squareplatform.tiles;
 
 import br.com.giorgetti.games.squareplatform.exception.ErrorConstants;
 import br.com.giorgetti.games.squareplatform.gameobjects.Sprite;
+import br.com.giorgetti.games.squareplatform.gameobjects.interaction.InteractiveSprite;
 import br.com.giorgetti.games.squareplatform.main.GamePanel;
 import br.com.giorgetti.games.squareplatform.tiles.Tile.TileType;
 
 import java.awt.*;
+import java.awt.event.KeyEvent;
 import java.io.*;
 import java.util.*;
 import java.util.List;
@@ -592,11 +594,11 @@ public class TileMap {
     }
 
     public int getPlayerLeftX() {
-        return this.player.getLeftX();
+        return this.player.getX()-player.getHalfWidth();
     }
 
     public int getPlayerRightX() {
-        return this.player.getRightX();
+        return this.player.getX()+player.getHalfWidth();
     }
 
     public int getPlayerY() {
@@ -604,11 +606,11 @@ public class TileMap {
     }
 
     public int getPlayerTopY() {
-        return this.player.getTopY();
+        return this.player.getY()+player.getHalfHeight();
     }
 
     public int getPlayerBottomY() {
-        return this.player.getBottomY();
+        return this.player.getY()-player.getHalfHeight();
     }
 
     public void update() {
@@ -634,6 +636,22 @@ public class TileMap {
 
         for ( Sprite sprite : gameObjects ) {
             sprite.update(this);
+        }
+
+    }
+
+    public void interactiveAction(KeyEvent key) {
+
+        // Ignore if no sprites available on the map
+        if ( gameObjects == null || gameObjects.length == 0 ) {
+            return;
+        }
+
+        for ( Sprite sprite : gameObjects ) {
+            if ( ! (sprite instanceof InteractiveSprite) ) {
+                continue;
+            }
+            ((InteractiveSprite) sprite).interact(key);
         }
 
     }

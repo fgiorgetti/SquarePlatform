@@ -45,13 +45,15 @@ public class LevelStateManager implements GameState {
         keyMap[KeyEvent.VK_LEFT] = false;
         keyMap[KeyEvent.VK_RIGHT] = false;
         keyMap[KeyEvent.VK_F12] = false;
+		keyMap[KeyEvent.VK_SPACE] = false;
 
         this.supportedKeys.add(KeyEvent.VK_UP);
         this.supportedKeys.add(KeyEvent.VK_DOWN);
         this.supportedKeys.add(KeyEvent.VK_LEFT);
         this.supportedKeys.add(KeyEvent.VK_RIGHT);
         this.supportedKeys.add(KeyEvent.VK_F12);
-        
+		this.supportedKeys.add(KeyEvent.VK_SPACE);
+
     }
 
     public void update() {
@@ -211,6 +213,9 @@ public class LevelStateManager implements GameState {
         if ( supportedKeys.contains(e.getKeyCode()) == false )
             return;
         keyMap[e.getKeyCode()] = true;
+
+        // Execute interaction on sprites
+        this.getMap().interactiveAction(e);
 
         // Show FPS
         if ( keyMap[KeyEvent.VK_F12] ) {

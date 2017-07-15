@@ -225,23 +225,31 @@ public abstract class Sprite {
 
 	public boolean hasPlayerCollision() {
 
-		boolean leftCollision = getLeftX() <= this.map.getPlayerRightX() &&
+		int lx = getX() - getHalfWidth();
+		int rx = getX() + getHalfWidth();
+		int ty = getY() + getHalfHeight();
+		int by = getY() - getHalfHeight();
+
+		//boolean playerLeftCollision = map.getPlayerX() - map.getpl
+		boolean leftCollision = lx <= this.map.getPlayerRightX() &&
+								lx >= this.map.getPlayerLeftX() &&
 								(
-								 	 ( getTopY() >= this.map.getPlayerBottomY() && getTopY() <= this.map.getPlayerTopY() ) //top left has collision
-								  || ( getBottomY() <= this.map.getPlayerTopY() && getBottomY() >= this.map.getPlayerBottomY() ) // bottom left has collision
-			  		              || ( getTopY() >= this.map.getPlayerTopY() && getBottomY() <= this.map.getPlayerBottomY() ) // player inside sprite on left
-	                              || ( getBottomY() >= this.map.getPlayerBottomY() && getTopY() <= this.map.getPlayerTopY() ) // sprite inside player on left
+								 	 ( ty >= this.map.getPlayerBottomY() && ty <= this.map.getPlayerTopY() ) //top left has collision
+								  || ( by <= this.map.getPlayerTopY() && by >= this.map.getPlayerBottomY() ) // bottom left has collision
+			  		              || ( ty >= this.map.getPlayerTopY() && by <= this.map.getPlayerBottomY() ) // player inside sprite on left
+	                              || ( by >= this.map.getPlayerBottomY() && ty <= this.map.getPlayerTopY() ) // sprite inside player on left
 								);
 
-		boolean rightCollision = getRightX() >= this.map.getPlayerLeftX() &&
-				(
-						( getTopY() >= this.map.getPlayerBottomY() && getTopY() <= this.map.getPlayerTopY() ) //top left has collision
-								|| ( getBottomY() <= this.map.getPlayerTopY() && getBottomY() >= this.map.getPlayerBottomY() ) // bottom left has collision
-								|| ( getTopY() >= this.map.getPlayerTopY() && getBottomY() <= this.map.getPlayerBottomY() ) // player inside sprite on left
-								|| ( getBottomY() >= this.map.getPlayerBottomY() && getTopY() <= this.map.getPlayerTopY() ) // sprite inside player on left
-				);
+		boolean rightCollision = rx >= this.map.getPlayerLeftX() &&
+				                 rx <= this.map.getPlayerRightX() &&
+								(
+								   ( ty >= this.map.getPlayerBottomY() && ty <= this.map.getPlayerTopY() ) //top left has collision
+								|| ( by <= this.map.getPlayerTopY() && by >= this.map.getPlayerBottomY() ) // bottom left has collision
+								|| ( ty >= this.map.getPlayerTopY() && by <= this.map.getPlayerBottomY() ) // player inside sprite on left
+								|| ( by >= this.map.getPlayerBottomY() && ty <= this.map.getPlayerTopY() ) // sprite inside player on left
+								);
 
-		return leftCollision && rightCollision;
+		return leftCollision || rightCollision;
 
 	}
 

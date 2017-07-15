@@ -29,5 +29,4 @@ public class SpriteConstants {
     public static final int PLAYER_HEIGHT_CROUCH = 10;
     public static final int PLAYER_WIDTH = 14;
 
-
 }
