@@ -348,11 +348,65 @@ public class TileMap {
            return;
        }
 
+       Sprite found = null;
        for ( Sprite sprite : gameObjects ) {
            if ( sprite.hasPlayerCollision() ) {
+               found = sprite;
                System.out.println("Found a sprite to remove... just need to do it now :)");
+               break;
            }
        }
+
+       if ( found == null ) {
+           return;
+       }
+
+       int idx = 0;
+       for ( String[] spArr : getSprites() ) {
+           if ( spArr[POS_SPRITE_X].equals(found.getX()+"")
+                   && spArr[POS_SPRITE_Y].equals(found.getY()+"")) {
+               break;
+           }
+           idx++;
+       }
+
+       getSprites().remove(idx);
+       loadGameObjects();
+
+    }
+
+    public void addTileAt(int row, int col, int tileSet, int tile, int type) {
+
+        Map<Integer, String[]> newTileRow = new HashMap<Integer, String[]>();
+        String[] newTileInfo = new String[4];
+
+        newTileInfo[POS_MAP_COLUMN] = "" + col;
+        newTileInfo[POS_MAP_TILESET_ID] = "" + tileSet;
+        newTileInfo[POS_MAP_TILEPOS_ID] = "" + tile;
+        newTileInfo[POS_MAP_TILE_TYPE] = "" + tile;
+
+        if ( map.containsKey(row) ) {
+            map.get(row).put(col, newTileInfo);
+        } else {
+            newTileRow.put(col, newTileInfo);
+            map.put(row, newTileRow);
+        }
+
+    }
+
+    public void removeTileAt(int row, int col) {
+
+        if ( !map.containsKey(row) ) {
+            return;
+        }
+
+        Map<Integer, String[]> tilesRow = map.get(row);
+
+        if ( !tilesRow.containsKey(col) ) {
+            return;
+        }
+
+        tilesRow.remove(col);
 
     }
 

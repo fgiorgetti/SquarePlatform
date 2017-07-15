@@ -219,8 +219,34 @@ public abstract class Sprite {
 	 * @return
 	 */
 	public boolean isOnScreen() {
-		return getRightX() >= map.getX() && getLeftX() <= map.getRightX()
-				&& getTopY() >= map.getY() && getBottomY() <= map.getTopY();
+
+		int lx  = getX() - getHalfWidth();
+		int rx  = getX() + getHalfWidth();
+		int ty  = getY() + getHalfHeight();
+		int by  = getY() - getHalfHeight();
+
+		int mlx = map.getX();
+		int mrx = map.getX() + GamePanel.WIDTH;
+		int mty = map.getY() + GamePanel.HEIGHT;
+		int mby = map.getY();
+
+		/*
+		 * Three possibilities for the sprite on each axis:
+		 * - Partially in
+		 * - Partially out
+		 * - Throughout the screen
+		 */
+		boolean rightOn  = rx >= mlx && rx <= mrx;
+		boolean leftOn   = lx >= mlx && lx <= mrx;
+		boolean throughX = lx <= mlx && rx >= mrx;
+
+		boolean topOn    = ty <= mty && ty >= mby;
+		boolean bottomOn = by <= mty && by >= mby;
+		boolean throughY = by <= mby && ty >= mty;
+
+		return ( rightOn || leftOn || throughX ) &&
+				( topOn || bottomOn || throughY );
+
 	}
 
 	public boolean hasPlayerCollision() {
