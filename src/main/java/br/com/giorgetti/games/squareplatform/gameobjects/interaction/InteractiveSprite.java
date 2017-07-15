@@ -19,14 +19,14 @@ public abstract class InteractiveSprite extends Sprite {
 
     public void interact(KeyEvent key) {
 
-        System.out.println("Entered");
+        //System.out.println("Entered");
         if ( !isOnScreen() ) {
-            System.out.println("! On Screen");
+            //System.out.println("! On Screen");
             return;
         }
 
-        System.out.println("hasCollision? " + hasPlayerCollision());
-        System.out.println("keyCode == interactionkeycode? " + (key.getKeyCode() == getInteractionKeyCode()));
+        //System.out.println("hasCollision? " + hasPlayerCollision());
+        //System.out.println("keyCode == interactionkeycode? " + (key.getKeyCode() == getInteractionKeyCode()));
         if ( hasPlayerCollision() && key.getKeyCode() == getInteractionKeyCode() ) {
             executeInteraction();
         }
