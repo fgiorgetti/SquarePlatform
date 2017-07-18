@@ -1,6 +1,8 @@
 package br.com.giorgetti.games.squareplatform.tiles;
 
 import br.com.giorgetti.games.squareplatform.exception.ErrorConstants;
+import br.com.giorgetti.games.squareplatform.gameobjects.MovableSprite;
+import br.com.giorgetti.games.squareplatform.gameobjects.Player;
 import br.com.giorgetti.games.squareplatform.gameobjects.Sprite;
 import br.com.giorgetti.games.squareplatform.gameobjects.interaction.InteractiveSprite;
 import br.com.giorgetti.games.squareplatform.main.GamePanel;
@@ -84,7 +86,11 @@ public class TileMap {
     private static final int POS_PLAYER_X = 0;
     private static final int POS_PLAYER_Y = 1;
 
+    // Player
     private Sprite player;
+    private int lastCheckpointX, lastCheckpointY;
+
+    // Sprites in game
     private Sprite[] gameObjects;
 
     /**
@@ -246,6 +252,7 @@ public class TileMap {
                 arr = value.split(PROP_SEPARATOR);
                 player.setX(Integer.parseInt(arr[POS_PLAYER_X]));
                 player.setY(Integer.parseInt(arr[POS_PLAYER_Y]));
+                checkpoint(player.getX(), player.getY());
                 break;
         }
     }
@@ -668,6 +675,9 @@ public class TileMap {
     }
 
     public void update() {
+        update(false);
+    }
+    public void update(boolean editMode) {
 
         player.update(this);
 
@@ -677,7 +687,9 @@ public class TileMap {
         setColOffset(getX() / getWidth());
         setRowOffset(getY() / getHeight() + 1);
 
-        updateSprites();
+        if ( !editMode ) {
+            updateSprites();
+        }
 
     }
 
@@ -770,6 +782,13 @@ public class TileMap {
 
         drawSprites(g);
 
+        if ( !editMode ) {
+            g.setColor(Color.white);
+            g.drawString("Score: " + ((Player) player).getScore(), 9, 14);
+            g.setColor(Color.red);
+            g.drawString("Score: " + ((Player) player).getScore(), 10, 15);
+        }
+
     }
 
     private void drawSprites(Graphics2D g) {
@@ -781,6 +800,9 @@ public class TileMap {
 
         // Draw the sprite
         for ( Sprite s : gameObjects ) {
+            if ( ! s.isOnScreen() ) {
+                continue;
+            }
             s.draw(g);
         }
 
@@ -801,5 +823,21 @@ public class TileMap {
 		}
 		
 	}
+
+	public void checkpoint(int x, int y) {
+        this.lastCheckpointX = x;
+        this.lastCheckpointY = y;
+    }
+
+    public void recoverLastCheckpoint() {
+        this.player.setX(lastCheckpointX);
+        this.player.setY(lastCheckpointY);
+        ((MovableSprite) this.player).setXSpeed(0);
+        //((MovableSprite) this.player).setYSpeed(0);
+    }
+
+    public Player getPlayer() {
+        return (Player) this.player;
+    }
 
 }

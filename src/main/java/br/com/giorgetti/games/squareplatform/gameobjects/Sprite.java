@@ -202,8 +202,9 @@ public abstract class Sprite {
     	
         if ( map != null && newY > map.getRows() * map.getHeight() - getHalfHeight()) {
             this.y = map.getRows() * map.getHeight() - getHalfHeight();
-        } else if ( newY < getHalfHeight() + 1) {
-            this.y = getHalfHeight() + 1;
+        } else if ( newY < -getHeight() ) { // getHalfHeight() + 1) {
+            this.y = -getHeight();
+		//	//this.y = getHalfHeight() + 1;
         } else {
             this.y = newY;
         }

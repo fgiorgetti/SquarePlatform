@@ -67,8 +67,9 @@ public class LevelStateManager implements GameState {
         updatePlayer();
 
         // Testing when player falls in a hole
-    	if ( player.getY()-1 == player.getHalfHeight() ) {
-    		gameOver = true; // lose one life instead
+    	if ( player.getY()-1 <= -player.getHalfHeight() ) {
+    		//gameOver = true; // lose one life instead
+            map.recoverLastCheckpoint();
     	}
 
     }

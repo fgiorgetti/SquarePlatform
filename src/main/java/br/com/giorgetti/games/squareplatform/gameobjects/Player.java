@@ -18,6 +18,8 @@ public class Player extends MovableSprite {
 
 	private long accelerationStarted, deaccelerationStarted, jumpingStarted;
     private boolean jumping; // Set to true while key is pressed
+
+	private int score;
     
     
     // DONE -> Handle acceleration and deacceleration X
@@ -284,4 +286,17 @@ public class Player extends MovableSprite {
 		return getState() == SpriteState.JUMPING 
 				|| getState() == SpriteState.FALLING;
 	}
+
+	public int getScore() {
+		return score;
+	}
+
+	public void addScore(int score) {
+		this.score += score;
+	}
+
+	public void subScore(int score) {
+        this.score -= score;
+    }
+
 }
