@@ -2,6 +2,8 @@ package br.com.giorgetti.games.squareplatform.gameobjects;
 
 import br.com.giorgetti.games.squareplatform.gameobjects.interaction.Button;
 import br.com.giorgetti.games.squareplatform.gameobjects.interaction.Coin;
+import br.com.giorgetti.games.squareplatform.gameobjects.interaction.Information;
+import br.com.giorgetti.games.squareplatform.gameobjects.interaction.Question;
 
 import java.util.ArrayList;
 import java.util.Map;
@@ -21,6 +23,9 @@ public class GameObjectSelector {
     static {
         gameObjectsMap.put("Button", Button.class);
         gameObjectsMap.put("Coin", Coin.class);
+        gameObjectsMap.put("Information", Information.class);
+        gameObjectsMap.put("Question", Question.class);
+
         for ( String key : gameObjectsMap.keySet() ) {
             gameObjectsList.add(key);
         }

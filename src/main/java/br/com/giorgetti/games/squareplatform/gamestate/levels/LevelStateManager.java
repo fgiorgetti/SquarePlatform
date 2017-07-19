@@ -46,6 +46,7 @@ public class LevelStateManager implements GameState {
         keyMap[KeyEvent.VK_RIGHT] = false;
         keyMap[KeyEvent.VK_F12] = false;
 		keyMap[KeyEvent.VK_SPACE] = false;
+		keyMap[KeyEvent.VK_ESCAPE] = false;
 
         this.supportedKeys.add(KeyEvent.VK_UP);
         this.supportedKeys.add(KeyEvent.VK_DOWN);
@@ -53,6 +54,7 @@ public class LevelStateManager implements GameState {
         this.supportedKeys.add(KeyEvent.VK_RIGHT);
         this.supportedKeys.add(KeyEvent.VK_F12);
 		this.supportedKeys.add(KeyEvent.VK_SPACE);
+		this.supportedKeys.add(KeyEvent.VK_ESCAPE);
 
     }
 
@@ -222,6 +224,10 @@ public class LevelStateManager implements GameState {
         if ( keyMap[KeyEvent.VK_F12] ) {
         	showFps = !showFps;
         }
+
+        if ( keyMap[KeyEvent.VK_ESCAPE] ) {
+        	System.exit(0);
+		}
     }
 
     public void keyReleased(KeyEvent e) {

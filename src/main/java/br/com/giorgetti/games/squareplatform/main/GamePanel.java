@@ -17,24 +17,32 @@ import br.com.giorgetti.games.squareplatform.gamestate.GameStateManager;
 public class GamePanel extends JPanel implements Runnable {
 
     // Game panel dimensions
-    public static final int WIDTH = 640;
-    public static final int HEIGHT = 480;
-    //public static final int WIDTH = 400;
-    //public static final int HEIGHT = 300;
+    //public static final int WIDTH = 800;
+    //public static final int HEIGHT = 600;
+    public static final int WIDTH = 400;
+    public static final int HEIGHT = 300;
 
-    public static final int SCALE = 1;
-    //public static final int SCALE = 2;
+    //public static final int SCALE = 1;
+    public static final int SCALE = 2;
     public static final int FPS = 60;
     public static final long TARGET_TIME = 1000 / FPS;
 
     private BufferedImage image;
     private Graphics2D g;
 
-    private GameStateManager gsm;
+    private static GamePanel instance;
+    public static GameStateManager gsm;
 
     private Thread thread = null;
 
-    public GamePanel(GameState gs) {
+    public static GamePanel getInstance(GameState gs) {
+        if ( instance == null ) {
+            instance = new GamePanel(gs);
+        }
+        return instance;
+    }
+
+    private GamePanel(GameState gs) {
         setPreferredSize(new Dimension(WIDTH * SCALE, HEIGHT * SCALE));
         setFocusable(true);
         requestFocus();

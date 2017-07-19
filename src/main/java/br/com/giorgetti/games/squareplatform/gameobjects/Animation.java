@@ -2,6 +2,8 @@ package br.com.giorgetti.games.squareplatform.gameobjects;
 
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.imageio.ImageIO;
 
@@ -12,6 +14,7 @@ import javax.imageio.ImageIO;
  */
 public class Animation {
 
+	private static Map<String, BufferedImage> imagesMap = new HashMap<>();
 	private String id;
 	private BufferedImage[] images;
 	private int currentImage;
@@ -22,11 +25,23 @@ public class Animation {
 	private boolean completedOnce;
 	
 	public Animation(String id, String resourceImagePath, int spriteWidth) {
+
 		this.id = id;
 
         try {
-            
-        	BufferedImage image = ImageIO.read(this.getClass().getResourceAsStream(resourceImagePath));
+
+            BufferedImage image = null;
+
+            // Tries to load from the map
+            synchronized ( imagesMap ) {
+				if (imagesMap.containsKey(resourceImagePath)) {
+					image = imagesMap.get(resourceImagePath);
+				} else {
+					image = ImageIO.read(this.getClass().getResourceAsStream(resourceImagePath));
+					imagesMap.put(resourceImagePath, image);
+				}
+			}
+
             int numSprites = image.getWidth() / spriteWidth;
             
             images = new BufferedImage[numSprites];

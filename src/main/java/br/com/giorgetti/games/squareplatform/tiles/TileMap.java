@@ -257,6 +257,14 @@ public class TileMap {
         }
     }
 
+    private void shiftGameObjectsLeft(int idx) {
+        synchronized (gameObjects) {
+            for ( int idxRight = idx + 1, idxLeft = idx; idxRight < gameObjects.length; idxRight++, idxLeft++) {
+                gameObjects[idxLeft] = gameObjects[idxRight];
+                gameObjects[idxRight] = null;
+            }
+        }
+    }
     private void loadGameObjects() {
 
         // Loading the objects
@@ -357,9 +365,11 @@ public class TileMap {
 
        Sprite found = null;
        for ( Sprite sprite : gameObjects ) {
+           if ( sprite == null ) { // Removed object
+               continue;
+           }
            if ( sprite.hasPlayerCollision() ) {
                found = sprite;
-               System.out.println("Found a sprite to remove... just need to do it now :)");
                break;
            }
        }
@@ -378,7 +388,7 @@ public class TileMap {
        }
 
        getSprites().remove(idx);
-       loadGameObjects();
+       shiftGameObjectsLeft(idx);
 
     }
 
@@ -701,6 +711,9 @@ public class TileMap {
         }
 
         for ( Sprite sprite : gameObjects ) {
+            if ( sprite == null ) {
+                continue;
+            }
             sprite.update(this);
         }
 
@@ -714,6 +727,9 @@ public class TileMap {
         }
 
         for ( Sprite sprite : gameObjects ) {
+            if ( sprite == null ) {
+                continue;
+            }
             if ( ! (sprite instanceof InteractiveSprite) ) {
                 continue;
             }
@@ -729,20 +745,7 @@ public class TileMap {
 
         // Drawing backgrounds
         for ( Background bg : getBackgrounds() ) {
-
-            int bgWidth = bg.getImage().getWidth();
-            int bgHeigth = GamePanel.HEIGHT - bg.getImage().getHeight();
-
-            int bgX = (int) (- getX() / 100.00 * bg.getSpeedPct() % bgWidth);
-            int bgY = (int) ( getY() / 100.00 * (bg.getSpeedPct()/2) % bgHeigth);
-            //System.out.printf("bgX = %d - bgY = %d\n", bgX, bgY);
-
-            // Consider X offset as map.x / 100 * bg.speed
-            g.drawImage(bg.getImage(), null, bgX, bgY);
-            g.drawImage(bg.getImage(), null, bgX + bgWidth, bgY);
-
-            g.drawImage(bg.getImage(), null, bgX, bgY + bgHeigth);
-            g.drawImage(bg.getImage(), null, bgX + bgWidth, bgY + bgHeigth);
+            bg.draw(g, getX(), getY());
         }
 
         // Drawing map on the screen...
@@ -800,6 +803,9 @@ public class TileMap {
 
         // Draw the sprite
         for ( Sprite s : gameObjects ) {
+            if ( s == null ) {
+                continue;
+            }
             if ( ! s.isOnScreen() ) {
                 continue;
             }

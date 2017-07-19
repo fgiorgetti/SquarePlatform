@@ -27,7 +27,7 @@ public class TileMapEditor {
         */
 
         JFrame window = new JFrame("TileMap Editor");
-        window.setContentPane(new GamePanel(new MapEditorStateManager("/maps/level1.dat", new EditorPlayer())));
+        window.setContentPane(GamePanel.getInstance(new MapEditorStateManager("/maps/level1.dat", new EditorPlayer())));
 
         window.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         window.setResizable(false);

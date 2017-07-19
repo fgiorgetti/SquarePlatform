@@ -75,7 +75,7 @@ public class MapEditorStateManager implements GameState {
     public void update() {
 
         map.update(true);
-        messages.update();;
+        messages.update();
         dialog.update();
 
     }

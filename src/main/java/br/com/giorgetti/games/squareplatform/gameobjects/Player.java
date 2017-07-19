@@ -20,19 +20,7 @@ public class Player extends MovableSprite {
     private boolean jumping; // Set to true while key is pressed
 
 	private int score;
-    
-    
-    // DONE -> Handle acceleration and deacceleration X
-    // DONE -> Added player height and width
-    // DONE -> Handle movement from player class, not level state...
-    // DONE -> Collision as player moves
-    // DONE -> Block if in contact with Block tile
-    // DONE -> Gravity (can be improved)
-    // DONE -> Jumping (can be improved - acceleration)
-    // DONE -> Crouching
-    // Load Sprite Animations
-    // Resize Sprite based on animation scene size
-    
+
     public Player() {
     	    	
     	loadAnimation(Animation.newAnimation(SpriteState.WALKING.name(),
