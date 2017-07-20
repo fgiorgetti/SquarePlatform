@@ -212,7 +212,7 @@ public class TileMap {
             case "HEIGHT":
                 height = Integer.parseInt(value);
                 maxY = height * rows - GamePanel.HEIGHT;
-                maxRowsOnScreen = GamePanel.HEIGHT / height;
+                maxRowsOnScreen = 1 + ( GamePanel.HEIGHT / height );
                 break;
             case "BG":
                 // Loading backgrounds

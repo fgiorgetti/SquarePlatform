@@ -17,9 +17,9 @@ public class Animation {
 	private static Map<String, BufferedImage> imagesMap = new HashMap<>();
 	private String id;
 	private BufferedImage[] images;
-	private int currentImage;
+	private int currentImage = -1;
 	private int animationDelayMs;
-	private long animationStarted;
+	private long animationStarted = -1;
 	
 	private boolean onceOnly;
 	private boolean completedOnce;
@@ -80,17 +80,18 @@ public class Animation {
 	}
 	
 	public void reset() {
-		this.animationStarted = 0L;
-		this.currentImage = 0;
+		this.animationStarted = -1L;
+		this.currentImage = -1;
 		this.completedOnce = false;
 	}
 	
 	public BufferedImage getAnimation() {
 		
-		if ( System.currentTimeMillis() - animationStarted < animationDelayMs ) {
+		if ( animationStarted > 0 &&
+				System.currentTimeMillis() - animationStarted < animationDelayMs ) {
 			return images[currentImage];
 		}
-		
+
 		animationStarted = System.currentTimeMillis();
 		
 		if ( currentImage == images.length-1 ) {
@@ -101,7 +102,7 @@ public class Animation {
 		if ( !isAnimationDone() ) {
 			currentImage = ++currentImage >= images.length? 0:currentImage;
 		}
-		
+
 		return images[currentImage];
 		
 	}

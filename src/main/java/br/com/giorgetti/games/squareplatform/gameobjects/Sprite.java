@@ -70,6 +70,9 @@ public abstract class Sprite {
 	public int getHeight() {
 		return height;
 	}
+	public void setHeight(int height) {
+		this.height = height;
+	}
 
 	/**
 	 * Validates whether player is allowed to move left
@@ -286,6 +289,9 @@ public abstract class Sprite {
 	
 	public void setAnimation(String animationId) {
 		if ( currentAnimation == null || !currentAnimation.getId().equals(animationId) ) {
+			//if ( currentAnimation != null ) {
+			//	System.out.println("animation has changed. OLD = " + currentAnimation.getId() + " - NEW = " + animationId);
+			//}
 			currentAnimation = animations.get(animationId);
 			currentAnimation.reset();
 		}

@@ -22,28 +22,39 @@ public class Player extends MovableSprite {
 	private int score;
 
     public Player() {
-    	    	
-    	loadAnimation(Animation.newAnimation(SpriteState.WALKING.name(),
-    				"/sprites/player/blocky_walkright.png",
-    				14).delay(100));
 
-    	loadAnimation(Animation.newAnimation(SpriteState.IDLE.name(),
-				"/sprites/player/blocky_right.png",
-				16).delay(500));
+		loadAnimation(Animation.newAnimation(SpriteState.WALKING.name(),
+				"/sprites/player/player_walkright.png",
+				10).delay(100));
+    	//loadAnimation(Animation.newAnimation(SpriteState.WALKING.name(),
+    	//			"/sprites/player/blocky_walkright.png",
+    	//			14).delay(100));
 
-    	loadAnimation(Animation.newAnimation(SpriteState.JUMPING.name(),
-				"/sprites/player/blocky_right.png",
-				16).delay(500));
+		loadAnimation(Animation.newAnimation(SpriteState.IDLE.name(),
+				"/sprites/player/player_right.png",
+				10).delay(500));
+    	//loadAnimation(Animation.newAnimation(SpriteState.IDLE.name(),
+		//		"/sprites/player/blocky_right.png",
+		//		16).delay(500));
+
+		loadAnimation(Animation.newAnimation(SpriteState.JUMPING.name(),
+				"/sprites/player/player_jumping.png",
+				10).delay(200).onlyOnce());
+    	//loadAnimation(Animation.newAnimation(SpriteState.JUMPING.name(),
+		//		"/sprites/player/blocky_right.png",
+		//		16).delay(500));
 
     	loadAnimation(Animation.newAnimation(SpriteState.FALLING.name(),
-				"/sprites/player/blocky_right.png",
-				16).delay(500));
+				"/sprites/player/player_right.png",
+				10).delay(500));
 
     	loadAnimation(Animation.newAnimation(SpriteState.CROUCHING.name(),
-				"/sprites/player/blocky_downedright.png",
-				16).delay(300).onlyOnce());
+				"/sprites/player/player_crouching.png",
+				10).delay(150).onlyOnce());
 
     	// Setting initial state
+		setWidth(10);
+		setHeight(20);
     	setDirection(SpriteDirection.RIGHT);
     	setState(SpriteState.IDLE);
     	
@@ -154,6 +165,9 @@ public class Player extends MovableSprite {
 	}
 
 	public void setState(SpriteState state) {
+    	if ( this.state == state ) {
+    		return;
+		}
 		this.state = state;
 		setAnimation(this.state.name());
 	}
@@ -173,7 +187,7 @@ public class Player extends MovableSprite {
 			this.xSpeed = MAX_XSPEED * getDirectionFactor();
 		}
 		
-		if ( !isJumpingOrCrouching() ) {
+		if ( !isJumpingOrFalling() ) {
 			if ( this.xSpeed != 0 ) {
 				setState(SpriteState.WALKING);
 				setAnimation(this.state.name());
@@ -187,7 +201,7 @@ public class Player extends MovableSprite {
 	public void deaccelerate() {
 
 		if ( this.xSpeed == 0 ) {
-			if ( !isJumpingOrCrouching() ) {
+			if ( !isJumpingOrFalling() && !isCrouching() ) {
 				setState(SpriteState.IDLE);
 			}
 			return;
@@ -208,15 +222,17 @@ public class Player extends MovableSprite {
 	}
 	
 	public void crouch() {
-		
+
 		setState(SpriteState.CROUCHING);
+		this.xSpeed = 0;
+
 		if ( this.height == PLAYER_HEIGHT_CROUCH ) {
 			return;
 		}
-		
+
 		this.height = PLAYER_HEIGHT_CROUCH;
-		this.y -= PLAYER_HEIGHT_CROUCH / 2;
-		
+		this.y -= (PLAYER_HEIGHT_UP - PLAYER_HEIGHT_CROUCH);
+
 	}
 	
 	public void standup() {
@@ -270,9 +286,13 @@ public class Player extends MovableSprite {
 		this.jumping = jumping;
 	}
 
-	public boolean isJumpingOrCrouching() {
-		return getState() == SpriteState.JUMPING 
+	public boolean isJumpingOrFalling() {
+		return getState() == SpriteState.JUMPING
 				|| getState() == SpriteState.FALLING;
+	}
+
+	public boolean isCrouching() {
+		return getState() == SpriteState.CROUCHING;
 	}
 
 	public int getScore() {

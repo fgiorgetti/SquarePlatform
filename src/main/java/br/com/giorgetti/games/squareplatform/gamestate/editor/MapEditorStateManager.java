@@ -212,7 +212,7 @@ public class MapEditorStateManager implements GameState {
             messages.addMessage("Player position defined");
 
         // Change tile
-        } else if ( e.getKeyCode() == KeyEvent.VK_Q) {
+        } else if ( e.getKeyCode() == KeyEvent.VK_ESCAPE) {
             System.exit(0);
         // Change tile
         } else if ( e.getKeyCode() == KeyEvent.VK_R ) {

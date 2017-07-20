@@ -37,7 +37,7 @@ public class SquarePlatform {
 		// Available display modes
 		for (DisplayMode mode : availableModes) {
 			if ( mode.getWidth() == GamePanel.WIDTH * GamePanel.SCALE ) {
-				System.out.println(mode.getWidth() + "x" + mode.getHeight() + " - " + mode.getBitDepth() + " - " + mode.getRefreshRate());
+				//System.out.println(mode.getWidth() + "x" + mode.getHeight() + " - " + mode.getBitDepth() + " - " + mode.getRefreshRate());
 				displayMode = mode;
 			}
 		}
