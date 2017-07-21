@@ -1,14 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="e7dc040d-9594-46f6-8ec5-8528565794df" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/java/br/com/giorgetti/games/squareplatform/gameobjects/interaction/QuestionBaby.java" />
+    <list default="true" id="e7dc040d-9594-46f6-8ec5-8528565794df" name="Default" comment="Added new sprites.&#10;Enhanced Question component.">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/br/com/giorgetti/games/squareplatform/gameobjects/GameObjectSelector.java" afterPath="$PROJECT_DIR$/src/main/java/br/com/giorgetti/games/squareplatform/gameobjects/GameObjectSelector.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/br/com/giorgetti/games/squareplatform/gameobjects/interaction/Button.java" afterPath="$PROJECT_DIR$/src/main/java/br/com/giorgetti/games/squareplatform/gameobjects/interaction/Button.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/br/com/giorgetti/games/squareplatform/gameobjects/interaction/Question.java" afterPath="$PROJECT_DIR$/src/main/java/br/com/giorgetti/games/squareplatform/gameobjects/interaction/Question.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/br/com/giorgetti/games/squareplatform/gameobjects/sprite/SpriteConstants.java" afterPath="$PROJECT_DIR$/src/main/java/br/com/giorgetti/games/squareplatform/gameobjects/sprite/SpriteConstants.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/resources/maps/level1.dat" afterPath="$PROJECT_DIR$/src/main/resources/maps/level1.dat" />
     </list>
     <ignored path="SquarePlatform.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -1269,7 +1263,14 @@
       <option name="project" value="LOCAL" />
       <updated>1500523592437</updated>
     </task>
-    <option name="localTasksCounter" value="47" />
+    <task id="LOCAL-00047" summary="Added new sprites.&#10;Enhanced Question component.">
+      <created>1500676234270</created>
+      <option name="number" value="00047" />
+      <option name="presentableId" value="LOCAL-00047" />
+      <option name="project" value="LOCAL" />
+      <updated>1500676234270</updated>
+    </task>
+    <option name="localTasksCounter" value="48" />
     <servers />
   </component>
   <component name="TodoView">
@@ -1389,7 +1390,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="LOCAL_CHANGES_DETAILS_PREVIEW_SHOWN" value="true" />
-    <MESSAGE value="Moving background as map moves (fixed)" />
     <MESSAGE value="Showing tile type when editing the map" />
     <MESSAGE value="Added slow movement of background on y axis" />
     <MESSAGE value="Enhanced player movement during game." />
@@ -1414,7 +1414,8 @@
     <MESSAGE value="Added Coin as a sample Sprite that auto interacts with player when they collide." />
     <MESSAGE value="Created question, information and added animation for coin." />
     <MESSAGE value="Several fixes and created a component to better handle user input" />
-    <option name="LAST_COMMIT_MESSAGE" value="Several fixes and created a component to better handle user input" />
+    <MESSAGE value="Added new sprites.&#10;Enhanced Question component." />
+    <option name="LAST_COMMIT_MESSAGE" value="Added new sprites.&#10;Enhanced Question component." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
