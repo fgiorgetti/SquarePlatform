@@ -11,6 +11,8 @@ import java.awt.event.KeyEvent;
  */
 public class Button extends InteractiveSprite {
 
+    private final int TILESET = 1;
+    private final int TILE    = 1;
     private final int HEIGHT = 10;
     private final int WIDTH = 10;
 
@@ -42,7 +44,7 @@ public class Button extends InteractiveSprite {
 
                 if ( !isOn ) {
                     for (int i = 0; i < 3; i++) {
-                        map.addTileAt(rowBelow, colRight + i, 1, 8, 1);
+                        map.addTileAt(rowBelow, colRight + i, TILESET, TILE, 2);
                         try { Thread.sleep(500); } catch (InterruptedException e) {}
                     }
                 } else {

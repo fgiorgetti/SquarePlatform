@@ -22,7 +22,7 @@ public class SpriteConstants {
     public static int FALL_DELAY = 50;
     
     // Jumping
-    public static final int JUMP_SPEED = 17;
+    public static final int JUMP_SPEED = 18;
     
 	// Dimensions
 	public static final int PLAYER_HEIGHT_UP = 20;

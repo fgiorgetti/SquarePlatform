@@ -8,34 +8,29 @@ import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 /**
  * Created by fgiorgetti on 08/07/17.
  */
-public class Question extends InteractiveSprite implements GameState {
+public abstract class Question extends InteractiveSprite implements GameState {
 
     private final int HEIGHT = 10;
     private final int WIDTH = 10;
 
-    private ArrayList<String> messages = new ArrayList<String>();
     private boolean askQuestion = false;
     private boolean correct = false;
     private boolean showResult = false;
-    private int correctAnswer = KeyEvent.VK_A;
-    private int [] validAnswers  = new int[]{KeyEvent.VK_A, KeyEvent.VK_B, KeyEvent.VK_C};
     private long timestamp;
+
+    public abstract String correctChoice();
+    public abstract String question();
+    public abstract LinkedHashMap<String, String> choicesAndAnswers();
 
     public Question() {
         this.width = WIDTH;
         this.height = HEIGHT;
-        messages.add("Question");
-        messages.add("---------------------------");
-        messages.add("What is the baby's name ?");
-        messages.add("A) Lucas");
-        messages.add("B) Fernando");
-        messages.add("C) Henrique");
-        messages.add("---------------------------");
-        messages.add("Type a character");
     }
 
     @Override
@@ -60,9 +55,12 @@ public class Question extends InteractiveSprite implements GameState {
     public void draw(Graphics2D g) {
 
         g.setColor(Color.black);
-        g.drawString("?",getX() - map.getX() - 1, GamePanel.HEIGHT - getY() + map.getY() + 1);
+        Font oldFont = g.getFont();
+        g.setFont(new Font("TimeRoman", Font.BOLD, 16));
+        g.drawString("?",getX() - map.getX() - 1, GamePanel.HEIGHT - getY() + map.getY() + 11);
         g.setColor(!correct? Color.magenta:Color.green);
-        g.drawString("?",getX() - map.getX(), GamePanel.HEIGHT - getY() + map.getY());
+        g.drawString("?",getX() - map.getX(), GamePanel.HEIGHT - getY() + map.getY() + 10);
+        g.setFont(oldFont);
 
         if ( askQuestion ) {
             drawQuestion(g);
@@ -72,25 +70,36 @@ public class Question extends InteractiveSprite implements GameState {
 
     private void drawQuestion(Graphics2D g) {
 
-        // If timeStamp is not refreshed within 100ms message is hidden
         g.setColor(Color.white);
-        g.fillRoundRect(GamePanel.WIDTH/4-5, GamePanel.HEIGHT/4-5,
-                (GamePanel.WIDTH/4)*2+10, (GamePanel.HEIGHT/4)*2+10,
+        g.fillRoundRect(GamePanel.WIDTH/5-15, GamePanel.HEIGHT/5-5,
+                (GamePanel.WIDTH/5)*3+30, (GamePanel.HEIGHT/5)*3+10,
                 5, 5);
         g.setColor(Color.black);
-        g.fillRoundRect(GamePanel.WIDTH/4, GamePanel.HEIGHT/4,
-                (GamePanel.WIDTH/4)*2, (GamePanel.HEIGHT/4)*2,
+        g.fillRoundRect(GamePanel.WIDTH/5-10, GamePanel.HEIGHT/5,
+                (GamePanel.WIDTH/5)*3+20, (GamePanel.HEIGHT/5)*3,
                 5, 5);
+
+        int lineY = GamePanel.HEIGHT/5;
+        int linesOffset = 15;
+        int linesPrinted = 0;
         g.setColor(Color.white);
-        for ( int i = 0 ; i < messages.size(); i++ ) {
-            g.drawString(messages.get(i), GamePanel.WIDTH/4 + 5,
-                    GamePanel.HEIGHT/4+(i+1)*15);
+        g.drawString("-------- QUESTION --------", GamePanel.WIDTH/5 + 5, lineY + (linesOffset * ++linesPrinted));
+        g.drawString(question(), GamePanel.WIDTH/5 + 5, lineY + (linesOffset * ++linesPrinted));
+        linesPrinted++;
+
+        int choiceIdx = 0;
+        for ( Map.Entry<String, String> choice : choicesAndAnswers().entrySet() ) {
+             g.drawString(String.format("%2s - %s", choice.getKey(), choice.getValue()),
+                     GamePanel.WIDTH/4 + 5,
+                     lineY + (linesOffset * ++linesPrinted));
         }
 
         if ( showResult ) {
 
-            g.drawString(correct? "Correct: " + "A":"Incorrect!", GamePanel.WIDTH/4 + 5,
-                    GamePanel.HEIGHT/4+(messages.size()+1)*15);
+            linesPrinted++;
+            g.drawString(correct? "Correct: " + correctChoice()+"! Nice job.":"Incorrect, try again.",
+                    GamePanel.WIDTH/4 + 5,
+                    lineY + (linesOffset * ++linesPrinted));
 
             if ( System.currentTimeMillis() - timestamp > 2000 ) {
                 askQuestion = false;
@@ -121,8 +130,8 @@ public class Question extends InteractiveSprite implements GameState {
         }
 
         boolean valid = false;
-        for ( int k : validAnswers ) {
-            if ( k == e.getKeyCode() ) {
+        for ( String choice : choicesAndAnswers().keySet() ) {
+            if ( choice.equalsIgnoreCase(String.valueOf(e.getKeyChar())) ) {
                 valid = true;
                 break;
             }
@@ -132,7 +141,7 @@ public class Question extends InteractiveSprite implements GameState {
             return;
         }
 
-        if ( e.getKeyCode() == correctAnswer ) {
+        if ( correctChoice().equalsIgnoreCase(String.valueOf(e.getKeyChar())) ) {
             correct = true;
         } else {
             correct = false;
