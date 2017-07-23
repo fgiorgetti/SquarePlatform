@@ -20,6 +20,7 @@ public abstract class Question extends InteractiveSprite implements GameState {
     private final int WIDTH = 10;
 
     private boolean askQuestion = false;
+    private boolean answered = false;
     private boolean correct = false;
     private boolean showResult = false;
     private long timestamp;
@@ -58,7 +59,7 @@ public abstract class Question extends InteractiveSprite implements GameState {
         Font oldFont = g.getFont();
         g.setFont(new Font("TimeRoman", Font.BOLD, 16));
         g.drawString("?",getX() - map.getX() - 1, GamePanel.HEIGHT - getY() + map.getY() + 11);
-        g.setColor(!correct? Color.magenta:Color.green);
+        g.setColor(!answered? Color.magenta:correct? Color.green:Color.red);
         g.drawString("?",getX() - map.getX(), GamePanel.HEIGHT - getY() + map.getY() + 10);
         g.setFont(oldFont);
 
@@ -97,15 +98,24 @@ public abstract class Question extends InteractiveSprite implements GameState {
         if ( showResult ) {
 
             linesPrinted++;
-            g.drawString(correct? "Correct: " + correctChoice()+"! Nice job.":"Incorrect, try again.",
+            g.drawString(correct? "Correct: " + correctChoice()+"! Nice job.":"Incorrect. Right answer was: " + correctChoice() + ".",
                     GamePanel.WIDTH/4 + 5,
                     lineY + (linesOffset * ++linesPrinted));
 
             if ( System.currentTimeMillis() - timestamp > 2000 ) {
+
                 askQuestion = false;
                 showResult = false;
+
+                if ( !answered && correct ) {
+                    Coin c = new Coin(getX(), getY()+20);
+                    map.addSpriteInGame(c);
+                }
+
+                answered = true;
                 GamePanel.gsm.cleanTemporaryState();
             }
+
 
         }
 
@@ -129,26 +139,29 @@ public abstract class Question extends InteractiveSprite implements GameState {
             return;
         }
 
-        boolean valid = false;
-        for ( String choice : choicesAndAnswers().keySet() ) {
-            if ( choice.equalsIgnoreCase(String.valueOf(e.getKeyChar())) ) {
-                valid = true;
-                break;
+        if ( !answered ) {
+            boolean valid = false;
+            for (String choice : choicesAndAnswers().keySet()) {
+                if (choice.equalsIgnoreCase(String.valueOf(e.getKeyChar()))) {
+                    valid = true;
+                    break;
+                }
             }
-        }
 
-        if ( ! valid ) {
-            return;
-        }
+            if (!valid) {
+                return;
+            }
 
-        if ( correctChoice().equalsIgnoreCase(String.valueOf(e.getKeyChar())) ) {
-            correct = true;
-        } else {
-            correct = false;
+            if (correctChoice().equalsIgnoreCase(String.valueOf(e.getKeyChar()))) {
+                correct = true;
+            } else {
+                correct = false;
+            }
         }
 
         showResult = true;
         timestamp = System.currentTimeMillis();
 
     }
+
 }

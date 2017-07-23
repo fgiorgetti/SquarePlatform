@@ -16,8 +16,12 @@ import static br.com.giorgetti.games.squareplatform.gameobjects.sprite.SpriteCon
  */
 public class Player extends MovableSprite {
 
-	private long accelerationStarted, deaccelerationStarted, jumpingStarted;
-    private boolean jumping; // Set to true while key is pressed
+	// Dimensions
+	public static final int PLAYER_HEIGHT_UP = 20;
+	public static final int PLAYER_HEIGHT_CROUCH = 12;
+	public static final int PLAYER_WIDTH = 10;
+
+	private long accelerationStarted, deaccelerationStarted;
 
 	private int score;
 
@@ -53,8 +57,8 @@ public class Player extends MovableSprite {
 				10).delay(150).onlyOnce());
 
     	// Setting initial state
-		setWidth(10);
-		setHeight(20);
+		setWidth(PLAYER_WIDTH);
+		setHeight(PLAYER_HEIGHT_UP);
     	setDirection(SpriteDirection.RIGHT);
     	setState(SpriteState.IDLE);
     	
@@ -62,13 +66,9 @@ public class Player extends MovableSprite {
     
     @Override
     public void update(TileMap map) {
-
         this.map = map;
-
         setX(getX() + getXSpeed());
         setY(getY() + getYSpeed());
-
-        //System.out.printf("Player X / Y = %d / %d\n", getPlayerX(), getPlayerY());
     }
 
     @Override
@@ -116,57 +116,10 @@ public class Player extends MovableSprite {
         
 	}
 
-    @Override
-    public void setY(int newY) {
-    	
-    	// Use the common logic
-    	super.setY(newY);
-    	
-        if ( this.map == null ) {
-        	return;
-        }
-
-    	// Player customization for Y
-    	
-        // Jumping
-        //System.out.printf("YSpeed = %d - STATE = %s\n", this.ySpeed, this.state);
-        if ( this.ySpeed > 0 ) {
-        	
-        	if ( isBlockedTop() ) {
-        		setYSpeed(0); // stop jumping
-        	}
-        	        	
-        	fall();
-        	
-        // Falling
-        } else if ( this.ySpeed < 0 ) {
-        	
-        	if ( !isBlockedBottom() ) {
-        		setState(SpriteState.FALLING);
-            	fall();
-        		//System.out.println("I am falllingggggg !!!!!");
-        	} else if ( this.state == SpriteState.FALLING ) {
-        	    if ( this.getXSpeed() != 0 ) {
-        	    	setState(SpriteState.WALKING);
-				} else {
-	        		setState(SpriteState.IDLE);
-				}
-        		this.ySpeed = FALL_SPEED;
-        	}
-        	
-        } else if ( this.state == SpriteState.JUMPING ) {
-    		fall();
-        }
-        
-    }
-
-    public SpriteState getState() {
-		return state;
-	}
-
+	@Override
 	public void setState(SpriteState state) {
-    	if ( this.state == state ) {
-    		return;
+		if ( this.state == state ) {
+			return;
 		}
 		this.state = state;
 		setAnimation(this.state.name());
@@ -247,50 +200,6 @@ public class Player extends MovableSprite {
 		
 	}
 	
-	public void jump() {
-		
-		if ( this.state == SpriteState.JUMPING || 
-				this.state == SpriteState.FALLING ) {
-			return;
-		}
-		
-		//System.out.println("Before jumping y speed: " + getYSpeed());
-		setYSpeed(JUMP_SPEED);
-		this.jumpingStarted = System.currentTimeMillis();
-		setState(SpriteState.JUMPING);
-		this.jumping = true;
-		
-	}
-	
-	public void jumpReleased() {
-		this.jumping = false;
-	}
-	
-	public void fall() {
-		
-		long elapsed = System.currentTimeMillis() - jumpingStarted;
-		if ( elapsed < FALL_DELAY ) {
-			return;
-		}
-		setYSpeed(FALL_RATE);
-		//System.out.println(getYSpeed());
-		this.jumpingStarted = System.currentTimeMillis();
-		
-	}
-	
-	public boolean isJumping() {
-		return jumping;
-	}
-
-	public void setJumping(boolean jumping) {
-		this.jumping = jumping;
-	}
-
-	public boolean isJumpingOrFalling() {
-		return getState() == SpriteState.JUMPING
-				|| getState() == SpriteState.FALLING;
-	}
-
 	public boolean isCrouching() {
 		return getState() == SpriteState.CROUCHING;
 	}

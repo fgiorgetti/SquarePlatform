@@ -1,5 +1,6 @@
 package br.com.giorgetti.games.squareplatform.gameobjects;
 
+import br.com.giorgetti.games.squareplatform.gameobjects.sprite.SpriteConstants;
 import br.com.giorgetti.games.squareplatform.gameobjects.sprite.SpriteState;
 import br.com.giorgetti.games.squareplatform.main.GamePanel;
 import br.com.giorgetti.games.squareplatform.tiles.Tile.TileType;
@@ -10,7 +11,7 @@ import java.awt.image.BufferedImage;
 import java.util.HashMap;
 import java.util.Map;
 
-import static br.com.giorgetti.games.squareplatform.gameobjects.sprite.SpriteConstants.*;
+//import static br.com.giorgetti.games.squareplatform.gameobjects.sprite.SpriteConstants.*;
 
 /**
  * General behavior for sprites in the game.
@@ -21,8 +22,10 @@ public abstract class Sprite {
 
     protected int x;
 	protected int y;
-	protected int width = PLAYER_WIDTH;
-	protected int height = PLAYER_HEIGHT_UP;
+
+	protected int loadedId;
+	protected int width = SpriteConstants.DEFAULT_WIDTH;
+	protected int height = SpriteConstants.DEFAULT_HEIGHT;
 	protected TileMap map = null;
 	protected Animation currentAnimation;
 	protected Map<String, Animation> animations = new HashMap<String, Animation>();
@@ -260,7 +263,6 @@ public abstract class Sprite {
 		int ty = getY() + getHalfHeight();
 		int by = getY() - getHalfHeight();
 
-		//boolean playerLeftCollision = map.getPlayerX() - map.getpl
 		boolean leftCollision = lx <= this.map.getPlayerRightX() &&
 								lx >= this.map.getPlayerLeftX() &&
 								(
@@ -271,7 +273,16 @@ public abstract class Sprite {
 								);
 
 		boolean rightCollision = rx >= this.map.getPlayerLeftX() &&
-				                 rx <= this.map.getPlayerRightX() &&
+								rx <= this.map.getPlayerRightX() &&
+								(
+									   ( ty >= this.map.getPlayerBottomY() && ty <= this.map.getPlayerTopY() ) //top left has collision
+									|| ( by <= this.map.getPlayerTopY() && by >= this.map.getPlayerBottomY() ) // bottom left has collision
+									|| ( ty >= this.map.getPlayerTopY() && by <= this.map.getPlayerBottomY() ) // player inside sprite on left
+									|| ( by >= this.map.getPlayerBottomY() && ty <= this.map.getPlayerTopY() ) // sprite inside player on left
+								);
+
+		boolean playerWithin = lx <= this.map.getPlayerLeftX() &&
+				                 rx >= this.map.getPlayerRightX() &&
 								(
 								   ( ty >= this.map.getPlayerBottomY() && ty <= this.map.getPlayerTopY() ) //top left has collision
 								|| ( by <= this.map.getPlayerTopY() && by >= this.map.getPlayerBottomY() ) // bottom left has collision
@@ -279,7 +290,9 @@ public abstract class Sprite {
 								|| ( by >= this.map.getPlayerBottomY() && ty <= this.map.getPlayerTopY() ) // sprite inside player on left
 								);
 
-		return leftCollision || rightCollision;
+		//System.out.printf("Player LeftX=%d|RightX=%d|TopY=%d|BottomY=%d\n", this.map.getPlayerLeftX(), this.map.getPlayerRightX(), this.map.getPlayerTopY(), this.map.getPlayerBottomY());
+		//System.out.printf("Sprite LeftX=%d|RightX=%d|TopY=%d|BottomY=%d\n", lx, rx, ty, by);
+		return leftCollision || rightCollision || playerWithin;
 
 	}
 
@@ -300,5 +313,13 @@ public abstract class Sprite {
 	public BufferedImage getCurrentAnimation() {
 		return currentAnimation == null? null:currentAnimation.getAnimation();
 	}
-	
+
+	public int getLoadedId() {
+		return loadedId;
+	}
+
+	public void setLoadedId(int loadedId) {
+		this.loadedId = loadedId;
+	}
+
 }

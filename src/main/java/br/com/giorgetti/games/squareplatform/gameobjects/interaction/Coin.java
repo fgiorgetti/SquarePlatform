@@ -27,15 +27,25 @@ public class Coin extends AutoInteractiveSprite {
 
     }
 
+    //TODO Remove when off screen
+    public Coin(int x, int y) {
+        this();
+        this.x = x;
+        this.y = y;
+        this.xSpeed = 1;
+        jump();
+    }
+
     @Override
     public void executeInteraction() {
         map.getPlayer().addScore(SCORE);
-        map.removeSpriteAtPlayer();
+        map.removeSprite(this);
     }
 
     @Override
     public void draw(Graphics2D g) {
 
+        //System.out.printf("X=%d/Y=%d --- MAP X=%d/Y=%d\n", getX(), getY(), map.getX(), map.getY());
         g.drawImage(getCurrentAnimation(),
                     getX() - getHalfWidth() - map.getX(),
                     GamePanel.HEIGHT - getY() - getHalfHeight() + map.getY(),

@@ -101,7 +101,7 @@ public class TileMap {
      * |-> Initial X coordinate in the map
      *
       */
-    private List<String[]> sprites;
+    private ArrayList<String[]> sprites;
 
     /**
      * Tile map, defining all tiles in the map
@@ -127,6 +127,8 @@ public class TileMap {
     public static final int POS_MAP_TILE_TYPE  = 3;
 
     private Map<Integer,Map<Integer,String[]>> map = new HashMap<>();
+    private int lastGameObjectIdx;
+    private boolean editMode;
 
     /**
      * Loads the tile map from the given path. First attempts to
@@ -257,14 +259,46 @@ public class TileMap {
         }
     }
 
-    private void shiftGameObjectsLeft(int idx) {
+    private void shiftGameObjectsLeft(int loadedId) {
         synchronized (gameObjects) {
+            int idx = -1;
+            for ( int i = 0; i < gameObjects.length; i++ ) {
+                if ( gameObjects[i] == null ) {
+                    continue;
+                }
+
+                if ( gameObjects[i].getLoadedId() == loadedId ) {
+                    idx = i;
+                    break;
+                }
+            }
+
+            // Not found
+            if ( idx == -1 ) {
+                return;
+            }
+
+            // Remove from persistent object
+            if ( editMode ) {
+                getSprites().remove(idx);
+            }
+
+            // If last one
+            if ( idx == gameObjects.length-1 ) {
+                gameObjects[idx] = null;
+                return;
+            }
+
             for ( int idxRight = idx + 1, idxLeft = idx; idxRight < gameObjects.length; idxRight++, idxLeft++) {
                 gameObjects[idxLeft] = gameObjects[idxRight];
                 gameObjects[idxRight] = null;
             }
         }
     }
+
+    /**
+     * Reloads all sprites from the map
+     */
     private void loadGameObjects() {
 
         // Loading the objects
@@ -275,13 +309,14 @@ public class TileMap {
                 Sprite s = (Sprite) Class.forName(spriteEntry[POS_SPRITE_CLASS]).newInstance();
                 s.setX(Integer.parseInt(spriteEntry[POS_SPRITE_X]));
                 s.setY(Integer.parseInt(spriteEntry[POS_SPRITE_Y]));
+                s.setLoadedId(idx);
                 gameObjects[idx++] = s;
                 s.setMap(this);
             } catch (Exception e) {
                 System.err.println("Invalid game object on map: " + spriteEntry[POS_SPRITE_CLASS]);
             }
         }
-
+        this.lastGameObjectIdx = idx;
     }
 
     private void readMapEntry(String line) {
@@ -341,20 +376,45 @@ public class TileMap {
         this.backgrounds = backgrounds;
     }
 
-    public List<String[]> getSprites() {
+    public ArrayList<String[]> getSprites() {
         if ( sprites == null ) {
             sprites = new ArrayList<>();
         }
         return sprites;
     }
 
-    public void setSprites(List<String[]> sprites) {
+    public void setSprites(ArrayList<String[]> sprites) {
         this.sprites = sprites;
     }
 
+    /**
+     * Adds a new sprite into the Map.
+     * Should NOT be used in game.
+     * @param x
+     * @param y
+     * @param name
+     */
     public void addSprite(int x, int y, String name) {
         getSprites().add(new String[]{""+x, ""+y, name});
         loadGameObjects();
+    }
+
+    public void addSpriteInGame(Sprite sprite) {
+
+        int id = ++lastGameObjectIdx;
+
+        Sprite[] newSprites = new Sprite[gameObjects.length+1];
+        System.arraycopy(gameObjects, 0, newSprites, 0, gameObjects.length);
+
+        sprite.setLoadedId(id);
+        newSprites[newSprites.length-1] = sprite;
+
+        gameObjects = newSprites;
+
+    }
+
+    public void removeSprite(Sprite sprite) {
+        shiftGameObjectsLeft( sprite.getLoadedId() );
     }
 
     public void removeSpriteAtPlayer() {
@@ -363,32 +423,18 @@ public class TileMap {
            return;
        }
 
-       Sprite found = null;
+       //System.out.println(String.format("Player -> X = %d | Y = %d", player.getX(), player.getY()));
        for ( Sprite sprite : gameObjects ) {
-           if ( sprite == null ) { // Removed object
+           if ( sprite == null || !sprite.isOnScreen() ) { // Removed object
                continue;
            }
+
+           //System.out.println(String.format("%-6d -> X = %d | Y = %d", sprite.getLoadedId(), sprite.getX(), sprite.getY()));
            if ( sprite.hasPlayerCollision() ) {
-               found = sprite;
-               break;
+               //System.out.println("removing sprite. loaded id = " + sprite.getLoadedId());
+               shiftGameObjectsLeft(sprite.getLoadedId());
            }
        }
-
-       if ( found == null ) {
-           return;
-       }
-
-       int idx = 0;
-       for ( String[] spArr : getSprites() ) {
-           if ( spArr[POS_SPRITE_X].equals(found.getX()+"")
-                   && spArr[POS_SPRITE_Y].equals(found.getY()+"")) {
-               break;
-           }
-           idx++;
-       }
-
-       getSprites().remove(idx);
-       shiftGameObjectsLeft(idx);
 
     }
 
@@ -689,6 +735,8 @@ public class TileMap {
     }
     public void update(boolean editMode) {
 
+        this.editMode = editMode;
+        
         player.update(this);
 
         setX(player.getX() - GamePanel.WIDTH / 2);
