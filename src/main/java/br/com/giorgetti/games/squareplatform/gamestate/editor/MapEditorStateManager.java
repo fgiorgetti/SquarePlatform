@@ -357,4 +357,14 @@ public class MapEditorStateManager implements GameState {
         return map;
     }
 
+    @Override
+    public void notifySwitchedOff() {
+
+    }
+
+    @Override
+    public void notifySwitchedOn() {
+
+    }
+
 }

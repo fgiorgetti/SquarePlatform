@@ -34,21 +34,29 @@ public class GameStateManager implements KeyListener {
 
     public void addTemporaryState(GameState state) {
         this.temporaryState = state;
+        this.currentState.notifySwitchedOff();
+        this.temporaryState.notifySwitchedOn();
     }
     public void cleanTemporaryState() {
+        this.temporaryState.notifySwitchedOff();
         this.temporaryState = null;
+        this.currentState.notifySwitchedOff();
     }
 
     public void switchGameState(GameState state) {
         this.previousState = this.currentState;
         this.currentState = state;
+        this.previousState.notifySwitchedOff();
+        this.currentState.notifySwitchedOn();
     }
 
     public void revertGameState() {
         if ( this.previousState == null ) {
             return;
         }
+        this.currentState.notifySwitchedOff();
         this.currentState = this.previousState;
+        this.currentState.notifySwitchedOn();
     }
 
     public boolean isRunning() {

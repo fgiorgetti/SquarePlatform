@@ -105,4 +105,15 @@ public class MessageGameState implements GameState {
     public void keyReleased(KeyEvent e) {
 
     }
+
+    @Override
+    public void notifySwitchedOff() {
+
+    }
+
+    @Override
+    public void notifySwitchedOn() {
+
+    }
+
 }

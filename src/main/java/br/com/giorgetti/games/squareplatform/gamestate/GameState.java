@@ -10,5 +10,7 @@ public interface GameState extends KeyListener {
 
     void update();
     void draw(Graphics2D g);
+    void notifySwitchedOff();
+    void notifySwitchedOn();
 
 }

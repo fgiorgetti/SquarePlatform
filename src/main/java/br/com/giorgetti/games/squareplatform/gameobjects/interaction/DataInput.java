@@ -192,4 +192,15 @@ public abstract class DataInput extends InteractiveSprite implements GameState {
     public String getDataInput(String key) {
         return userInput.get(key);
     }
+
+    @Override
+    public void notifySwitchedOff() {
+
+    }
+
+    @Override
+    public void notifySwitchedOn() {
+
+    }
+
 }

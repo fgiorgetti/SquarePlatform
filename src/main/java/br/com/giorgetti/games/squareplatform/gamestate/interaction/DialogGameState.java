@@ -79,6 +79,16 @@ public class DialogGameState implements GameState {
     }
 
     @Override
+    public void notifySwitchedOff() {
+
+    }
+
+    @Override
+    public void notifySwitchedOn() {
+
+    }
+
+    @Override
     public void keyTyped(KeyEvent e) {
 
     }

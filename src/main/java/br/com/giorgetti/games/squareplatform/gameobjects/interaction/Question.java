@@ -164,4 +164,14 @@ public abstract class Question extends InteractiveSprite implements GameState {
 
     }
 
+    @Override
+    public void notifySwitchedOff() {
+
+    }
+
+    @Override
+    public void notifySwitchedOn() {
+
+    }
+
 }

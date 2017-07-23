@@ -143,7 +143,17 @@ public class LevelStateManager implements GameState {
         
     }
 
-    private void drawCollision(Graphics2D g) {
+	@Override
+	public void notifySwitchedOff() {
+		keyMap[KeyEvent.VK_LEFT] = false;
+		keyMap[KeyEvent.VK_RIGHT] = false;
+	}
+
+	@Override
+	public void notifySwitchedOn() {
+	}
+
+	private void drawCollision(Graphics2D g) {
 
         // Draw tile borders (top left, bottom left, top right, bottom right)
 		drawTileBorders(g, map.getPlayerRow() + 1, map.getPlayerCol() - 1);
