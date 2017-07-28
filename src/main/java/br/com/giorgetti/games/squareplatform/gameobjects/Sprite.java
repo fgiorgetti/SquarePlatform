@@ -52,10 +52,10 @@ public abstract class Sprite {
 		return getX() + getHalfWidth() - map.getX();
 	}
 	public int getHalfHeight() {
-		return getHeight() / 2;
+		return getHeight() / 2 - getHeight() % 2;
 	}
 	public int getHalfWidth() {
-		return getWidth() / 2;
+		return getWidth() / 2 + getWidth() % 2;
 	}
 	public int getX() {
 	    return x;
@@ -86,18 +86,13 @@ public abstract class Sprite {
 	    // Checks if right corners of player are blocked
 	    boolean leftTopBlocked    = map.getTile(map.getRowAt(getY()+getHalfHeight()), map.getColAt(getX()-getHalfWidth())).getType() == TileType.BLOCKED;
 	    boolean leftBottomBlocked = map.getTile(map.getRowAt(getY()-getHalfHeight()), map.getColAt(getX()-getHalfWidth())).getType() == TileType.BLOCKED;
-	    
+	    //TODO Check if on left side of map (x-halfwidth==0)
+
 	    // If tiles at left corners are not blocking tiles, then it is ok to move left
 	    if ( !leftTopBlocked && !leftBottomBlocked ) {
 	    	return false;
 	    }
-	    
-	    // Right X for tile on left side
-	    int tileRx = (map.getColAt(getX()-getHalfWidth())) * map.getWidth() + map.getWidth();// left side of tile on the right
-	    
-	    // Sets player X based on right side of blocking tile on the left
-	    this.x = (tileRx + getHalfWidth());
-	    
+
 	    return true;
 	    
 	}
@@ -111,17 +106,11 @@ public abstract class Sprite {
 	    // Checks if right corners of player are blocked
 	    boolean rightTopBlocked    = map.getTile(map.getRowAt(getY()+getHalfHeight()), map.getColAt(getX()+getHalfWidth())).getType() == TileType.BLOCKED;
 	    boolean rightBottomBlocked = map.getTile(map.getRowAt(getY()-getHalfHeight()), map.getColAt(getX()+getHalfWidth())).getType() == TileType.BLOCKED;
-	    
+
 	    // If tiles at right corners are not blocking tiles, then it is ok to move right
 	    if ( !rightTopBlocked && !rightBottomBlocked ) {
 	    	return false;
 	    }
-	    
-	    // Left X for tile on right side
-	    int tileLx = (map.getColAt(getX()+getHalfWidth())) * map.getWidth()-1;// left side of tile on the right
-	    
-	    // Sets player X based on left side of blocking tile on the right
-	    this.x = (tileLx - getHalfWidth());
 
 	    return true;
 	    
@@ -141,12 +130,6 @@ public abstract class Sprite {
 	    	return false;
 	    }
 	    
-	    // Bottom Y for tile on upper side
-	    int tileBy = (map.getRowAt(getY() + getHalfHeight())) * map.getHeight() - map.getHeight() - 1;// bottom y of upper tile
-	    
-	    // Sets player Y based on bottom side of blocking tile on the top
-	    this.y = (tileBy - getHalfHeight());
-	    
 	    return true;
 	    
 	}
@@ -165,12 +148,6 @@ public abstract class Sprite {
 	    	return false;
 	    }
 	    
-	    // Top Y for tile on bottom side
-	    int tileTy = (map.getRowAt(getY() - getHalfHeight())) * map.getHeight();// top y of bottom tile
-	    
-	    // Sets player Y based on bottom side of blocking tile on the top
-	    this.y = (tileTy + getHalfHeight());
-	    
 	    return true;
 	    
 	}
@@ -178,9 +155,10 @@ public abstract class Sprite {
 	public void setX(int newX) {
     	
     	int oldX = this.x;
-    	
-        if ( map != null && newX > map.getCols() * map.getWidth() - getHalfWidth() - 1 ) {
-            this.x = map.getCols() * map.getWidth() - getHalfWidth() - 1;
+
+    	// Right most of screen
+        if ( map != null && newX > map.getCols() * map.getWidth() - getHalfWidth() ) {
+            this.x = map.getCols() * map.getWidth() - getHalfWidth();
         } else if ( newX < getHalfWidth() ) {
             this.x = getHalfWidth();
         } else {
@@ -190,14 +168,6 @@ public abstract class Sprite {
         // If map not yet provided
         if ( this.map == null ) {
         	return;
-        }
-        
-        // Moving right
-        if ( this.x > oldX ) {
-        	isBlockedRight();
-    	// Moving left
-        } else if ( this.x < oldX ) {
-        	isBlockedLeft();
         }
         
     }
@@ -210,7 +180,6 @@ public abstract class Sprite {
             this.y = map.getRows() * map.getHeight() - getHalfHeight();
         } else if ( newY < -getHeight() ) { // getHalfHeight() + 1) {
             this.y = -getHeight();
-		//	//this.y = getHalfHeight() + 1;
         } else {
             this.y = newY;
         }

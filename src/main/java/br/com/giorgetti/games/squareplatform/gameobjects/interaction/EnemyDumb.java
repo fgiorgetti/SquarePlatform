@@ -19,22 +19,29 @@ public class EnemyDumb extends MovableSprite {
     }
 
     @Override
-    public void update(TileMap map) {
-
-        super.update(map);
-
-        //System.out.printf("X=%d/Y=%d - XSPEED = %d\n", getX(), getY(), getXSpeed());
-        if ( isBlockedLeft() || isBlockedRight() || getX() - getHalfWidth() == 0 ) {
-            this.xSpeed = this.xSpeed * -1;
-        }
-
+    public boolean isBlockedLeft() {
+        return updateDirection(super.isBlockedLeft());
     }
+
+    private boolean updateDirection(boolean blocked) {
+        if ( blocked ) {
+            this.xSpeed = this.xSpeed * - 1;
+        }
+        return blocked;
+    }
+
+    @Override
+    public boolean isBlockedRight() {
+        return updateDirection(super.isBlockedRight());
+    }
+
 
     @Override
     public void draw(Graphics2D g) {
 
         if ( hasPlayerCollision() ) {
-            g.drawString("Hurting player", getX(), getY()+25);
+            g.setColor(Color.RED);
+            g.drawString("Hurting player", getX() - getHalfWidth() - map.getX(), GamePanel.HEIGHT - getY() - getHalfHeight() + map.getY()-25);
         }
 
         g.setColor(Color.RED);

@@ -1,6 +1,7 @@
 package br.com.giorgetti.games.squareplatform.gameobjects;
 
 import br.com.giorgetti.games.squareplatform.gameobjects.sprite.SpriteState;
+import br.com.giorgetti.games.squareplatform.main.GamePanel;
 import br.com.giorgetti.games.squareplatform.tiles.TileMap;
 
 import java.awt.*;
@@ -74,12 +75,6 @@ public class Player extends MovableSprite {
     @Override
     public void draw(Graphics2D g) {
 
-		/*
-    	drawPlayerBorders(g);
-        g.setColor(Color.GREEN);
-        g.drawString("Player State = " + getState(), 10, 10);
-        */
-
         if ( getCurrentAnimation() != null ) {
         	if ( getDirection() == SpriteDirection.RIGHT ) {
         		g.drawImage(getCurrentAnimation(), getLeftX(), getTopY(), getWidth(), getHeight(), null);
@@ -87,6 +82,17 @@ public class Player extends MovableSprite {
         		g.drawImage(getCurrentAnimation(), getRightX(), getTopY(), -getWidth(), getHeight(), null);
         	}
         }
+
+        //g.setColor(Color.green);
+		// Draw a line at top
+		//g.drawLine(0, 0, GamePanel.WIDTH, 0);
+		// Draw a line at bottom
+		//g.drawLine(0, GamePanel.HEIGHT-1, GamePanel.WIDTH, GamePanel.HEIGHT-1);
+		/*
+		drawPlayerBorders(g);
+		g.setColor(Color.GREEN);
+		g.drawString("Player State = " + getState(), 10, 10);
+        */
     }
 
     // Draw borders around player ( for debugging )
@@ -176,15 +182,15 @@ public class Player extends MovableSprite {
 	
 	public void crouch() {
 
-		setState(SpriteState.CROUCHING);
-		this.xSpeed = 0;
-
 		if ( this.height == PLAYER_HEIGHT_CROUCH ) {
 			return;
 		}
 
 		this.height = PLAYER_HEIGHT_CROUCH;
 		this.y -= (PLAYER_HEIGHT_UP - PLAYER_HEIGHT_CROUCH);
+
+		setState(SpriteState.CROUCHING);
+		this.xSpeed = 0;
 
 	}
 	

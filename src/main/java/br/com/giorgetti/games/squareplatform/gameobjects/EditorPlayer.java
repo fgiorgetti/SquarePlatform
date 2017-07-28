@@ -14,7 +14,7 @@ import static br.com.giorgetti.games.squareplatform.gameobjects.sprite.SpriteCon
  * 
  * Created by fgiorgetti on 7/30/15.
  */
-public class EditorPlayer extends MovableSprite {
+public class EditorPlayer extends Sprite {
 
 	@Override
 	public void draw(Graphics2D g) {
@@ -25,40 +25,4 @@ public class EditorPlayer extends MovableSprite {
 		this.map = map;
 	}
 
-	@Override
-	public void setX(int newX) {
-		int oldX = this.x;
-
-		if ( map != null && newX > map.getCols() * map.getWidth() ) {
-			this.x = map.getCols() * map.getWidth();
-		} else if ( newX < getWidth() ) {
-			this.x = getWidth();
-		} else {
-			this.x = newX;
-		}
-
-		// If map not yet provided
-		if ( this.map == null ) {
-			return;
-		}
-
-	}
-
-	@Override
-	public void setY(int newY) {
-		int oldY = this.y;
-
-		if ( map != null && newY > map.getRows() * map.getHeight()) {
-			this.y = map.getRows() * map.getHeight();
-		} else if ( newY < getHeight()) {
-			this.y = getHeight();
-		} else {
-			this.y = newY;
-		}
-
-		if ( this.map == null ) {
-			return;
-		}
-
-	}
 }

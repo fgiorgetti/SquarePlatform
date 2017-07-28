@@ -37,23 +37,26 @@ public class Information extends AutoInteractiveSprite {
     public void draw(Graphics2D g) {
 
         g.setColor(Color.black);
-        g.fillOval(getX() - getHalfWidth() - map.getX() - 1, GamePanel.HEIGHT - getY() - getHalfHeight() + map.getY() + 1, WIDTH, HEIGHT);
-        g.setColor(Color.blue);
-        g.fillOval(getX() - getHalfWidth() - map.getX(), GamePanel.HEIGHT - getY() - getHalfHeight() + map.getY(), WIDTH, HEIGHT);
+        Font oldFont = g.getFont();
+        g.setFont(new Font("TimeRoman", Font.BOLD, 16));
+        g.drawString("!",getX() - map.getX() - 1, GamePanel.HEIGHT - getY() + map.getY() + 1);
+        g.setColor(Color.yellow);
+        g.drawString("!",getX() - map.getX(), GamePanel.HEIGHT - getY() + map.getY() );
+        g.setFont(oldFont);
 
         // If timeStamp is not refreshed within 100ms message is hidden
         if ( System.currentTimeMillis() - timeStamp <= 100 ) {
             g.setColor(Color.white);
-            g.fillRoundRect(GamePanel.WIDTH/4-5, GamePanel.HEIGHT/4-5,
-                    (GamePanel.WIDTH/4)*2+10, (GamePanel.HEIGHT/4)*2+10,
+            g.fillRoundRect(GamePanel.WIDTH/5-15, GamePanel.HEIGHT/5-5,
+                    (GamePanel.WIDTH/5)*3+30, (GamePanel.HEIGHT/5)*3+10,
                     5, 5);
             g.setColor(Color.black);
-            g.fillRoundRect(GamePanel.WIDTH/4, GamePanel.HEIGHT/4,
-                    (GamePanel.WIDTH/4)*2, (GamePanel.HEIGHT/4)*2,
+            g.fillRoundRect(GamePanel.WIDTH/5-10, GamePanel.HEIGHT/5,
+                    (GamePanel.WIDTH/5)*3+20, (GamePanel.HEIGHT/5)*3,
                     5, 5);
             g.setColor(Color.white);
             for ( int i = 0 ; i < messages.size(); i++ ) {
-                g.drawString(messages.get(i), GamePanel.WIDTH/4 + 5,
+                g.drawString(messages.get(i), GamePanel.WIDTH/5 + 5,
                        GamePanel.HEIGHT/4+(i+1)*20);
             }
         }

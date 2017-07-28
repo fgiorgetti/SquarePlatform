@@ -29,7 +29,7 @@ public class SquarePlatform {
 
         // If fullscreen mode is supported, then use it.
 		if ( gd.isFullScreenSupported() ) {
-			gd.setFullScreenWindow(window);
+//			gd.setFullScreenWindow(window);
 		}
 
 		DisplayMode[] availableModes = gd.getDisplayModes();
@@ -44,7 +44,7 @@ public class SquarePlatform {
 
 		// Must be in Full Screen to test if change display mode is allowed
 		if ( gd.isDisplayChangeSupported() && displayMode != null ) {
-			gd.setDisplayMode(displayMode);
+//			gd.setDisplayMode(displayMode);
 		}
 
 		window.validate();

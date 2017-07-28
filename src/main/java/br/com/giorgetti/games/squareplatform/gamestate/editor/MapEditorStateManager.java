@@ -29,7 +29,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public class MapEditorStateManager implements GameState {
 
     protected TileMap map;
-    protected MovableSprite player;
+    protected Sprite player;
 
     private Tile currentTile = null;
     private TileSet currentTileSet = null;
@@ -47,9 +47,9 @@ public class MapEditorStateManager implements GameState {
         PREV, NEXT;
     }
 
-    public MapEditorStateManager(String mapPath, MovableSprite p) {
+    public MapEditorStateManager(String mapPath, Sprite p) {
 
-        this.map = new TileMap();
+        this.map = new TileMap(true);
         this.map.loadTileMap(mapPath, p);
         this.player = p;
         this.playerInitialX = this.map.getPlayerX();
@@ -74,7 +74,7 @@ public class MapEditorStateManager implements GameState {
 
     public void update() {
 
-        map.update(true);
+        map.update();
         messages.update();
         dialog.update();
 
@@ -338,17 +338,17 @@ public class MapEditorStateManager implements GameState {
 
         // go right a tile
         if ( e.getKeyCode() == KeyEvent.VK_RIGHT ) {
-            player.setXSpeed(0);
+            //player.setXSpeed(0);
         } else if ( e.getKeyCode() == KeyEvent.VK_LEFT ) {
-            player.setXSpeed(0);
+            //player.setXSpeed(0);
         }
 
         // go up a tile
         if ( e.getKeyCode() == KeyEvent.VK_UP ) {
-            player.setYSpeed(0);
+            //player.incYSpeed(0);
         // go down a tile
         } else if ( e.getKeyCode() == KeyEvent.VK_DOWN ) {
-            player.setYSpeed(0);
+            //player.incYSpeed(0);
         }
 
     }

@@ -6,6 +6,7 @@ import br.com.giorgetti.games.squareplatform.gameobjects.Player;
 import br.com.giorgetti.games.squareplatform.gameobjects.Sprite;
 import br.com.giorgetti.games.squareplatform.gameobjects.interaction.InteractiveSprite;
 import br.com.giorgetti.games.squareplatform.main.GamePanel;
+import br.com.giorgetti.games.squareplatform.media.Camera;
 import br.com.giorgetti.games.squareplatform.tiles.Tile.TileType;
 
 import java.awt.*;
@@ -128,7 +129,15 @@ public class TileMap {
 
     private Map<Integer,Map<Integer,String[]>> map = new HashMap<>();
     private int lastGameObjectIdx;
-    private boolean editMode;
+
+    private Camera camera;
+    private boolean editMode = false;
+
+    public TileMap() {}
+
+    public TileMap(boolean editMode) {
+        this.editMode = editMode;
+    }
 
     /**
      * Loads the tile map from the given path. First attempts to
@@ -186,6 +195,10 @@ public class TileMap {
             System.exit(ErrorConstants.IO_ERROR_READING_TILE_MAP);
         }
 
+        // Once map has been read, initialize the Camera
+        if ( !editMode ) {
+            this.camera = new Camera(this, (Player) player);
+        }
     }
 
     /**
@@ -731,16 +744,15 @@ public class TileMap {
     }
 
     public void update() {
-        update(false);
-    }
-    public void update(boolean editMode) {
 
-        this.editMode = editMode;
-        
         player.update(this);
 
-        setX(player.getX() - GamePanel.WIDTH / 2);
-        setY(player.getY() - GamePanel.HEIGHT / 2);
+        if ( editMode ) {
+            setX(player.getX() - GamePanel.WIDTH / 2);
+            setY(player.getY() - GamePanel.HEIGHT / 2);
+        } else {
+            camera.update();
+        }
 
         setColOffset(getX() / getWidth());
         setRowOffset(getY() / getHeight() + 1);
@@ -887,7 +899,10 @@ public class TileMap {
         this.player.setX(lastCheckpointX);
         this.player.setY(lastCheckpointY);
         ((MovableSprite) this.player).setXSpeed(0);
-        //((MovableSprite) this.player).setYSpeed(0);
+        // Resets the camera
+        setX(player.getX() - GamePanel.WIDTH / 2);
+        setY(player.getY() - GamePanel.HEIGHT / 2);
+        //((MovableSprite) this.player).incYSpeed(0);
     }
 
     public Player getPlayer() {

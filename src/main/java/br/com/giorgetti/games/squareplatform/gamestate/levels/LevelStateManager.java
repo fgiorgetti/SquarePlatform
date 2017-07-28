@@ -114,10 +114,12 @@ public class LevelStateManager implements GameState {
 
     	// If we dont do it, then if we write anything, we observe a delay...
     	// Need to research if there is a better approach.
+        /*
     	if ( !initString ) {
-            g.drawString("", 0, 0);	
+            g.drawString("", 0, 0);
             initString = true;
     	}
+    	*/
     	
         map.draw(g);
 

@@ -94,6 +94,9 @@ public abstract class MovableSprite extends Sprite {
     }
 
     public void setXSpeed(int xSpeed) {
+        this.xSpeed = xSpeed;
+    }
+    public void incXSpeed(int xSpeed) {
         this.xSpeed += xSpeed;
         if ( this.xSpeed > MAX_XSPEED )
             this.xSpeed = MAX_XSPEED;
@@ -102,6 +105,9 @@ public abstract class MovableSprite extends Sprite {
     }
 
     public void setYSpeed(int ySpeed) {
+        this.ySpeed = ySpeed;
+    }
+    public void incYSpeed(int ySpeed) {
 
         if ( ySpeed == 0 ) {
             this.ySpeed = 0;
@@ -117,6 +123,34 @@ public abstract class MovableSprite extends Sprite {
 
     }
 
+    @Override
+    public void setX(int newX) {
+
+        int oldX = this.x;
+        super.setX(newX);
+
+        if ( map == null ) {
+            return;
+        }
+
+        // Moving right
+        if ( this.x > oldX && isBlockedRight() ) {
+            // Left X for tile on right side
+            int tileLx = (map.getColAt(getX() + getHalfWidth())) * map.getWidth();// left side of tile on the right
+            // Sets player X based on left side of blocking tile on the right
+            // Suppose player is at X=27 its width is 10 (half=5)
+            // The tile (width 16) at X=32 (or col 3) (player x + player half 5 = 32) is blocked
+            // Each tile on X axis goes from 0 to 31 so player X must be 32 - 5 - 1 so they dont collide
+            this.x = (tileLx - getHalfWidth() - 1);
+            // Moving left
+        } else if ( this.x < oldX && isBlockedLeft() ) {
+            // Right X for tile on left side
+            int tileRx = (map.getColAt(getX()-getHalfWidth())) * map.getWidth() + map.getWidth();// left side of tile on the right
+            // Sets player X based on right side of blocking tile on the left
+            this.x = (tileRx + getHalfWidth());
+        }
+
+    }
     @Override
     public void setY(int newY) {
 
@@ -134,6 +168,13 @@ public abstract class MovableSprite extends Sprite {
         if ( this.ySpeed > 0 ) {
 
             if ( isBlockedTop() ) {
+                // Bottom Y for tile on upper side
+                int tileBy = (map.getRowAt(getY() + getHalfHeight())) * map.getHeight() - map.getHeight();// bottom y of upper tile
+                // Sets player Y based on bottom side of blocking tile on the top
+                // Considering bottom is 0 and tile width is 16, it is drawn from 0 to 15 so at y 16 it is the tile above
+                // Tile is drawn from 0 to 15 so Player cannot be at tile bottom (ex 16 - 5 half player = 11)
+                // Instead player must be drawn from 10 to 15 to avoid colliding with tile above
+                this.y = (tileBy - getHalfHeight() - 1);
                 setYSpeed(0); // stop jumping
             }
 
@@ -146,13 +187,21 @@ public abstract class MovableSprite extends Sprite {
                 setState(SpriteState.FALLING);
                 fall();
                 //System.out.println("I am falllingggggg !!!!!");
-            } else if ( this.state == SpriteState.FALLING ) {
-                if ( this.getXSpeed() != 0 ) {
-                    setState(SpriteState.WALKING);
-                } else {
-                    setState(SpriteState.IDLE);
+            } else {
+
+                // Top Y for tile on bottom side
+                int tileTy = (map.getRowAt(getY() - getHalfHeight())) * map.getHeight();// top y of bottom tile
+                // Sets player Y based on bottom side of blocking tile on the top
+                this.y = (tileTy + getHalfHeight());
+
+                if ( this.state == SpriteState.FALLING ) {
+                    if ( this.getXSpeed() != 0 ) {
+                        setState(SpriteState.WALKING);
+                    } else {
+                        setState(SpriteState.IDLE);
+                    }
+                    this.ySpeed = FALL_SPEED;
                 }
-                this.ySpeed = FALL_SPEED;
             }
 
         } else if ( this.state == SpriteState.JUMPING ) {
@@ -180,7 +229,7 @@ public abstract class MovableSprite extends Sprite {
         }
 
         //System.out.println("Before jumping y speed: " + getYSpeed());
-        setYSpeed(JUMP_SPEED);
+        incYSpeed(JUMP_SPEED);
         this.jumpingStarted = System.currentTimeMillis();
         setState(SpriteState.JUMPING);
         this.jumping = true;
@@ -210,7 +259,7 @@ public abstract class MovableSprite extends Sprite {
         if ( elapsed < FALL_DELAY ) {
             return;
         }
-        setYSpeed(FALL_RATE);
+        incYSpeed(FALL_RATE);
         //System.out.println(getYSpeed());
         this.jumpingStarted = System.currentTimeMillis();
 
