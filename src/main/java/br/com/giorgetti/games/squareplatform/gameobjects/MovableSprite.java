@@ -30,13 +30,16 @@ public abstract class MovableSprite extends Sprite {
     protected SpriteDirection direction;
     protected boolean jumping; // Set to true while key is pressed
 
+    protected boolean spriteBlockedBottom;
 
     @Override
     public void update(TileMap map) {
 
         this.map = map;
+
         setX(getX() + getXSpeed());
         setY(getY() + getYSpeed());
+        checkBlockingSprites(getX(), getXSpeed(), getY(), getYSpeed());
 
         // Fell in a whole off screen
         if ( getY()+getHalfHeight() <= 0 ) {
@@ -184,7 +187,9 @@ public abstract class MovableSprite extends Sprite {
         } else if ( this.ySpeed < 0 ) {
 
             if ( !isBlockedBottom() ) {
-                setState(SpriteState.FALLING);
+                if ( !spriteBlockedBottom ) {
+                    setState(SpriteState.FALLING);
+                }
                 fall();
                 //System.out.println("I am falllingggggg !!!!!");
             } else {
@@ -206,6 +211,98 @@ public abstract class MovableSprite extends Sprite {
 
         } else if ( this.state == SpriteState.JUMPING ) {
             fall();
+        }
+
+    }
+
+    protected void checkBlockingSprites(int x, int xSpeed, int y, int ySpeed) {
+
+        if ( this instanceof BlockingSprite ) {
+            return;
+        }
+
+        // Check against other game objects
+        int newX = x + xSpeed;
+        int newY = y + ySpeed;
+        int olx = x - getHalfWidth();
+        int orx = x + getHalfWidth();
+        int oty = y + getHalfHeight();
+        int oby = y - getHalfHeight();
+        int lx = x + xSpeed - getHalfWidth();
+        int rx = x + xSpeed + getHalfWidth();
+        int ty = y + ySpeed + getHalfHeight();
+        int by = y + ySpeed - getHalfHeight();
+
+        for ( Sprite s : map.getGameObjects() ) {
+
+            if ( !(s instanceof BlockingSprite) ) {
+                continue;
+            }
+
+            int slx = s.getX() - s.getHalfWidth();
+            int srx = s.getX() + s.getHalfWidth();
+            int sby = s.getY() - s.getHalfHeight();
+            int sty = s.getY() + s.getHalfHeight();
+
+            boolean bottomCollision = ( by <= sty && by >= sby ) &&
+                                      ( ( rx >= slx && rx < srx )
+                                     || ( lx < srx && lx >= slx ) );
+            boolean topCollision = ( oty <= sby && ty >= sby && ty <= sty ) &&
+                                      ( ( rx >= slx && rx < srx )
+                                     || ( lx < srx && lx >= slx ) );
+
+            boolean blockedRightBottom = rx >= slx && rx <= srx &&
+                    orx <= slx && oby < sty && by <= sty && by > sby;
+            boolean blockedRightTop = rx >= slx && rx <= srx &&
+                    orx <= slx && oty > sby && ty >= sby && ty < sty;
+            boolean blockedLeftBottom = lx > slx && lx <= srx &&
+                    olx >= srx && oby < sty && by <= sty && by > sby;
+            boolean blockedLeftTop = lx > slx && lx <= srx &&
+                    olx >= srx && oty > sby && ty >= sby && ty < sty;
+
+            spriteBlockedBottom = false;
+
+            if ( blockedRightBottom || blockedRightTop ) {
+            //if ( leftCollision && getYSpeed() > 0 ) {
+                System.out.println("RIGHT COLLISION");
+                setXSpeed(0);
+                setX(slx-getHalfWidth()-1);
+            } else if ( blockedLeftBottom || blockedLeftTop ) {
+            //} else if ( rightCollision && getYSpeed() > 0 ) {
+                System.out.println("RIGHT COLLISION");
+                setXSpeed(0);
+                setX(srx+1+getHalfWidth());
+            } else if ( bottomCollision ) {
+
+                if ( isJumpingOrFalling() ) {
+                    if ( getXSpeed() > 0 ) {
+                        setState(SpriteState.WALKING);
+                    } else {
+                        setState(SpriteState.IDLE);
+                    }
+                }
+
+                spriteBlockedBottom = true;
+                fall();
+
+                // System.out.println("BOTTOM COLLISION");
+                if (s instanceof MovableSprite) {
+                    MovableSprite ms = (MovableSprite) s;
+                    setY(sty + getHalfHeight() + ms.getYSpeed());
+                } else {
+                    setY(sty + getHalfHeight() + 1);
+                }
+                //fall();
+
+            } else if ( topCollision ) {
+                System.out.println("TOP COLLISION");
+                setYSpeed(0);
+                setY(sby-getHalfHeight()-1);
+                fall();
+            } else {
+            }
+
+
         }
 
     }

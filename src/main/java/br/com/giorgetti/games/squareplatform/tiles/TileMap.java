@@ -461,11 +461,13 @@ public class TileMap {
         newTileInfo[POS_MAP_TILEPOS_ID] = "" + tile;
         newTileInfo[POS_MAP_TILE_TYPE] = "" + tile;
 
-        if ( map.containsKey(row) ) {
-            map.get(row).put(col, newTileInfo);
-        } else {
-            newTileRow.put(col, newTileInfo);
-            map.put(row, newTileRow);
+        synchronized ( this.map ) {
+            if (map.containsKey(row)) {
+                map.get(row).put(col, newTileInfo);
+            } else {
+                newTileRow.put(col, newTileInfo);
+                map.put(row, newTileRow);
+            }
         }
 
     }
@@ -809,36 +811,39 @@ public class TileMap {
         }
 
         // Drawing map on the screen...
-        for ( int row : getMap().keySet() ) {
+        synchronized ( this.map ) {
 
-            if ( row < getRowOffset() || row > getRowOffset() + getMaxRowsOnScreen() )
-                continue;
+            for ( int row : getMap().keySet() ) {
 
-            for ( int col : getMap().get(row).keySet() ) {
-
-                if ( col < getColOffset() || col > getColOffset() + getMaxColsOnScreen()+1 )
+                if ( row < getRowOffset() || row > getRowOffset() + getMaxRowsOnScreen() )
                     continue;
 
-                // Drawing the tile map
-                Tile t = getTile(row, col);
+                for ( int col : getMap().get(row).keySet() ) {
 
-                g.drawImage(t.getTileImage(),
-                        col * getWidth() - getX(),
-                        GamePanel.HEIGHT - row * getHeight() + getY(),
-                        null);
+                    if ( col < getColOffset() || col > getColOffset() + getMaxColsOnScreen()+1 )
+                        continue;
 
-                if ( editMode && t.getType() == Tile.TileType.BLOCKED ) {
-                    g.setColor(Color.black);
-                    g.fillRect(
-                            col * getWidth() - getX() + (getWidth() / 2) - 2,
-                            GamePanel.HEIGHT - row * getHeight() + getY() + (getHeight() / 2) - 10,
-                            10, 15
-                    );
-                    g.setColor(Color.white);
-                    g.drawString("B",
-                            col * getWidth() - getX() + (getWidth() / 2),
-                            GamePanel.HEIGHT - row * getHeight() + getY() + (getHeight() / 2)
-                    );
+                    // Drawing the tile map
+                    Tile t = getTile(row, col);
+
+                    g.drawImage(t.getTileImage(),
+                            col * getWidth() - getX(),
+                            GamePanel.HEIGHT - row * getHeight() + getY(),
+                            null);
+
+                    if ( editMode && t.getType() == Tile.TileType.BLOCKED ) {
+                        g.setColor(Color.black);
+                        g.fillRect(
+                                col * getWidth() - getX() + (getWidth() / 2) - 2,
+                                GamePanel.HEIGHT - row * getHeight() + getY() + (getHeight() / 2) - 10,
+                                10, 15
+                        );
+                        g.setColor(Color.white);
+                        g.drawString("B",
+                                col * getWidth() - getX() + (getWidth() / 2),
+                                GamePanel.HEIGHT - row * getHeight() + getY() + (getHeight() / 2)
+                        );
+                    }
                 }
             }
         }
@@ -907,6 +912,10 @@ public class TileMap {
 
     public Player getPlayer() {
         return (Player) this.player;
+    }
+
+    public Sprite[] getGameObjects() {
+        return this.gameObjects;
     }
 
 }

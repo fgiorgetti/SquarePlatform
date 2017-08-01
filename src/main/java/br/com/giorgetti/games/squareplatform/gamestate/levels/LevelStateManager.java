@@ -1,16 +1,16 @@
 package br.com.giorgetti.games.squareplatform.gamestate.levels;
 
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.Graphics2D;
-import java.awt.event.KeyEvent;
-import java.util.ArrayList;
-
 import br.com.giorgetti.games.squareplatform.gameobjects.Player;
 import br.com.giorgetti.games.squareplatform.gameobjects.SpriteDirection;
 import br.com.giorgetti.games.squareplatform.gamestate.GameState;
 import br.com.giorgetti.games.squareplatform.main.GamePanel;
+import br.com.giorgetti.games.squareplatform.media.MediaPlayer;
 import br.com.giorgetti.games.squareplatform.tiles.TileMap;
+import javafx.embed.swing.JFXPanel;
+
+import java.awt.*;
+import java.awt.event.KeyEvent;
+import java.util.ArrayList;
 
 
 /**
@@ -19,7 +19,7 @@ import br.com.giorgetti.games.squareplatform.tiles.TileMap;
  * 
  * Created by fgiorgetti on 5/1/15.
  */
-public class LevelStateManager implements GameState {
+public class LevelStateManager extends JFXPanel implements GameState {
 
 	private boolean initString = false;
     private static final Font GAME_OVER_FONT = Font.getFont(Font.DIALOG_INPUT);
@@ -33,8 +33,11 @@ public class LevelStateManager implements GameState {
 	protected boolean showFps = false;
 	private int fps = 0;
 	private long lastDrawFps;
-    
-    public LevelStateManager(String mapPath, Player p) {
+
+	private MediaPlayer mediaPlayer;
+
+	public LevelStateManager(String mapPath, Player p) {
+
         this.map = new TileMap();
         this.map.loadTileMap(mapPath, p);
         this.player = p;
@@ -54,6 +57,13 @@ public class LevelStateManager implements GameState {
         this.supportedKeys.add(KeyEvent.VK_F12);
 		this.supportedKeys.add(KeyEvent.VK_SPACE);
 		this.supportedKeys.add(KeyEvent.VK_ESCAPE);
+
+		//TODO Customize media to play on map
+		//TODO Adjust volume on configuration state
+		this.mediaPlayer = new MediaPlayer("/music/music.mp3");
+		this.mediaPlayer.setVolume(0.02D);
+		System.out.println(this.mediaPlayer.getVolume());
+		this.mediaPlayer.play(true, 2000);
 
     }
 

@@ -70,6 +70,7 @@ public class Player extends MovableSprite {
         this.map = map;
         setX(getX() + getXSpeed());
         setY(getY() + getYSpeed());
+		checkBlockingSprites(getX(), getXSpeed(), getY(), getYSpeed());
     }
 
     @Override
@@ -187,7 +188,6 @@ public class Player extends MovableSprite {
 		}
 
 		this.height = PLAYER_HEIGHT_CROUCH;
-		this.y -= (PLAYER_HEIGHT_UP - PLAYER_HEIGHT_CROUCH);
 
 		setState(SpriteState.CROUCHING);
 		this.xSpeed = 0;
@@ -201,7 +201,7 @@ public class Player extends MovableSprite {
 		}
 
 		this.height = PLAYER_HEIGHT_UP;
-		this.y += PLAYER_HEIGHT_CROUCH / 2;
+		this.y += (PLAYER_HEIGHT_UP - PLAYER_HEIGHT_CROUCH);
 		setState(SpriteState.IDLE);
 		
 	}

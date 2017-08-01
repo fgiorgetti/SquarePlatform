@@ -9,12 +9,14 @@ import javax.swing.JPanel;
 
 import br.com.giorgetti.games.squareplatform.gamestate.GameState;
 import br.com.giorgetti.games.squareplatform.gamestate.GameStateManager;
+import javafx.embed.swing.JFXPanel;
 
 /**
  * Created by fgiorgetti on 5/1/15.
  */
 @SuppressWarnings("serial")
-public class GamePanel extends JPanel implements Runnable {
+public class GamePanel extends JFXPanel implements Runnable {
+    //public class GamePanel extends JPanel implements Runnable {
 
     // Game panel dimensions
     //public static final int WIDTH = 800;
