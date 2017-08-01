@@ -25,6 +25,8 @@ public class GameObjectSelector {
         gameObjectsMap.put("Question Baby", QuestionBaby.class);
         gameObjectsMap.put("UserInput - Name", NameDataInput.class);
         gameObjectsMap.put("UpDownPlatform", UpDownPlatform.class);
+        gameObjectsMap.put("Open Door 1", OpenBlockingDoor.class);
+        gameObjectsMap.put("Door 1", BlockingDoor.class);
 
         for ( String key : gameObjectsMap.keySet() ) {
             gameObjectsList.add(key);

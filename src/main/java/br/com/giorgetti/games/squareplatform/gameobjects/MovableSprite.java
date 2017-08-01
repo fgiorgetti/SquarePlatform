@@ -263,13 +263,11 @@ public abstract class MovableSprite extends Sprite {
             spriteBlockedBottom = false;
 
             if ( blockedRightBottom || blockedRightTop ) {
-            //if ( leftCollision && getYSpeed() > 0 ) {
-                System.out.println("RIGHT COLLISION");
+                //System.out.println("RIGHT COLLISION");
                 setXSpeed(0);
                 setX(slx-getHalfWidth()-1);
             } else if ( blockedLeftBottom || blockedLeftTop ) {
-            //} else if ( rightCollision && getYSpeed() > 0 ) {
-                System.out.println("RIGHT COLLISION");
+                //System.out.println("RIGHT COLLISION");
                 setXSpeed(0);
                 setX(srx+1+getHalfWidth());
             } else if ( bottomCollision ) {
@@ -299,9 +297,7 @@ public abstract class MovableSprite extends Sprite {
                 setYSpeed(0);
                 setY(sby-getHalfHeight()-1);
                 fall();
-            } else {
             }
-
 
         }
 
