@@ -281,6 +281,7 @@ public abstract class MovableSprite extends Sprite {
                 }
 
                 spriteBlockedBottom = true;
+                setYSpeed(FALL_SPEED);
                 fall();
 
                 //System.out.println("BOTTOM COLLISION");
