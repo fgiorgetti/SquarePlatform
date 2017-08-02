@@ -31,6 +31,9 @@ public abstract class MovableSprite extends Sprite {
     protected boolean jumping; // Set to true while key is pressed
 
     protected boolean spriteBlockedBottom;
+    protected boolean spriteBlockedLeft;
+    protected boolean spriteBlockedRight;
+    protected boolean spriteBlockedTop;
 
     @Override
     public void update(TileMap map) {
@@ -261,15 +264,20 @@ public abstract class MovableSprite extends Sprite {
                     olx >= srx && oty > sby && ty >= sby && ty < sty;
 
             spriteBlockedBottom = false;
+            spriteBlockedLeft = false;
+            spriteBlockedRight = false;
+            spriteBlockedTop = false;
 
             if ( blockedRightBottom || blockedRightTop ) {
-                //System.out.println("RIGHT COLLISION");
+                System.out.println(getClass().getSimpleName() + "RIGHT COLLISION");
                 setXSpeed(0);
                 setX(slx-getHalfWidth()-1);
+                spriteBlockedRight = true;
             } else if ( blockedLeftBottom || blockedLeftTop ) {
-                //System.out.println("RIGHT COLLISION");
+                System.out.println(getClass().getSimpleName() + "LEFT COLLISION");
                 setXSpeed(0);
                 setX(srx+1+getHalfWidth());
+                spriteBlockedLeft = true;
             } else if ( bottomCollision ) {
 
                 if ( isJumpingOrFalling() ) {
@@ -298,6 +306,7 @@ public abstract class MovableSprite extends Sprite {
                 setYSpeed(0);
                 setY(sby-getHalfHeight()-1);
                 fall();
+                spriteBlockedTop = true;
             }
 
         }

@@ -19,15 +19,26 @@ public class EnemyDumb extends MovableSprite {
     }
 
     @Override
+    public void update(TileMap map) {
+        if ( spriteBlockedLeft ) {
+            this.xSpeed = 1;
+        } else if ( spriteBlockedRight ) {
+            this.xSpeed = -1;
+        }
+        super.update(map);
+    }
+
+    @Override
     public boolean isBlockedLeft() {
         return updateDirection(super.isBlockedLeft());
     }
 
     private boolean updateDirection(boolean blocked) {
         if ( blocked ) {
-            this.xSpeed = this.xSpeed * - 1;
+            this.xSpeed = this.xSpeed * -1;
         }
         return blocked;
+
     }
 
     @Override
