@@ -246,7 +246,7 @@ public abstract class MovableSprite extends Sprite {
 
             boolean bottomCollision = ( by <= sty && by >= sby ) &&
                                       ( ( rx >= slx && rx < srx )
-                                     || ( lx < srx && lx >= slx ) );
+                                     || ( lx < srx && lx > slx ) );
             boolean topCollision = ( oty <= sby && ty >= sby && ty <= sty ) &&
                                       ( ( rx >= slx && rx < srx )
                                      || ( lx < srx && lx >= slx ) );
@@ -273,7 +273,7 @@ public abstract class MovableSprite extends Sprite {
             } else if ( bottomCollision ) {
 
                 if ( isJumpingOrFalling() ) {
-                    if ( getXSpeed() > 0 ) {
+                    if ( getXSpeed() != 0 ) {
                         setState(SpriteState.WALKING);
                     } else {
                         setState(SpriteState.IDLE);
@@ -283,17 +283,17 @@ public abstract class MovableSprite extends Sprite {
                 spriteBlockedBottom = true;
                 fall();
 
-                // System.out.println("BOTTOM COLLISION");
+                //System.out.println("BOTTOM COLLISION");
                 if (s instanceof MovableSprite) {
                     MovableSprite ms = (MovableSprite) s;
                     setY(sty + getHalfHeight() + ms.getYSpeed());
+                    setX(getX() + ms.getXSpeed());
                 } else {
                     setY(sty + getHalfHeight() + 1);
                 }
-                //fall();
 
             } else if ( topCollision ) {
-                System.out.println("TOP COLLISION");
+                //System.out.println("TOP COLLISION");
                 setYSpeed(0);
                 setY(sby-getHalfHeight()-1);
                 fall();

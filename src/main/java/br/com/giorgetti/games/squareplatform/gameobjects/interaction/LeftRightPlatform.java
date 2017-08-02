@@ -7,29 +7,30 @@ import br.com.giorgetti.games.squareplatform.tiles.TileMap;
 
 import java.awt.*;
 
-public class UpDownPlatform extends MovableSprite implements BlockingSprite {
+public class LeftRightPlatform extends MovableSprite implements BlockingSprite {
 
-    private static final int Y_SPEED = 1;
+    private static final int X_SPEED = 1;
     private static final int MAX_DISTANCE = 100;
 
     private int distanceMoved = 0;
 
-    public UpDownPlatform() {
+    public LeftRightPlatform() {
         super();
-        this.width = 70;
+        this.width = 90;
         this.height = 20;
-        this.ySpeed = Y_SPEED;
+        this.xSpeed = X_SPEED;
+        this.ySpeed = 0;
     }
 
     @Override
     public void update(TileMap map) {
 
         super.update(map);
-        distanceMoved += Math.abs(this.ySpeed);
+        distanceMoved += Math.abs(this.xSpeed);
 
         if ( distanceMoved >= MAX_DISTANCE ) {
             distanceMoved = 0;
-            this.ySpeed = this.ySpeed * -1;
+            this.xSpeed = this.xSpeed * -1;
         }
 
     }
@@ -37,6 +38,11 @@ public class UpDownPlatform extends MovableSprite implements BlockingSprite {
     @Override
     public void setY(int newY) {
         this.y = newY;
+    }
+
+    @Override
+    public void setX(int newX) {
+        this.x = newX;
     }
 
     @Override
@@ -48,4 +54,5 @@ public class UpDownPlatform extends MovableSprite implements BlockingSprite {
                 getWidth(), getHeight());
 
     }
+
 }

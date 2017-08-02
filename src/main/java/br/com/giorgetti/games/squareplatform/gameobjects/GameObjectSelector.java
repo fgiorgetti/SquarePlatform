@@ -25,8 +25,10 @@ public class GameObjectSelector {
         gameObjectsMap.put("Question Baby", QuestionBaby.class);
         gameObjectsMap.put("UserInput - Name", NameDataInput.class);
         gameObjectsMap.put("UpDownPlatform", UpDownPlatform.class);
+        gameObjectsMap.put("LeftRightPlatform", LeftRightPlatform.class);
         gameObjectsMap.put("Open Door 1", OpenBlockingDoor.class);
         gameObjectsMap.put("Door 1", BlockingDoor.class);
+        gameObjectsMap.put("Wizard Level 1", WizardLevel1.class);
 
         for ( String key : gameObjectsMap.keySet() ) {
             gameObjectsList.add(key);

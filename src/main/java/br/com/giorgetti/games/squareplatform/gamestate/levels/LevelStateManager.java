@@ -62,7 +62,6 @@ public class LevelStateManager extends JFXPanel implements GameState {
 		//TODO Adjust volume on configuration state
 		this.mediaPlayer = new MediaPlayer("/music/music.mp3");
 		this.mediaPlayer.setVolume(0.02D);
-		System.out.println(this.mediaPlayer.getVolume());
 		this.mediaPlayer.play(true, 2000);
 
     }
