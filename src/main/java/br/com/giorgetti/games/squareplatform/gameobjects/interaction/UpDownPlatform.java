@@ -16,7 +16,7 @@ public class UpDownPlatform extends MovableSprite implements BlockingSprite {
 
     public UpDownPlatform() {
         super();
-        this.width = 70;
+        this.width = 80;
         this.height = 20;
         this.ySpeed = Y_SPEED;
     }

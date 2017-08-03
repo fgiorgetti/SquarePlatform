@@ -16,6 +16,10 @@ import static br.com.giorgetti.games.squareplatform.gameobjects.sprite.SpriteCon
  */
 public class EditorPlayer extends Sprite {
 
+	public EditorPlayer() {
+
+	}
+
 	@Override
 	public void draw(Graphics2D g) {
 	}

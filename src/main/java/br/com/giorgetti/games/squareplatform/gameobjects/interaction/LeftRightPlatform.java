@@ -16,7 +16,7 @@ public class LeftRightPlatform extends MovableSprite implements BlockingSprite {
 
     public LeftRightPlatform() {
         super();
-        this.width = 90;
+        this.width = 80;
         this.height = 20;
         this.xSpeed = X_SPEED;
         this.ySpeed = 0;

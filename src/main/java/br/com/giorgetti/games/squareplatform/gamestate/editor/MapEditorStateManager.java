@@ -52,10 +52,13 @@ public class MapEditorStateManager implements GameState {
         this.map = new TileMap(true);
         this.map.loadTileMap(mapPath, p);
         this.player = p;
+        this.player.setMap(this.map);
         this.playerInitialX = this.map.getPlayerX();
         this.playerInitialY = this.map.getPlayerY();
         player.setX(map.getWidth() / 2);
         player.setY(map.getHeight() / 2);
+        player.setWidth(this.map.getWidth());
+        player.setHeight(this.map.getHeight());
 
         tileSetList = new LinkedList<>(getMap().getTileSetMap().values());
         currentTileSet = tileSetList.get(curTileSetPos);
@@ -183,11 +186,9 @@ public class MapEditorStateManager implements GameState {
         // go down a tile
         } else if ( e.getKeyCode() == KeyEvent.VK_DOWN ) {
 
-            player.setY(player.getY() - map.getHeight());
-
             // if reached bottom of map
-            if ( player.getY() == 0 ) {
-                player.setY(map.getHeight() / 2);
+            if ( player.getY() > player.getHeight() ) {
+                player.setY(player.getY() - map.getHeight());
             }
 
         // Add selected tile to the selected row/column

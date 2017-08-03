@@ -42,7 +42,7 @@ public abstract class MovableSprite extends Sprite {
 
         setX(getX() + getXSpeed());
         setY(getY() + getYSpeed());
-        checkBlockingSprites(getX(), getXSpeed(), getY(), getYSpeed());
+        checkBlockingSprites(getX()-getXSpeed(), getXSpeed(), getY()-getYSpeed(), getYSpeed());
 
         // Fell in a whole off screen
         if ( getY()+getHalfHeight() <= 0 ) {
@@ -225,8 +225,6 @@ public abstract class MovableSprite extends Sprite {
         }
 
         // Check against other game objects
-        int newX = x + xSpeed;
-        int newY = y + ySpeed;
         int olx = x - getHalfWidth();
         int orx = x + getHalfWidth();
         int oty = y + getHalfHeight();
@@ -236,6 +234,11 @@ public abstract class MovableSprite extends Sprite {
         int ty = y + ySpeed + getHalfHeight();
         int by = y + ySpeed - getHalfHeight();
 
+        spriteBlockedTop = false;
+        spriteBlockedBottom = false;
+        spriteBlockedLeft = false;
+        spriteBlockedRight = false;
+
         for ( Sprite s : map.getGameObjects() ) {
 
             if ( !(s instanceof BlockingSprite) ) {
@@ -244,55 +247,59 @@ public abstract class MovableSprite extends Sprite {
 
             int slx = s.getX() - s.getHalfWidth();
             int srx = s.getX() + s.getHalfWidth();
-            int sby = s.getY() - s.getHalfHeight();
             int sty = s.getY() + s.getHalfHeight();
+            int sby = s.getY() - s.getHalfHeight();
 
-            boolean bottomCollision = ( by <= sty && by >= sby ) &&
-                                      ( ( rx >= slx && rx < srx )
-                                     || ( lx < srx && lx > slx ) );
-            boolean topCollision = ( oty <= sby && ty >= sby && ty <= sty ) &&
-                                      ( ( rx >= slx && rx < srx )
-                                     || ( lx < srx && lx >= slx ) );
+            // If set to try by any of the sprites on map, do not change it to false
+            boolean blockedBottom = (getYSpeed() < 0 && by <= sty && by >= sby) &&
+                    ((rx > slx && rx < srx)
+                            || (lx < srx && lx > slx));
 
-            boolean blockedRightBottom = rx >= slx && rx <= srx &&
-                    orx <= slx && oby < sty && by <= sty && by > sby;
-            boolean blockedRightTop = rx >= slx && rx <= srx &&
-                    orx <= slx && oty > sby && ty >= sby && ty < sty;
-            boolean blockedLeftBottom = lx > slx && lx <= srx &&
-                    olx >= srx && oby < sty && by <= sty && by > sby;
-            boolean blockedLeftTop = lx > slx && lx <= srx &&
-                    olx >= srx && oty > sby && ty >= sby && ty < sty;
+            // If set to try by any of the sprites on map, do not change it to false
+            boolean blockedTop = ( oty <= sby && (oty >= sby || ty >= sby) && y <= sty ) && (
+                    ( rx >= slx && rx < srx )
+                            || ( lx < srx && lx >= slx )
+            );
 
-            spriteBlockedBottom = false;
-            spriteBlockedLeft = false;
-            spriteBlockedRight = false;
-            spriteBlockedTop = false;
+            boolean blockedRight = x < slx && rx >= slx && rx < srx && (
+                        ( y >= sby && y <= sty ) // y within sprite
+                                || ( oty >= sby && oty <=sty ) // top y within sprite
+                                || ( oby >= sby && y < sty ) // bottom y within sprite
+                                || ( oby <= sby && oty >= sty ) // sprite bigger than blocking object
+                );
 
-            if ( blockedRightBottom || blockedRightTop ) {
-                System.out.println(getClass().getSimpleName() + "RIGHT COLLISION");
+            boolean blockedLeft = x > srx && lx <= srx && lx > slx && (
+                        (y >= sby && y <= sty) // y within sprite
+                                || (oty >= sby && oty <= sty) // top y within sprite
+                                || (oby >= sby && y < sty) // bottom y within sprite
+                                || (oby <= sby && oty >= sty) // sprite bigger than blocking object
+                );
+
+            if ( blockedRight && !spriteBlockedRight ) {
+                spriteBlockedRight = true;
+                //System.out.println(getClass().getSimpleName() + "RIGHT COLLISION");
                 setXSpeed(0);
                 setX(slx-getHalfWidth()-1);
-                spriteBlockedRight = true;
-            } else if ( blockedLeftBottom || blockedLeftTop ) {
-                System.out.println(getClass().getSimpleName() + "LEFT COLLISION");
+            } else if ( blockedLeft && !spriteBlockedLeft ) {
+                spriteBlockedLeft = true;
+                //System.out.println(getClass().getSimpleName() + "LEFT COLLISION");
                 setXSpeed(0);
                 setX(srx+1+getHalfWidth());
-                spriteBlockedLeft = true;
-            } else if ( bottomCollision ) {
+            } else if ( blockedBottom && !spriteBlockedBottom ) {
+
+                spriteBlockedBottom = true;
 
                 if ( isJumpingOrFalling() ) {
-                    if ( getXSpeed() != 0 ) {
+                    if (getXSpeed() != 0) {
                         setState(SpriteState.WALKING);
                     } else {
                         setState(SpriteState.IDLE);
                     }
                 }
 
-                spriteBlockedBottom = true;
                 setYSpeed(FALL_SPEED);
                 fall();
 
-                //System.out.println("BOTTOM COLLISION");
                 if (s instanceof MovableSprite) {
                     MovableSprite ms = (MovableSprite) s;
                     setY(sty + getHalfHeight() + ms.getYSpeed());
@@ -301,13 +308,21 @@ public abstract class MovableSprite extends Sprite {
                     setY(sty + getHalfHeight() + 1);
                 }
 
-            } else if ( topCollision ) {
+
+            } else if ( blockedTop && !spriteBlockedTop ) {
+                spriteBlockedTop = true;
                 //System.out.println("TOP COLLISION");
                 setYSpeed(0);
                 setY(sby-getHalfHeight()-1);
                 fall();
-                spriteBlockedTop = true;
             }
+
+            /**
+            System.out.printf("OLX = %d | LX = %d | X = %d | ORX = %d | RX = %d | XSPEED = %d\n", olx, lx, x, orx, rx, xSpeed);
+            System.out.printf("OBY = %d | BY = %d | Y = %d | OTY = %d | TY = %d | YSPEED = %d\n", oby, by, getY(), oty, ty, ySpeed);
+            System.out.printf("SLX = %d | SRX = %d | STY = %d | SBY = %d\n", slx, srx, sty, sby);
+            System.out.printf("blockedBottom = %s - by = %d - sty = %d\n", spriteBlockedBottom, y, by, sty);
+             **/
 
         }
 
