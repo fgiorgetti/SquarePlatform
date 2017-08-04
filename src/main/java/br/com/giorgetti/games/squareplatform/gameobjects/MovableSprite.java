@@ -50,7 +50,7 @@ public abstract class MovableSprite extends Sprite {
 
     }
 
-    private void checkOffScreenBottom(TileMap map) {
+    protected void checkOffScreenBottom(TileMap map) {
         // Fell in a whole off screen
         if ( getY()+getHalfHeight() <= 0 ) {
             //System.out.println(this.getClass().getSimpleName() + " - good bye");
@@ -235,6 +235,8 @@ public abstract class MovableSprite extends Sprite {
         int orx = x + getHalfWidth();
         int oty = y + getHalfHeight();
         int oby = y - getHalfHeight();
+        int nx = x + xSpeed;
+        int ny = y + ySpeed;
         int lx = x + xSpeed - getHalfWidth();
         int rx = x + xSpeed + getHalfWidth();
         int ty = y + ySpeed + getHalfHeight();
@@ -256,7 +258,6 @@ public abstract class MovableSprite extends Sprite {
             int sty = s.getY() + s.getHalfHeight();
             int sby = s.getY() - s.getHalfHeight();
 
-            // If set to true by any of the sprites on map, do not change it to false
             boolean blockedBottom = (getYSpeed() < 0 && by <= sty && by >= sby) &&
                     ((rx > slx && rx < srx)
                             || (lx < srx && lx > slx));
@@ -285,12 +286,10 @@ public abstract class MovableSprite extends Sprite {
 
             if ( blockedRight && !spriteBlockedRight ) {
                 spriteBlockedRight = true;
-                //System.out.println(getClass().getSimpleName() + "RIGHT COLLISION");
                 setXSpeed(0);
                 setX(slx-getHalfWidth()-1);
             } else if ( blockedLeft && !spriteBlockedLeft ) {
                 spriteBlockedLeft = true;
-                //System.out.println(getClass().getSimpleName() + "LEFT COLLISION");
                 setXSpeed(0);
                 setX(srx+1+getHalfWidth());
             } else if ( blockedBottom && !spriteBlockedBottom ) {
@@ -319,10 +318,9 @@ public abstract class MovableSprite extends Sprite {
 
             } else if ( blockedTop && !spriteBlockedTop ) {
                 spriteBlockedTop = true;
-                //System.out.println("TOP COLLISION");
-                setYSpeed(0);
-                setY(sby-getHalfHeight()-1);
+                setYSpeed(FALL_RATE);
                 fall();
+                setY(sby-getHalfHeight()-1);
             }
 
             /**

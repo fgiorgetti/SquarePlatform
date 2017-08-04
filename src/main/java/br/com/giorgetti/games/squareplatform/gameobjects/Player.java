@@ -1,10 +1,12 @@
 package br.com.giorgetti.games.squareplatform.gameobjects;
 
+import br.com.giorgetti.games.squareplatform.gameobjects.interaction.Enemy;
 import br.com.giorgetti.games.squareplatform.gameobjects.sprite.SpriteState;
 import br.com.giorgetti.games.squareplatform.main.GamePanel;
 import br.com.giorgetti.games.squareplatform.tiles.TileMap;
 
 import java.awt.*;
+import java.util.Arrays;
 
 import static br.com.giorgetti.games.squareplatform.gameobjects.sprite.SpriteConstants.*;
 
@@ -21,12 +23,14 @@ public class Player extends MovableSprite {
 	public static final int PLAYER_HEIGHT_UP = 20;
 	public static final int PLAYER_HEIGHT_CROUCH = 12;
 	public static final int PLAYER_WIDTH = 10;
+	public static final int JUMP_DAMAGE = 100;
 
 	private long accelerationStarted, deaccelerationStarted;
 
 	private int score;
+	private int health;
 
-    public Player() {
+	public Player() {
 
 		loadAnimation(Animation.newAnimation(SpriteState.WALKING.name(),
 				"/sprites/player/player_walkright.png",
@@ -71,9 +75,32 @@ public class Player extends MovableSprite {
         setX(getX() + getXSpeed());
         setY(getY() + getYSpeed());
 		checkBlockingSprites(getX(), getXSpeed(), getY(), getYSpeed());
-    }
+		checkJumpingOnEnemy(map);
+	}
 
-    @Override
+	private void checkJumpingOnEnemy(TileMap map) {
+        
+    	// If player is not falling, ignore it
+    	if ( getYSpeed() >= 0 ) {
+    		return;
+		}
+		
+		for ( Sprite s : map.getGameObjects() ) {
+
+			if ( !Enemy.class.isInstance(s) || !s.hasPlayerCollision() ) {
+				continue;
+			}
+
+			Enemy e = (Enemy) s;
+
+			if ( e.isPlayerJumpingOver(this) ) {
+				e.damage(JUMP_DAMAGE);
+			}
+
+		}
+	}
+
+	@Override
     public void draw(Graphics2D g) {
 
         if ( getCurrentAnimation() != null ) {
@@ -222,4 +249,7 @@ public class Player extends MovableSprite {
         this.score -= score;
     }
 
+    public void damage(int damage) {
+    	this.health -= damage;
+	}
 }

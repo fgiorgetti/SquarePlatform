@@ -9,7 +9,17 @@ import java.awt.*;
 /**
  * Created by fgiorgetti on 23/07/17.
  */
-public class EnemyDumb extends MovableSprite {
+public class EnemyDumb extends Enemy {
+
+    @Override
+    public int getMaxHealth() {
+        return 100;
+    }
+
+    @Override
+    public int getHitDamage() {
+        return 25;
+    }
 
     public EnemyDumb() {
         super();
