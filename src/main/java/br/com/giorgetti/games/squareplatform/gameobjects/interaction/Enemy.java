@@ -70,7 +70,6 @@ public abstract class Enemy extends MovableSprite {
         int slx = getX() - getHalfWidth();
         int srx = getX() + getHalfWidth();
 
-        System.out.println(xAtSty - p.getHalfWidth() >= slx && xAtSty + getHalfWidth() <= srx);
         return xAtSty + p.getHalfWidth() >= slx && xAtSty - getHalfWidth() <= srx;
 
     }
