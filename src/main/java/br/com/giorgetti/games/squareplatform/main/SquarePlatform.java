@@ -1,8 +1,7 @@
 package br.com.giorgetti.games.squareplatform.main;
 
-import java.awt.DisplayMode;
-import java.awt.GraphicsDevice;
-import java.awt.GraphicsEnvironment;
+import java.awt.*;
+import java.awt.image.BufferedImage;
 
 import javax.swing.JFrame;
 import javax.swing.WindowConstants;
@@ -23,13 +22,13 @@ public class SquarePlatform {
         window.setResizable(true); // without it, it does not hide taskbar on linux
         window.setUndecorated(true);
         window.setIgnoreRepaint(true);
-
+		window.setCursor(hideCursor());
         GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
         DisplayMode displayMode = null;
 
         // If fullscreen mode is supported, then use it.
 		if ( gd.isFullScreenSupported() ) {
-//			gd.setFullScreenWindow(window);
+			gd.setFullScreenWindow(window);
 		}
 
 		DisplayMode[] availableModes = gd.getDisplayModes();
@@ -44,7 +43,7 @@ public class SquarePlatform {
 
 		// Must be in Full Screen to test if change display mode is allowed
 		if ( gd.isDisplayChangeSupported() && displayMode != null ) {
-//			gd.setDisplayMode(displayMode);
+			gd.setDisplayMode(displayMode);
 		}
 
 		window.validate();
@@ -52,6 +51,13 @@ public class SquarePlatform {
 		window.setVisible(false);
 		window.setVisible(true);
 
+	}
+
+	public static Cursor hideCursor() {
+		Toolkit toolkit = Toolkit.getDefaultToolkit();
+		Point hotSpot = new Point(0,0);
+		BufferedImage cursorImage = new BufferedImage(1, 1, BufferedImage.TRANSLUCENT);
+		return toolkit.createCustomCursor(cursorImage, hotSpot, "InvisibleCursor");
 	}
 
 }

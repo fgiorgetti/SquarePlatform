@@ -12,7 +12,7 @@ public class BlockingDoor extends InteractiveSprite implements BlockingSprite {
 
     public BlockingDoor() {
         super();
-        this.width = 32;
+        this.width = 30;
         this.height = 32;
     }
 

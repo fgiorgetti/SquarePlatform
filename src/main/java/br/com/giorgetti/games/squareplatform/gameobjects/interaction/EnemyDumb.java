@@ -13,39 +13,40 @@ public class EnemyDumb extends MovableSprite {
 
     public EnemyDumb() {
         super();
-        this.width = 15;
-        this.height = 10;
+        this.width = 10;
+        this.height = 16;
         this.xSpeed = 10 * Math.random() >= 5? 1:-1;
     }
 
     @Override
-    public void update(TileMap map) {
-        if ( spriteBlockedLeft ) {
-            this.xSpeed = 1;
-        } else if ( spriteBlockedRight ) {
-            this.xSpeed = -1;
-        }
-        super.update(map);
-    }
-
-    @Override
     public boolean isBlockedLeft() {
-        return updateDirection(super.isBlockedLeft());
-    }
-
-    private boolean updateDirection(boolean blocked) {
-        if ( blocked ) {
-            this.xSpeed = this.xSpeed * -1;
+        if ( super.isBlockedLeft() ) {
+            this.xSpeed = 1;
+            return true;
         }
-        return blocked;
-
+        return false;
     }
 
     @Override
     public boolean isBlockedRight() {
-        return updateDirection(super.isBlockedRight());
+        if (super.isBlockedRight()) {
+            this.xSpeed = -1;
+            return true;
+        }
+        return false;
     }
 
+    @Override
+    public void update(TileMap map) {
+
+        super.update(map);
+        if ( spriteBlockedLeft || isAtLeftMost(getX()) ) {
+            this.xSpeed = 1;
+        } else if ( spriteBlockedRight || isAtRightMost(getX())) {
+            this.xSpeed = -1;
+        }
+
+    }
 
     @Override
     public void draw(Graphics2D g) {

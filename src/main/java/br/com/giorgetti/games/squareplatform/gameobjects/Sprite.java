@@ -86,15 +86,10 @@ public abstract class Sprite {
 	    // Checks if right corners of player are blocked
 	    boolean leftTopBlocked    = map.getTile(map.getRowAt(getY()+getHalfHeight()), map.getColAt(getX()-getHalfWidth())).getType() == TileType.BLOCKED;
 	    boolean leftBottomBlocked = map.getTile(map.getRowAt(getY()-getHalfHeight()), map.getColAt(getX()-getHalfWidth())).getType() == TileType.BLOCKED;
-	    //TODO Check if on left side of map (x-halfwidth==0)
 
 	    // If tiles at left corners are not blocking tiles, then it is ok to move left
-	    if ( !leftTopBlocked && !leftBottomBlocked ) {
-	    	return false;
-	    }
+		return leftTopBlocked || leftBottomBlocked;
 
-	    return true;
-	    
 	}
 	
 	/**
@@ -102,18 +97,14 @@ public abstract class Sprite {
 	 * @return
 	 */
 	public boolean isBlockedRight() {
-	
+
 	    // Checks if right corners of player are blocked
 	    boolean rightTopBlocked    = map.getTile(map.getRowAt(getY()+getHalfHeight()), map.getColAt(getX()+getHalfWidth())).getType() == TileType.BLOCKED;
 	    boolean rightBottomBlocked = map.getTile(map.getRowAt(getY()-getHalfHeight()), map.getColAt(getX()+getHalfWidth())).getType() == TileType.BLOCKED;
 
 	    // If tiles at right corners are not blocking tiles, then it is ok to move right
-	    if ( !rightTopBlocked && !rightBottomBlocked ) {
-	    	return false;
-	    }
+        return rightTopBlocked || rightBottomBlocked;
 
-	    return true;
-	    
 	}
 	/**
 	 * Validates whether player is allowed to move up
@@ -157,9 +148,9 @@ public abstract class Sprite {
     	int oldX = this.x;
 
     	// Right most of screen
-        if ( map != null && newX > map.getCols() * map.getWidth() - getHalfWidth() ) {
-            this.x = map.getCols() * map.getWidth() - getHalfWidth();
-        } else if ( newX < getHalfWidth() ) {
+        if (isAtRightMost(newX)) {
+            this.x = map.getCols() * map.getWidth() - getHalfWidth() - 1;
+        } else if (isAtLeftMost(newX)) {
             this.x = getHalfWidth();
         } else {
             this.x = newX;
@@ -172,7 +163,28 @@ public abstract class Sprite {
         
     }
 
-    public void setY(int newY) {
+	/**
+	 * Returns true if the given X is at the left most side
+	 * of the screen (beginning of map)
+	 * @param x
+	 * @return
+	 */
+	protected boolean isAtLeftMost(int x) {
+		return x <= getHalfWidth();
+	}
+
+	/**
+	 * Returns true if the given X is at the right most side
+	 * of the screen (end of map).
+	 * @param x
+	 * @return
+	 */
+	protected boolean isAtRightMost(int x) {
+		// Suppose width is 32, it goes from 0 to 31
+		return map != null && x >= map.getCols() * map.getWidth() - getHalfWidth() - 1;
+	}
+
+	public void setY(int newY) {
     	
     	int oldY = this.y;
     	

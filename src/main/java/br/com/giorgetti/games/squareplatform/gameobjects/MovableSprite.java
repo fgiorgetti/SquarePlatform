@@ -44,12 +44,18 @@ public abstract class MovableSprite extends Sprite {
         setY(getY() + getYSpeed());
         checkBlockingSprites(getX()-getXSpeed(), getXSpeed(), getY()-getYSpeed(), getYSpeed());
 
+        // Test if sprite is off at bottom of the screen
+        checkOffScreenBottom(map);
+
+
+    }
+
+    private void checkOffScreenBottom(TileMap map) {
         // Fell in a whole off screen
         if ( getY()+getHalfHeight() <= 0 ) {
             //System.out.println(this.getClass().getSimpleName() + " - good bye");
             map.removeSprite(this);
         }
-
     }
 
     public int getXSpeed() {
@@ -152,7 +158,7 @@ public abstract class MovableSprite extends Sprite {
         } else if ( this.x < oldX && isBlockedLeft() ) {
             // Right X for tile on left side
             int tileRx = (map.getColAt(getX()-getHalfWidth())) * map.getWidth() + map.getWidth();// left side of tile on the right
-            // Sets player X based on right side of blocking tile on the left
+            // Sets X based on right side of blocking tile on the left
             this.x = (tileRx + getHalfWidth());
         }
 
@@ -250,17 +256,18 @@ public abstract class MovableSprite extends Sprite {
             int sty = s.getY() + s.getHalfHeight();
             int sby = s.getY() - s.getHalfHeight();
 
-            // If set to try by any of the sprites on map, do not change it to false
+            // If set to true by any of the sprites on map, do not change it to false
             boolean blockedBottom = (getYSpeed() < 0 && by <= sty && by >= sby) &&
                     ((rx > slx && rx < srx)
                             || (lx < srx && lx > slx));
 
-            // If set to try by any of the sprites on map, do not change it to false
+            // If set to true by any of the sprites on map, do not change it to false
             boolean blockedTop = ( oty <= sby && (oty >= sby || ty >= sby) && y <= sty ) && (
                     ( rx >= slx && rx < srx )
                             || ( lx < srx && lx >= slx )
             );
 
+            // If set to true by any of the sprites on map, do not change it to false
             boolean blockedRight = x < slx && rx >= slx && rx < srx && (
                         ( y >= sby && y <= sty ) // y within sprite
                                 || ( oty >= sby && oty <=sty ) // top y within sprite
@@ -268,6 +275,7 @@ public abstract class MovableSprite extends Sprite {
                                 || ( oby <= sby && oty >= sty ) // sprite bigger than blocking object
                 );
 
+            // If set to true by any of the sprites on map, do not change it to false
             boolean blockedLeft = x > srx && lx <= srx && lx > slx && (
                         (y >= sby && y <= sty) // y within sprite
                                 || (oty >= sby && oty <= sty) // top y within sprite
@@ -305,7 +313,7 @@ public abstract class MovableSprite extends Sprite {
                     setY(sty + getHalfHeight() + ms.getYSpeed());
                     setX(getX() + ms.getXSpeed());
                 } else {
-                    setY(sty + getHalfHeight() + 1);
+                    setY(sty + getHalfHeight());
                 }
 
 
