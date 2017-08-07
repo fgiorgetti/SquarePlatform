@@ -14,7 +14,11 @@ public class MediaPlayer extends JFXPanel {
            this.music = new Media(getClass().getResource(audioResource).toURI().toString());
            this.mediaPlayer = new javafx.scene.media.MediaPlayer(this.music);
            this.mediaPlayer.setVolume(.02);
-       } catch (Exception e) {}
+       } catch (Exception e) {
+           System.err.println("Unable to use audio: " + audioResource);
+           e.printStackTrace();
+           System.exit(1);
+       }
 
    }
 

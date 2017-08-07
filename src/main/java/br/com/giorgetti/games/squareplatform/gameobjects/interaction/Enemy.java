@@ -31,7 +31,7 @@ public abstract class Enemy extends MovableSprite {
 
     }
 
-    private boolean isDead() {
+    protected boolean isDead() {
         return health <= 0;
     }
 
@@ -47,30 +47,39 @@ public abstract class Enemy extends MovableSprite {
         }
 
         // Player is supposed to be updated already
-        int ny = p.getY();
+        int ny = p.getY() - p.getHalfHeight();
         int nx = p.getX();
-        int y = p.getY() - p.getYSpeed();
+        int y = p.getY() - p.getHalfHeight() - p.getYSpeed();
         int x = p.getX() - p.getXSpeed();
 
+        // New Y must be smaller than Y
+        if ( ny >= y ) {
+            return false;
+        }
+
         // Discover the linear function to validate if player is falling above
+        // Gets player previous position (x,y) and new position (nx,ny)
+        // Then discover the f(x) so we can find what is the player's X
+        // at a given Sprite's Y.
         int slope = nx-x == 0 ? 0 : ( ny - y ) / ( nx - x );
         int b = ny - ( slope * nx );
 
-//        System.out.printf("ny = %d - y = %d / nx = %d - x = %d | slope = %d - b = %d\n",
- //               ny, y, nx, x, slope, b);
-
         // f(x) = slope*x + b
         // Now we can trace the player line and check if it crosses a given line
+        // To use it, replace f(x) by the sprite's y
+        // and then we will be able to figure out Player's X at a given
+        // Sprite's Y coordinate.
 
         // f(x) = slope*x + b
         // sty  = slope * x + b   -> finds X at given STY
-        int sty = getY() - getHalfHeight();
+        int sty = getY() + getHalfHeight();
         int xAtSty = slope == 0 ? nx:( sty - b ) / slope;
 
         int slx = getX() - getHalfWidth();
         int srx = getX() + getHalfWidth();
 
-        return xAtSty + p.getHalfWidth() >= slx && xAtSty - getHalfWidth() <= srx;
+        //System.out.printf("Player Y = %d / NY = %d / STY = %d\n", y, ny, sty);
+        return y > sty && ny <= sty && xAtSty + p.getHalfWidth() >= slx && xAtSty - getHalfWidth() <= srx;
 
     }
 

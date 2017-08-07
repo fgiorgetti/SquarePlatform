@@ -23,8 +23,8 @@ public class EnemyDumb extends Enemy {
 
     public EnemyDumb() {
         super();
-        this.width = 10;
-        this.height = 16;
+        this.width = 16;
+        this.height = 20;
         this.xSpeed = 10 * Math.random() >= 5? 1:-1;
     }
 
@@ -61,7 +61,7 @@ public class EnemyDumb extends Enemy {
     @Override
     public void draw(Graphics2D g) {
 
-        if ( hasPlayerCollision() ) {
+        if ( hasPlayerCollision() && !isDead() ) {
             g.setColor(Color.RED);
             g.drawString("Hurting player", getX() - getHalfWidth() - map.getX(), GamePanel.HEIGHT - getY() - getHalfHeight() + map.getY()-25);
         }

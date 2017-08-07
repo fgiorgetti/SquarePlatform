@@ -60,7 +60,7 @@ public class LevelStateManager extends JFXPanel implements GameState {
 
 		//TODO Customize media to play on map
 		//TODO Adjust volume on configuration state
-		this.mediaPlayer = new MediaPlayer("/music/music.mp3");
+		this.mediaPlayer = new MediaPlayer("/music/music.wav");
 		this.mediaPlayer.setVolume(0.02D);
 		this.mediaPlayer.play(true, 2000);
 
@@ -217,8 +217,8 @@ public class LevelStateManager extends JFXPanel implements GameState {
 			realTimeElapsed = System.currentTimeMillis();
 		} else {
 
-			// Recalculate after 1 sec elapsed only
-			if ( System.currentTimeMillis() - lastDrawFps > 500 ) {
+			// Recalculate after 250ms elapsed only
+			if ( System.currentTimeMillis() - lastDrawFps > 250 ) {
 				this.fps = (int) (1000 / (System.currentTimeMillis() - realTimeElapsed));
 				lastDrawFps = realTimeElapsed;
 			}

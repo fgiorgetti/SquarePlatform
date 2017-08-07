@@ -2,13 +2,9 @@ package br.com.giorgetti.games.squareplatform.gameobjects;
 
 import br.com.giorgetti.games.squareplatform.gameobjects.interaction.Enemy;
 import br.com.giorgetti.games.squareplatform.gameobjects.sprite.SpriteState;
-import br.com.giorgetti.games.squareplatform.main.GamePanel;
 import br.com.giorgetti.games.squareplatform.tiles.TileMap;
 
 import java.awt.*;
-import java.util.Arrays;
-
-import static br.com.giorgetti.games.squareplatform.gameobjects.sprite.SpriteConstants.*;
 
 /**
  * Defines the player customizations over the Sprite base class.
@@ -20,9 +16,9 @@ import static br.com.giorgetti.games.squareplatform.gameobjects.sprite.SpriteCon
 public class Player extends MovableSprite {
 
 	// Dimensions
-	public static final int PLAYER_HEIGHT_UP = 20;
-	public static final int PLAYER_HEIGHT_CROUCH = 12;
-	public static final int PLAYER_WIDTH = 10;
+	public static final int PLAYER_HEIGHT_UP = 24;
+	public static final int PLAYER_HEIGHT_CROUCH = 16;
+	public static final int PLAYER_WIDTH = 20;
 	public static final int JUMP_DAMAGE = 100;
 
 	private long accelerationStarted, deaccelerationStarted;
@@ -35,23 +31,14 @@ public class Player extends MovableSprite {
 		loadAnimation(Animation.newAnimation(SpriteState.WALKING.name(),
 				"/sprites/player/player_walkright.png",
 				10).delay(100));
-    	//loadAnimation(Animation.newAnimation(SpriteState.WALKING.name(),
-    	//			"/sprites/player/blocky_walkright.png",
-    	//			14).delay(100));
 
 		loadAnimation(Animation.newAnimation(SpriteState.IDLE.name(),
 				"/sprites/player/player_right.png",
 				10).delay(500));
-    	//loadAnimation(Animation.newAnimation(SpriteState.IDLE.name(),
-		//		"/sprites/player/blocky_right.png",
-		//		16).delay(500));
 
 		loadAnimation(Animation.newAnimation(SpriteState.JUMPING.name(),
 				"/sprites/player/player_jumping.png",
 				10).delay(200).onlyOnce());
-    	//loadAnimation(Animation.newAnimation(SpriteState.JUMPING.name(),
-		//		"/sprites/player/blocky_right.png",
-		//		16).delay(500));
 
     	loadAnimation(Animation.newAnimation(SpriteState.FALLING.name(),
 				"/sprites/player/player_right.png",
@@ -95,6 +82,7 @@ public class Player extends MovableSprite {
 
 			if ( e.isPlayerJumpingOver(this) ) {
 				e.damage(JUMP_DAMAGE);
+				bounce();
 			}
 
 		}
@@ -120,8 +108,14 @@ public class Player extends MovableSprite {
 		drawPlayerBorders(g);
 		g.setColor(Color.GREEN);
 		g.drawString("Player State = " + getState(), 10, 10);
+		g.drawString("Player Y = " + getY(), 10, 20);
+		g.drawString("Player YSpeed = " + getYSpeed(), 10, 30);
+		g.drawString("Blocked Bottom = " + isBlockedBottom() , 10, 40);
+		g.drawString("Blocked Top = " + isBlockedTop() , 10, 50);
+		g.drawString("Blocked Left = " + isBlockedLeft() , 10, 60);
+		g.drawString("Blocked Right = " + isBlockedRight() , 10, 70);
         */
-    }
+	}
 
     // Draw borders around player ( for debugging )
 	private void drawPlayerBorders(Graphics2D g) {

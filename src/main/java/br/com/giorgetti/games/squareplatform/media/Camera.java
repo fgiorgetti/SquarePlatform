@@ -16,8 +16,8 @@ public class Camera {
     private final Player player;
     private final TileMap map;
 
-    private static final int X_LIMIT = GamePanel.WIDTH / 100 * 20;
-    private static final int Y_LIMIT = GamePanel.HEIGHT / 100 * 20;
+    private static final int X_LIMIT = GamePanel.WIDTH / 100 * 15;
+    private static final int Y_LIMIT = GamePanel.HEIGHT / 100 * 15;
     private final int minPlayerXLeft;
     private final int minPlayerXRight;
     private final int minPlayerYBottom;
