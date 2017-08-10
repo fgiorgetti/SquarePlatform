@@ -5,18 +5,29 @@ import br.com.giorgetti.games.squareplatform.gameobjects.MovableSprite;
 import br.com.giorgetti.games.squareplatform.main.GamePanel;
 import br.com.giorgetti.games.squareplatform.tiles.TileMap;
 
+import javax.imageio.ImageIO;
 import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
 
 public class LeftRightPlatform extends MovableSprite implements BlockingSprite {
 
+    private static BufferedImage image;
     private static final int X_SPEED = 1;
     private static final int MAX_DISTANCE = 100;
 
     private int distanceMoved = 0;
 
+    static {
+        try {
+            image = ImageIO.read(UpDownPlatform.class.getResourceAsStream("/sprites/objects/platform.png"));
+        } catch (IOException e) {
+            image = null;
+        }
+    }
     public LeftRightPlatform() {
         super();
-        this.width = 80;
+        this.width = 79;
         this.height = 20;
         this.xSpeed = X_SPEED;
         this.ySpeed = 0;
@@ -48,10 +59,14 @@ public class LeftRightPlatform extends MovableSprite implements BlockingSprite {
     @Override
     public void draw(Graphics2D g) {
 
-        g.setColor(Color.orange);
-        g.fillRect(getX() - getHalfWidth() - map.getX(),
-                GamePanel.HEIGHT - getY() - getHalfHeight() + map.getY(),
-                getWidth(), getHeight());
+        if ( image != null ) {
+            g.drawImage(image, getLeftX(), getTopY(), getWidth(), getHeight(), null);
+        } else {
+            g.setColor(Color.orange);
+            g.fillRect(getX() - getHalfWidth() - map.getX(),
+                    GamePanel.HEIGHT - getY() - getHalfHeight() + map.getY(),
+                    getWidth(), getHeight());
+        }
 
     }
 

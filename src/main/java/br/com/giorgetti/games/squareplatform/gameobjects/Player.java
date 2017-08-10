@@ -16,9 +16,9 @@ import java.awt.*;
 public class Player extends MovableSprite {
 
 	// Dimensions
-	public static final int PLAYER_HEIGHT_UP = 24;
-	public static final int PLAYER_HEIGHT_CROUCH = 16;
-	public static final int PLAYER_WIDTH = 20;
+	public static final int PLAYER_HEIGHT_UP = 20;
+	public static final int PLAYER_HEIGHT_CROUCH = 12;
+	public static final int PLAYER_WIDTH = 16;
 	public static final int JUMP_DAMAGE = 100;
 
 	private long accelerationStarted, deaccelerationStarted;
@@ -30,23 +30,23 @@ public class Player extends MovableSprite {
 
 		loadAnimation(Animation.newAnimation(SpriteState.WALKING.name(),
 				"/sprites/player/player_walkright.png",
-				10).delay(100));
+				16).delay(100));
 
 		loadAnimation(Animation.newAnimation(SpriteState.IDLE.name(),
 				"/sprites/player/player_right.png",
-				10).delay(500));
+				16).delay(500));
 
 		loadAnimation(Animation.newAnimation(SpriteState.JUMPING.name(),
 				"/sprites/player/player_jumping.png",
-				10).delay(200).onlyOnce());
+				16).delay(200).onlyOnce());
 
     	loadAnimation(Animation.newAnimation(SpriteState.FALLING.name(),
 				"/sprites/player/player_right.png",
-				10).delay(500));
+				16).delay(500));
 
     	loadAnimation(Animation.newAnimation(SpriteState.CROUCHING.name(),
 				"/sprites/player/player_crouching.png",
-				10).delay(150).onlyOnce());
+				16).delay(150).onlyOnce());
 
     	// Setting initial state
 		setWidth(PLAYER_WIDTH);

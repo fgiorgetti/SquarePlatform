@@ -1,6 +1,9 @@
 package br.com.giorgetti.games.squareplatform.gameobjects.interaction;
 
+import br.com.giorgetti.games.squareplatform.gameobjects.Animation;
 import br.com.giorgetti.games.squareplatform.gameobjects.MovableSprite;
+import br.com.giorgetti.games.squareplatform.gameobjects.SpriteDirection;
+import br.com.giorgetti.games.squareplatform.gameobjects.sprite.SpriteState;
 import br.com.giorgetti.games.squareplatform.main.GamePanel;
 import br.com.giorgetti.games.squareplatform.tiles.TileMap;
 
@@ -23,9 +26,16 @@ public class EnemyDumb extends Enemy {
 
     public EnemyDumb() {
         super();
-        this.width = 16;
+        this.width = 26;
         this.height = 20;
         this.xSpeed = 10 * Math.random() >= 5? 1:-1;
+
+        loadAnimation(Animation.newAnimation(SpriteState.WALKING.name(),
+                "/sprites/enemies/enemydump.png",
+                26).delay(100));
+
+        setAnimation(SpriteState.WALKING.name());
+
     }
 
     @Override
@@ -66,10 +76,18 @@ public class EnemyDumb extends Enemy {
             g.drawString("Hurting player", getX() - getHalfWidth() - map.getX(), GamePanel.HEIGHT - getY() - getHalfHeight() + map.getY()-25);
         }
 
+        if ( getXSpeed() < 0 ) {
+            g.drawImage(getCurrentAnimation(), getLeftX(), getTopY(), getWidth(), getHeight(), null);
+        } else {
+            g.drawImage(getCurrentAnimation(), getRightX(), getTopY(), -getWidth(), getHeight(), null);
+        }
+
+        /*
         g.setColor(Color.RED);
         g.drawRect(getX() - getHalfWidth() - map.getX(),
                     GamePanel.HEIGHT - getY() - getHalfHeight() + map.getY(),
                     getWidth(), getHeight());
+                    */
 
     }
 }

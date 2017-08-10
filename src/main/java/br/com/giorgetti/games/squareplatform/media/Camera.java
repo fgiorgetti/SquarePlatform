@@ -18,10 +18,15 @@ public class Camera {
 
     private static final int X_LIMIT = GamePanel.WIDTH / 100 * 15;
     private static final int Y_LIMIT = GamePanel.HEIGHT / 100 * 15;
+    private static final int X_STOP_LIMIT = GamePanel.WIDTH / 100 * 2;
+    private static final int Y_STOP_LIMIT = GamePanel.HEIGHT / 100 * 2;
     private final int minPlayerXLeft;
     private final int minPlayerXRight;
     private final int minPlayerYBottom;
     private final int minPlayerYTop;
+    private boolean chasePlayer = false;
+    private int chaseSpeedX = 0;
+    private int chaseSpeedY = 0;
 
     public Camera(TileMap map) {
         this(map, null);
@@ -57,25 +62,47 @@ public class Camera {
         //System.out.println("minLeft  = " + minLeft);
         //System.out.println("minRight  = " + minRight);
 
-        if (  Math.abs(diffX) > X_LIMIT && minLeft && minRight ) {
-            int speed = 0;
+        // Test if need to chase X
+        if ( Math.abs(diffX) > X_LIMIT && minLeft && minRight ) {
+            chasePlayer = true;
             if ( player.getXSpeed() != 0 ) {
-                speed = player.getXSpeed();
+                chaseSpeedX = player.getXSpeed();
             } else {
-                speed = diffX > 0 ? 1:-1;
+                chaseSpeedX = diffX > 0 ? 1:-1;
             }
-            map.setX(map.getX() + speed);
+        } else {
+            if ( Math.abs(diffX) <= X_STOP_LIMIT ) {
+                chaseSpeedX = 0;
+            }
         }
 
+        // Test if needs to chase Y
         if ( Math.abs(diffY) > Y_LIMIT && minBottom && minTop ) {
-            int speed = 0;
-            if ( player.isJumpingOrFalling() ) {
-                speed = player.getYSpeed();
+            chasePlayer = true;
+            if ( player.getYSpeed() > 0 && diffY > 0 ) {
+                chaseSpeedY = player.getYSpeed();
+            } else if ( player.getYSpeed() < 0 && diffY < 0 ) {
+                chaseSpeedY = player.getYSpeed();
             } else {
-                speed = ( diffY > 0 ? 1 : -1 );
+                chaseSpeedY = ( diffY > 0 ? 1 : -1 );
             }
-            map.setY(map.getY() + speed);
+        } else {
+            if ( Math.abs(diffY) <= Y_STOP_LIMIT ) {
+                chaseSpeedY = 0;
+            }
         }
+
+        if ( chaseSpeedX == 0 && chaseSpeedY == 0 ) {
+            chasePlayer = false;
+        }
+
+        // Reached minimum distance to center of screen
+        if ( ! chasePlayer ) {
+            return;
+        }
+
+        map.setX(map.getX() + chaseSpeedX);
+        map.setY(map.getY() + chaseSpeedY);
 
     }
 
