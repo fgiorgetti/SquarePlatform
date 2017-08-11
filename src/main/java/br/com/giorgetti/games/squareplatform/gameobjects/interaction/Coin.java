@@ -29,6 +29,11 @@ public class Coin extends AutoInteractiveSprite {
 
     }
 
+    @Override
+    protected int getJumpSpeed() {
+        return 10;
+    }
+
     public Coin(int x, int y) {
         this();
         this.x = x;

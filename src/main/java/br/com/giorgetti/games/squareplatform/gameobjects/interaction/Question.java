@@ -108,7 +108,7 @@ public abstract class Question extends InteractiveSprite implements GameState {
                 showResult = false;
 
                 if ( !answered && correct ) {
-                    Coin c = new Coin(getX(), getY()+20);
+                    Coin c = new Coin(getX(), getY()+40);
                     map.addSpriteInGame(c);
                 }
 

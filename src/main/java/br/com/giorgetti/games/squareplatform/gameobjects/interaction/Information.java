@@ -11,8 +11,8 @@ import java.util.ArrayList;
  */
 public class Information extends AutoInteractiveSprite {
 
-    private final int HEIGHT = 20;
-    private final int WIDTH = 5;
+    private final int HEIGHT = 15;
+    private final int WIDTH = 15;
     private long timeStamp;
 
     // Use a max of 28 characters per line
@@ -21,8 +21,9 @@ public class Information extends AutoInteractiveSprite {
     public Information() {
         this.width = WIDTH;
         this.height = HEIGHT;
+
         messages.add("---- Important Information ----");
-        messages.add("---------------------------");
+        messages.add("");
         messages.add("This is just a test message.");
         messages.add("It will be hidden as soon as you");
         messages.add("move off the question mark.");
@@ -46,6 +47,7 @@ public class Information extends AutoInteractiveSprite {
 
         // If timeStamp is not refreshed within 100ms message is hidden
         if ( System.currentTimeMillis() - timeStamp <= 100 ) {
+            /*
             g.setColor(Color.white);
             g.fillRoundRect(GamePanel.WIDTH/5-15, GamePanel.HEIGHT/5-5,
                     (GamePanel.WIDTH/5)*3+30, (GamePanel.HEIGHT/5)*3+10,
@@ -54,10 +56,14 @@ public class Information extends AutoInteractiveSprite {
             g.fillRoundRect(GamePanel.WIDTH/5-10, GamePanel.HEIGHT/5,
                     (GamePanel.WIDTH/5)*3+20, (GamePanel.HEIGHT/5)*3,
                     5, 5);
-            g.setColor(Color.white);
+            */
             for ( int i = 0 ; i < messages.size(); i++ ) {
+                g.setColor(Color.black);
+                g.drawString(messages.get(i), GamePanel.WIDTH/5 + 4,
+                        GamePanel.HEIGHT/5+(i+1)*20-1);
+                g.setColor(Color.white);
                 g.drawString(messages.get(i), GamePanel.WIDTH/5 + 5,
-                       GamePanel.HEIGHT/4+(i+1)*20);
+                       GamePanel.HEIGHT/5+(i+1)*20);
             }
         }
 

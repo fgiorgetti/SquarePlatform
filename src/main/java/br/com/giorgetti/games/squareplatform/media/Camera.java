@@ -1,6 +1,7 @@
 package br.com.giorgetti.games.squareplatform.media;
 
 import br.com.giorgetti.games.squareplatform.gameobjects.Player;
+import br.com.giorgetti.games.squareplatform.gameobjects.sprite.SpriteState;
 import br.com.giorgetti.games.squareplatform.main.GamePanel;
 import br.com.giorgetti.games.squareplatform.tiles.TileMap;
 
@@ -17,9 +18,9 @@ public class Camera {
     private final TileMap map;
 
     private static final int X_LIMIT = GamePanel.WIDTH / 100 * 15;
-    private static final int Y_LIMIT = GamePanel.HEIGHT / 100 * 15;
+    private static final int Y_LIMIT = GamePanel.HEIGHT / 100 * 20;
     private static final int X_STOP_LIMIT = GamePanel.WIDTH / 100 * 2;
-    private static final int Y_STOP_LIMIT = GamePanel.HEIGHT / 100 * 2;
+    private static final int Y_STOP_LIMIT = GamePanel.HEIGHT / 100 * 4;
     private final int minPlayerXLeft;
     private final int minPlayerXRight;
     private final int minPlayerYBottom;
@@ -81,7 +82,7 @@ public class Camera {
             chasePlayer = true;
             if ( player.getYSpeed() > 0 && diffY > 0 ) {
                 chaseSpeedY = player.getYSpeed();
-            } else if ( player.getYSpeed() < 0 && diffY < 0 ) {
+            } else if ( player.getYSpeed() < 0 && diffY < 0 && Math.abs(diffY) > Y_LIMIT  ) {
                 chaseSpeedY = player.getYSpeed();
             } else {
                 chaseSpeedY = ( diffY > 0 ? 1 : -1 );

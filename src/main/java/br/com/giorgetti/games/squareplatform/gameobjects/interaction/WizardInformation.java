@@ -56,7 +56,7 @@ public abstract class WizardInformation extends InteractiveSprite implements Gam
         if ( GamePanel.gsm.temporaryState == this ) {
             drawMessage(g);
             // Draw the wizard
-            g.drawImage(getCurrentAnimation(), getLeftX(), getTopY(), getWidth()*2, getHeight()*2,null);
+            g.drawImage(getCurrentAnimation(), (GamePanel.WIDTH/5)*3+30, getTopY(), getWidth()*2, getHeight()*2,null);
         } else {
             // Draw the wizard
             g.drawImage(getCurrentAnimation(), getLeftX(), getTopY(), getWidth(), getHeight(),null);

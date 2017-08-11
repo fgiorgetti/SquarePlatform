@@ -128,11 +128,15 @@ public abstract class MovableSprite extends Sprite {
 
         this.ySpeed += ySpeed;
 
-        if ( this.ySpeed > JUMP_SPEED )
-            this.ySpeed = JUMP_SPEED;
+        if ( this.ySpeed > getJumpSpeed())
+            this.ySpeed = getJumpSpeed();
         else if ( this.ySpeed < FALL_SPEED )
             this.ySpeed = FALL_SPEED;
 
+    }
+
+    protected int getJumpSpeed() {
+        return JUMP_SPEED;
     }
 
     @Override
@@ -345,7 +349,7 @@ public abstract class MovableSprite extends Sprite {
         }
 
         //System.out.println("Before jumping y speed: " + getYSpeed());
-        incYSpeed(JUMP_SPEED);
+        incYSpeed(getJumpSpeed());
         this.jumpingStarted = System.currentTimeMillis();
         setState(SpriteState.JUMPING);
         this.jumping = true;
