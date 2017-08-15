@@ -1,5 +1,7 @@
 package br.com.giorgetti.games.squareplatform.gameobjects.interaction;
 
+import br.com.giorgetti.games.squareplatform.gameobjects.Animation;
+import br.com.giorgetti.games.squareplatform.gameobjects.sprite.SpriteState;
 import br.com.giorgetti.games.squareplatform.main.GamePanel;
 import br.com.giorgetti.games.squareplatform.tiles.TileMap;
 
@@ -13,15 +15,38 @@ public class Button extends InteractiveSprite {
 
     private final int TILESET = 1;
     private final int TILE    = 1;
-    private final int HEIGHT = 10;
-    private final int WIDTH = 10;
+    private final int HEIGHT = 32;
+    private final int WIDTH = 24;
 
     private boolean executing = false;
     private boolean isOn = false;
 
+    protected enum ButtonState {
+        OFF, TESTING, ON, FAIL;
+    }
+
     public Button() {
         this.width = WIDTH;
         this.height = HEIGHT;
+
+        loadAnimation(Animation.newAnimation(ButtonState.OFF.name(),
+                "/sprites/objects/button.png",
+                24).onlyOnce());
+
+        loadAnimation(Animation.newAnimation(ButtonState.TESTING.name(),
+                "/sprites/objects/button_testing.png",
+                24).delay(250).onlyOnce());
+
+        loadAnimation(Animation.newAnimation(ButtonState.ON.name(),
+                "/sprites/objects/button_on.png",
+                24).onlyOnce());
+
+        loadAnimation(Animation.newAnimation(ButtonState.FAIL.name(),
+                "/sprites/objects/button_fail.png",
+                24).delay(500).onlyOnce());
+
+        setAnimation(ButtonState.OFF.name());
+
     }
 
     @Override
@@ -42,16 +67,19 @@ public class Button extends InteractiveSprite {
             @Override
             public void run() {
 
+                setAnimation(ButtonState.TESTING.name());
                 if ( !isOn ) {
                     for (int i = 0; i < 3; i++) {
                         map.addTileAt(rowBelow, colRight + i, TILESET, TILE, 2);
                         try { Thread.sleep(500); } catch (InterruptedException e) {}
                     }
+                    setAnimation(ButtonState.ON.name());
                 } else {
                     for (int i = 2; i >= 0; i--) {
                         map.removeTileAt(rowBelow, colRight + i);
                         try { Thread.sleep(500); } catch (InterruptedException e) {}
                     }
+                    setAnimation(ButtonState.FAIL.name());
                 }
 
                 isOn = !isOn;
@@ -71,10 +99,7 @@ public class Button extends InteractiveSprite {
     @Override
     public void draw(Graphics2D g) {
 
-        g.setColor(Color.black);
-        g.fillOval(getX() - getHalfWidth() - map.getX() - 1, GamePanel.HEIGHT - getY() - getHalfHeight() + map.getY() + 1, WIDTH, HEIGHT);
-        g.setColor(Color.red);
-        g.fillOval(getX() - getHalfWidth() - map.getX(), GamePanel.HEIGHT - getY() - getHalfHeight() + map.getY(), WIDTH, HEIGHT);
+        g.drawImage(getCurrentAnimation(), getLeftX(), getTopY(), getWidth(), getHeight(), null);
 
         /*
         g.setColor(Color.green);

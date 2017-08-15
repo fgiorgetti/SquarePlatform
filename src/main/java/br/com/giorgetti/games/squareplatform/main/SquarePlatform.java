@@ -14,21 +14,42 @@ import br.com.giorgetti.games.squareplatform.gamestate.levels.LevelStateManager;
  */
 public class SquarePlatform {
 
+	private static JFrame window;
+	private static DisplayMode originalDisplayMode;
+	private static final GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
+
     public static void main(String [] args ) {
 
-        final JFrame window = new JFrame("Square Platform");
+        window = new JFrame("Square Platform");
         window.setContentPane(GamePanel.getInstance(new LevelStateManager("/maps/level1.dat", new Player())));
         window.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         window.setResizable(true); // without it, it does not hide taskbar on linux
-        window.setUndecorated(true);
+		window.setUndecorated(true);
         window.setIgnoreRepaint(true);
+		window.setUndecorated(false);
 		window.setCursor(hideCursor());
-        GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
-        DisplayMode displayMode = null;
+		originalDisplayMode = gd.getDisplayMode();
 
-        // If fullscreen mode is supported, then use it.
-		if ( gd.isFullScreenSupported() ) {
-//			gd.setFullScreenWindow(window);
+		switchFullScreen(LevelStateManager.isFullScreen());
+
+	}
+
+	public static void switchFullScreen(boolean fullScreen) {
+
+        if ( fullScreen && gd.isFullScreenSupported() ) {
+			window.setResizable(true); // without it, it does not hide taskbar on linux
+		} else {
+			window.setResizable(false);
+		}
+
+		DisplayMode displayMode = null;
+
+		// If fullscreen mode is supported, then use it.
+		if ( fullScreen && gd.isFullScreenSupported() ) {
+			gd.setFullScreenWindow(window);
+		} else {
+			gd.setFullScreenWindow(null);
+			gd.setDisplayMode(originalDisplayMode);
 		}
 
 		DisplayMode[] availableModes = gd.getDisplayModes();
@@ -36,14 +57,15 @@ public class SquarePlatform {
 		// Available display modes
 		for (DisplayMode mode : availableModes) {
 			if ( mode.getWidth() == GamePanel.WIDTH * GamePanel.SCALE ) {
-				System.out.println(mode.getWidth() + "x" + mode.getHeight() + " - " + mode.getBitDepth() + " - " + mode.getRefreshRate());
+				//System.out.println(mode.getWidth() + "x" + mode.getHeight() + " - " + mode.getBitDepth() + " - " + mode.getRefreshRate());
 				displayMode = mode;
 			}
 		}
 
 		// Must be in Full Screen to test if change display mode is allowed
-		if ( gd.isDisplayChangeSupported() && displayMode != null ) {
-//			gd.setDisplayMode(displayMode);
+		if ( fullScreen && gd.isFullScreenSupported() &&
+				gd.isDisplayChangeSupported() && displayMode != null ) {
+			gd.setDisplayMode(displayMode);
 		}
 
 		window.validate();

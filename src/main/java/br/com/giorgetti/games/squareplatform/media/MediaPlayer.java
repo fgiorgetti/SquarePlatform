@@ -3,7 +3,12 @@ package br.com.giorgetti.games.squareplatform.media;
 import javafx.embed.swing.JFXPanel;
 import javafx.scene.media.Media;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class MediaPlayer extends JFXPanel {
+
+    private static final Map<String, Media> sounds = new HashMap<>();
 
     private Media music;
     private javafx.scene.media.MediaPlayer mediaPlayer;
@@ -11,9 +16,17 @@ public class MediaPlayer extends JFXPanel {
     public MediaPlayer(String audioResource) {
 
        try {
-           this.music = new Media(getClass().getResource(audioResource).toURI().toString());
+
+           if ( sounds.containsKey(audioResource) ) {
+               this.music = sounds.get(audioResource);
+           } else {
+               this.music = new Media(getClass().getResource(audioResource).toURI().toString());
+               sounds.put(audioResource, this.music);
+           }
+
            this.mediaPlayer = new javafx.scene.media.MediaPlayer(this.music);
            this.mediaPlayer.setVolume(.02);
+
        } catch (Exception e) {
            System.err.println("Unable to use audio: " + audioResource);
            e.printStackTrace();

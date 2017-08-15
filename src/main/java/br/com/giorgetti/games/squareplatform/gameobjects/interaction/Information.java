@@ -11,16 +11,18 @@ import java.util.ArrayList;
  */
 public class Information extends AutoInteractiveSprite {
 
-    private final int HEIGHT = 15;
+    private final int DRAW_HEIGHT = 15;
+    private final int FULL_HEIGHT = GamePanel.HEIGHT; // Even if player jumps message gets displayed
     private final int WIDTH = 15;
     private long timeStamp;
 
     // Use a max of 28 characters per line
     private ArrayList<String> messages = new ArrayList<String>();
 
+    //TODO Needs some enhancements and make it abstract, so concrete classes will only provide the message
     public Information() {
         this.width = WIDTH;
-        this.height = HEIGHT;
+        this.height = FULL_HEIGHT;
 
         messages.add("---- Important Information ----");
         messages.add("");
@@ -40,9 +42,9 @@ public class Information extends AutoInteractiveSprite {
         g.setColor(Color.black);
         Font oldFont = g.getFont();
         g.setFont(new Font("TimeRoman", Font.BOLD, 16));
-        g.drawString("!",getX() - map.getX() - 1, GamePanel.HEIGHT - getY() + map.getY() + 1);
+        g.drawString("!",getX() - map.getX() - 1, GamePanel.HEIGHT - getY() - (FULL_HEIGHT/2 + DRAW_HEIGHT/2) + map.getY() + 1);
         g.setColor(Color.yellow);
-        g.drawString("!",getX() - map.getX(), GamePanel.HEIGHT - getY() + map.getY() );
+        g.drawString("!",getX() - map.getX(), GamePanel.HEIGHT - getY() - (FULL_HEIGHT/2 + DRAW_HEIGHT/2) + map.getY() );
         g.setFont(oldFont);
 
         // If timeStamp is not refreshed within 100ms message is hidden

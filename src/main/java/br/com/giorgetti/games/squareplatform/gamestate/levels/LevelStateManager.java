@@ -4,6 +4,7 @@ import br.com.giorgetti.games.squareplatform.gameobjects.Player;
 import br.com.giorgetti.games.squareplatform.gameobjects.SpriteDirection;
 import br.com.giorgetti.games.squareplatform.gamestate.GameState;
 import br.com.giorgetti.games.squareplatform.main.GamePanel;
+import br.com.giorgetti.games.squareplatform.main.SquarePlatform;
 import br.com.giorgetti.games.squareplatform.media.MediaPlayer;
 import br.com.giorgetti.games.squareplatform.tiles.TileMap;
 import javafx.embed.swing.JFXPanel;
@@ -36,6 +37,8 @@ public class LevelStateManager extends JFXPanel implements GameState {
 
 	private MediaPlayer mediaPlayer;
 
+	private static boolean fullScreen = false;
+
 	public LevelStateManager(String mapPath, Player p) {
 
         this.map = new TileMap();
@@ -49,6 +52,7 @@ public class LevelStateManager extends JFXPanel implements GameState {
         keyMap[KeyEvent.VK_F12] = false;
 		keyMap[KeyEvent.VK_SPACE] = false;
 		keyMap[KeyEvent.VK_ESCAPE] = false;
+		keyMap[KeyEvent.VK_F] = false;
 
         this.supportedKeys.add(KeyEvent.VK_UP);
         this.supportedKeys.add(KeyEvent.VK_DOWN);
@@ -57,6 +61,7 @@ public class LevelStateManager extends JFXPanel implements GameState {
         this.supportedKeys.add(KeyEvent.VK_F12);
 		this.supportedKeys.add(KeyEvent.VK_SPACE);
 		this.supportedKeys.add(KeyEvent.VK_ESCAPE);
+		this.supportedKeys.add(KeyEvent.VK_F);
 
 		//TODO Customize media to play on map
 		//TODO Adjust volume on configuration state
@@ -229,7 +234,9 @@ public class LevelStateManager extends JFXPanel implements GameState {
 		
 	}
 
-    public void keyTyped(KeyEvent e) { }
+    public void keyTyped(KeyEvent e) {
+
+	}
 
     public void keyPressed(KeyEvent e) {
 
@@ -241,9 +248,15 @@ public class LevelStateManager extends JFXPanel implements GameState {
         this.getMap().interactiveAction(e);
 
         // Show FPS
-        if ( keyMap[KeyEvent.VK_F12] ) {
-        	showFps = !showFps;
-        }
+		if ( keyMap[KeyEvent.VK_F12] ) {
+			showFps = !showFps;
+		}
+
+		// FullScreen mode
+		if ( e.getKeyCode() == KeyEvent.VK_F ) {
+			fullScreen = !fullScreen;
+			SquarePlatform.switchFullScreen(fullScreen);
+		}
 
         if ( keyMap[KeyEvent.VK_ESCAPE] ) {
         	System.exit(0);
@@ -261,5 +274,9 @@ public class LevelStateManager extends JFXPanel implements GameState {
     public TileMap getMap() {
         return map;
     }
+
+	public static boolean isFullScreen() {
+		return fullScreen;
+	}
 
 }
