@@ -37,6 +37,7 @@ public abstract class Enemy extends MovableSprite {
 
     protected void die() {
        this.ySpeed = 0;
+       this.xSpeed = 0;
        fall();
     }
 

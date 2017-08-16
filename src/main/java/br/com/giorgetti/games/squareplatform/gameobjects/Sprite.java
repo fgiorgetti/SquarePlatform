@@ -283,9 +283,11 @@ public abstract class Sprite {
 	
 	public void setAnimation(String animationId) {
 		if ( currentAnimation == null || !currentAnimation.getId().equals(animationId) ) {
-			//if ( currentAnimation != null ) {
-			//	System.out.println("animation has changed. OLD = " + currentAnimation.getId() + " - NEW = " + animationId);
-			//}
+			/*
+			if ( getClass() == Player.class && currentAnimation != null ) {
+				System.out.println("animation has changed. OLD = " + currentAnimation.getId() + " - NEW = " + animationId);
+			}
+			*/
 			currentAnimation = animations.get(animationId);
 			currentAnimation.reset();
 		}

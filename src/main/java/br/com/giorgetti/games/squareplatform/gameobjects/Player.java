@@ -46,7 +46,7 @@ public class Player extends MovableSprite {
 
     	loadAnimation(Animation.newAnimation(SpriteState.CROUCHING.name(),
 				"/sprites/player/player_crouching.png",
-				16).delay(150).onlyOnce());
+				16).delay(200).onlyOnce());
 
     	// Setting initial state
 		setWidth(PLAYER_WIDTH);
@@ -155,6 +155,10 @@ public class Player extends MovableSprite {
 
 	public void accelerate() {
 
+	    if ( getHeight() == PLAYER_HEIGHT_CROUCH ) {
+	    	return;
+		}
+
 		long elapsed = System.currentTimeMillis() - accelerationStarted;
 		
 		// Not enough time passed
@@ -209,6 +213,7 @@ public class Player extends MovableSprite {
 		}
 
 		this.height = PLAYER_HEIGHT_CROUCH;
+		this.y -= PLAYER_HEIGHT_UP - PLAYER_HEIGHT_CROUCH;
 
 		setState(SpriteState.CROUCHING);
 		this.xSpeed = 0;

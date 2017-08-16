@@ -20,7 +20,9 @@ public class GameObjectSelector {
     static {
         gameObjectsMap.put("Button", Button.class);
         gameObjectsMap.put("Coin", Coin.class);
+        gameObjectsMap.put("Checkpoint", Checkpoint.class);
         gameObjectsMap.put("Enemy - Dumb", EnemyDumb.class);
+        gameObjectsMap.put("Enemy - Fly", EnemyFly.class);
         gameObjectsMap.put("Information", Information.class);
         gameObjectsMap.put("Question Baby", QuestionBaby.class);
         gameObjectsMap.put("UserInput - Name", NameDataInput.class);

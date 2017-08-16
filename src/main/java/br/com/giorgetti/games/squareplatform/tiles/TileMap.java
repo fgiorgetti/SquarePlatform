@@ -918,4 +918,9 @@ public class TileMap {
         return this.gameObjects;
     }
 
+
+    public boolean isEditMode() {
+        return editMode;
+    }
+
 }
