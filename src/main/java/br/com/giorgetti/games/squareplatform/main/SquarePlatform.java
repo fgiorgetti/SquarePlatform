@@ -49,7 +49,9 @@ public class SquarePlatform {
 			gd.setFullScreenWindow(window);
 		} else {
 			gd.setFullScreenWindow(null);
-			gd.setDisplayMode(originalDisplayMode);
+			if ( !gd.getDisplayMode().equals(originalDisplayMode) ) {
+				gd.setDisplayMode(originalDisplayMode);
+			}
 		}
 
 		DisplayMode[] availableModes = gd.getDisplayModes();
