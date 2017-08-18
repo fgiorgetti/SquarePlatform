@@ -88,8 +88,8 @@ public class LevelStateManager extends JFXPanel implements GameState {
         // Testing when player falls in a hole
     	if ( player.getY()-1 <= -player.getHeight() ) {
     		//gameOver = true; // lose one life instead
-			if ( player.getLifes() == 1 ) {
-				player.revive();
+			if ( player.getLifes() == 0 ) {
+				//player.revive();
 				gameOver = true;
 			} else {
 				try { Thread.sleep(500); } catch (InterruptedException e) {}
