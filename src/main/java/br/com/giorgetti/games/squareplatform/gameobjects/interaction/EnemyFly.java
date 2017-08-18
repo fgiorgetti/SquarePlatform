@@ -28,7 +28,7 @@ public class EnemyFly extends Enemy {
 
     @Override
     public int getHitDamage() {
-        return 25;
+        return 100;
     }
 
     public EnemyFly() {

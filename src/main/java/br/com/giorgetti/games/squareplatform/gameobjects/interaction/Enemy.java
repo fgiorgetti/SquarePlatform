@@ -94,6 +94,8 @@ public abstract class Enemy extends MovableSprite {
 
             checkOffScreenBottom(map);
 
+            return;
+
         } else {
             super.update(map);
         }

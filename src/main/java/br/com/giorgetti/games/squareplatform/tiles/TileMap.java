@@ -855,6 +855,11 @@ public class TileMap {
             g.drawString("Score: " + ((Player) player).getScore(), 9, 14);
             g.setColor(Color.red);
             g.drawString("Score: " + ((Player) player).getScore(), 10, 15);
+
+            g.setColor(Color.white);
+            g.drawString("Lifes: " + ((Player) player).getLifes(), 99,14);
+            g.setColor(Color.red);
+            g.drawString("Lifes: " + ((Player) player).getLifes(), 100, 15);
         }
 
     }

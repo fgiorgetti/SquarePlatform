@@ -65,7 +65,7 @@ public class LevelStateManager extends JFXPanel implements GameState {
 
 		//TODO Customize media to play on map
 		//TODO Adjust volume on configuration state
-		this.mediaPlayer = new MediaPlayer("/music/music.wav");
+		this.mediaPlayer = new MediaPlayer("/music/music.mp3");
 		this.mediaPlayer.setVolume(0.02D);
 		this.mediaPlayer.play(true, 2000);
 
@@ -77,14 +77,25 @@ public class LevelStateManager extends JFXPanel implements GameState {
     	if ( gameOver ) {
     		return;
     	}
-    	
-        map.update();
-        updatePlayer();
+
+    	if ( !player.isDying() ) {
+			map.update();
+			updatePlayer();
+		} else {
+    		player.update(map);
+		}
 
         // Testing when player falls in a hole
-    	if ( player.getY()-1 <= -player.getHalfHeight() ) {
+    	if ( player.getY()-1 <= -player.getHeight() ) {
     		//gameOver = true; // lose one life instead
-            map.recoverLastCheckpoint();
+			if ( player.getLifes() == 1 ) {
+				player.revive();
+				gameOver = true;
+			} else {
+				try { Thread.sleep(500); } catch (InterruptedException e) {}
+				map.recoverLastCheckpoint();
+				player.revive();
+			}
     	}
 
     }

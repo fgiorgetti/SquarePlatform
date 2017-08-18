@@ -20,11 +20,15 @@ public class Player extends MovableSprite {
 	public static final int PLAYER_HEIGHT_CROUCH = 12;
 	public static final int PLAYER_WIDTH = 16;
 	public static final int JUMP_DAMAGE = 100;
+	public static final int MAX_HEALTH = 100;
+	private static final int INITIAL_LIFES = 3;
 
 	private long accelerationStarted, deaccelerationStarted;
 
 	private int score;
-	private int health;
+	private int health = MAX_HEALTH;
+	private int lifes = INITIAL_LIFES;
+	private boolean dying;
 
 	public Player() {
 
@@ -59,6 +63,13 @@ public class Player extends MovableSprite {
     @Override
     public void update(TileMap map) {
         this.map = map;
+
+        if ( dying ) {
+            fall();
+        	this.y += ySpeed;
+        	return;
+		}
+
         setX(getX() + getXSpeed());
         setY(getY() + getYSpeed());
 		checkBlockingSprites(getX(), getXSpeed(), getY(), getYSpeed());
@@ -250,5 +261,28 @@ public class Player extends MovableSprite {
 
     public void damage(int damage) {
     	this.health -= damage;
+    	if ( this.health <= 0 && !dying ) {
+    		die();
+		}
 	}
+
+	private void die() {
+		this.dying = true;
+		bounce();
+	}
+
+	public boolean isDying() {
+		return dying;
+	}
+
+	public int getLifes() {
+		return lifes;
+	}
+
+	public void revive() {
+		lifes--;
+		setState(SpriteState.IDLE);
+		this.dying = false;
+	}
+
 }
