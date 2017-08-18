@@ -200,11 +200,15 @@ public abstract class MovableSprite extends Sprite {
         } else if ( this.ySpeed < 0 ) {
 
             if ( !isBlockedBottom() ) {
-                if ( !spriteBlockedBottom ) {
+                if (!spriteBlockedBottom) {
                     setState(SpriteState.FALLING);
                 }
                 fall();
             } else {
+
+                if ( getState() == SpriteState.JUMPING ) {
+                    setState(SpriteState.FALLING);
+                }
 
                 // Top Y for tile on bottom side
                 int tileTy = (map.getRowAt(getY() - getHalfHeight())) * map.getHeight();// top y of bottom tile

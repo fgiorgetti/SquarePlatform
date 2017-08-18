@@ -3,7 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="e7dc040d-9594-46f6-8ec5-8528565794df" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/br/com/giorgetti/games/squareplatform/gamestate/levels/LevelStateManager.java" afterPath="$PROJECT_DIR$/src/main/java/br/com/giorgetti/games/squareplatform/gamestate/levels/LevelStateManager.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/br/com/giorgetti/games/squareplatform/gameobjects/MovableSprite.java" afterPath="$PROJECT_DIR$/src/main/java/br/com/giorgetti/games/squareplatform/gameobjects/MovableSprite.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/resources/maps/level1.dat" afterPath="$PROJECT_DIR$/src/main/resources/maps/level1.dat" />
     </list>
     <ignored path="SquarePlatform.iws" />
@@ -32,12 +32,25 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="Player.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="Player.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/br/com/giorgetti/games/squareplatform/gameobjects/Player.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1530">
-              <caret line="106" column="58" lean-forward="false" selection-start-line="106" selection-start-column="58" selection-end-line="106" selection-end-column="58" />
-              <folding />
+            <state relative-caret-position="199">
+              <caret line="117" column="8" lean-forward="false" selection-start-line="117" selection-start-column="8" selection-end-line="117" selection-end-column="8" />
+              <folding>
+                <element signature="e#6526#6527#0" expanded="true" />
+                <element signature="e#6575#6576#0" expanded="true" />
+                <element signature="e#6601#6602#0" expanded="true" />
+                <element signature="e#6620#6621#0" expanded="true" />
+                <element signature="e#6656#6657#0" expanded="true" />
+                <element signature="e#6682#6683#0" expanded="true" />
+                <element signature="e#6718#6719#0" expanded="true" />
+                <element signature="e#6753#6754#0" expanded="true" />
+                <element signature="e#6968#6969#0" expanded="true" />
+                <element signature="e#6987#6988#0" expanded="true" />
+                <element signature="e#7013#7014#0" expanded="true" />
+                <element signature="e#7032#7033#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -45,8 +58,8 @@
       <file leaf-file-name="MovableSprite.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/br/com/giorgetti/games/squareplatform/gameobjects/MovableSprite.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="3825">
-              <caret line="270" column="20" lean-forward="false" selection-start-line="270" selection-start-column="20" selection-end-line="270" selection-end-column="20" />
+            <state relative-caret-position="175">
+              <caret line="214" column="49" lean-forward="false" selection-start-line="214" selection-start-column="49" selection-end-line="214" selection-end-column="49" />
               <folding />
             </state>
           </provider>
@@ -62,14 +75,12 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Information.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="Information.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/br/com/giorgetti/games/squareplatform/gameobjects/interaction/Information.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="46">
               <caret line="47" column="58" lean-forward="false" selection-start-line="47" selection-start-column="58" selection-end-line="47" selection-end-column="58" />
-              <folding>
-                <element signature="e#693#701#0" expanded="true" />
-              </folding>
+              <folding />
             </state>
           </provider>
         </entry>
@@ -169,7 +180,6 @@
         <option value="$PROJECT_DIR$/src/main/java/br/com/giorgetti/games/squareplatform/gameobjects/interaction/LeftRightPlatform.java" />
         <option value="$PROJECT_DIR$/src/main/java/br/com/giorgetti/games/squareplatform/media/Camera.java" />
         <option value="$PROJECT_DIR$/src/main/java/br/com/giorgetti/games/squareplatform/gameobjects/interaction/Question.java" />
-        <option value="$PROJECT_DIR$/src/main/java/br/com/giorgetti/games/squareplatform/gameobjects/MovableSprite.java" />
         <option value="$PROJECT_DIR$/src/main/java/br/com/giorgetti/games/squareplatform/gameobjects/interaction/Coin.java" />
         <option value="$PROJECT_DIR$/src/main/java/br/com/giorgetti/games/squareplatform/gameobjects/interaction/WizardInformation.java" />
         <option value="$PROJECT_DIR$/src/main/java/br/com/giorgetti/games/squareplatform/gameobjects/interaction/WizardLevel1.java" />
@@ -181,13 +191,14 @@
         <option value="$PROJECT_DIR$/src/main/java/br/com/giorgetti/games/squareplatform/gameobjects/interaction/AutoInteractiveSprite.java" />
         <option value="$PROJECT_DIR$/src/main/java/br/com/giorgetti/games/squareplatform/gameobjects/interaction/Checkpoint.java" />
         <option value="$PROJECT_DIR$/src/main/java/br/com/giorgetti/games/squareplatform/tiles/TileMap.java" />
-        <option value="$PROJECT_DIR$/src/main/java/br/com/giorgetti/games/squareplatform/gameobjects/Player.java" />
         <option value="$PROJECT_DIR$/src/main/java/br/com/giorgetti/games/squareplatform/gameobjects/interaction/EnemyDumb.java" />
         <option value="$PROJECT_DIR$/src/main/java/br/com/giorgetti/games/squareplatform/gameobjects/interaction/EnemyFly.java" />
         <option value="$PROJECT_DIR$/src/main/java/br/com/giorgetti/games/squareplatform/gameobjects/interaction/Enemy.java" />
         <option value="$PROJECT_DIR$/src/main/java/br/com/giorgetti/games/squareplatform/gamestate/levels/LevelStateManager.java" />
         <option value="$PROJECT_DIR$/src/main/resources/maps/level1.dat" />
         <option value="$PROJECT_DIR$/src/main/java/br/com/giorgetti/games/squareplatform/gameobjects/interaction/Information.java" />
+        <option value="$PROJECT_DIR$/src/main/java/br/com/giorgetti/games/squareplatform/gameobjects/MovableSprite.java" />
+        <option value="$PROJECT_DIR$/src/main/java/br/com/giorgetti/games/squareplatform/gameobjects/Player.java" />
       </list>
     </option>
   </component>
@@ -330,7 +341,6 @@
     <panes>
       <pane id="Scope" />
       <pane id="PackagesPane" />
-      <pane id="Scratches" />
       <pane id="AndroidView" />
       <pane id="ProjectPane">
         <subPane>
@@ -412,6 +422,7 @@
           <select />
         </subPane>
       </pane>
+      <pane id="Scratches" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -837,13 +848,6 @@
       <option name="presentableId" value="Default" />
       <updated>1430454872653</updated>
     </task>
-    <task id="LOCAL-00020" summary="Moving background as map moves (fixed)">
-      <created>1438028358240</created>
-      <option name="number" value="00020" />
-      <option name="presentableId" value="LOCAL-00020" />
-      <option name="project" value="LOCAL" />
-      <updated>1438028358241</updated>
-    </task>
     <task id="LOCAL-00021" summary="Showing tile type when editing the map">
       <created>1438095622541</created>
       <option name="number" value="00021" />
@@ -1180,7 +1184,14 @@
       <option name="project" value="LOCAL" />
       <updated>1503092924521</updated>
     </task>
-    <option name="localTasksCounter" value="69" />
+    <task id="LOCAL-00069" summary="Minor fixes to Information and LevelStateManager">
+      <created>1503092952898</created>
+      <option name="number" value="00069" />
+      <option name="presentableId" value="LOCAL-00069" />
+      <option name="project" value="LOCAL" />
+      <updated>1503092952898</updated>
+    </task>
+    <option name="localTasksCounter" value="70" />
     <servers />
   </component>
   <component name="TodoView">
@@ -1207,7 +1218,7 @@
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3259587" sideWeight="0.49030694" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.30775446" sideWeight="0.4885845" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.31260097" sideWeight="0.4885845" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25767368" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
@@ -1612,7 +1623,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="77">
           <caret line="6" column="1421" lean-forward="false" selection-start-line="6" selection-start-column="1421" selection-end-line="6" selection-end-column="1421" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1620,22 +1630,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="138">
           <caret line="94" column="18" lean-forward="false" selection-start-line="94" selection-start-column="18" selection-end-line="94" selection-end-column="18" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/br/com/giorgetti/games/squareplatform/gameobjects/Player.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1530">
-          <caret line="106" column="58" lean-forward="false" selection-start-line="106" selection-start-column="58" selection-end-line="106" selection-end-column="58" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/br/com/giorgetti/games/squareplatform/gameobjects/MovableSprite.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="3825">
-          <caret line="270" column="20" lean-forward="false" selection-start-line="270" selection-start-column="20" selection-end-line="270" selection-end-column="20" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1677,8 +1671,35 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="46">
           <caret line="47" column="58" lean-forward="false" selection-start-line="47" selection-start-column="58" selection-end-line="47" selection-end-column="58" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/br/com/giorgetti/games/squareplatform/gameobjects/MovableSprite.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="175">
+          <caret line="214" column="49" lean-forward="false" selection-start-line="214" selection-start-column="49" selection-end-line="214" selection-end-column="49" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/br/com/giorgetti/games/squareplatform/gameobjects/Player.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="199">
+          <caret line="117" column="8" lean-forward="false" selection-start-line="117" selection-start-column="8" selection-end-line="117" selection-end-column="8" />
           <folding>
-            <element signature="e#693#701#0" expanded="true" />
+            <element signature="e#6526#6527#0" expanded="true" />
+            <element signature="e#6575#6576#0" expanded="true" />
+            <element signature="e#6601#6602#0" expanded="true" />
+            <element signature="e#6620#6621#0" expanded="true" />
+            <element signature="e#6656#6657#0" expanded="true" />
+            <element signature="e#6682#6683#0" expanded="true" />
+            <element signature="e#6718#6719#0" expanded="true" />
+            <element signature="e#6753#6754#0" expanded="true" />
+            <element signature="e#6968#6969#0" expanded="true" />
+            <element signature="e#6987#6988#0" expanded="true" />
+            <element signature="e#7013#7014#0" expanded="true" />
+            <element signature="e#7032#7033#0" expanded="true" />
           </folding>
         </state>
       </provider>
