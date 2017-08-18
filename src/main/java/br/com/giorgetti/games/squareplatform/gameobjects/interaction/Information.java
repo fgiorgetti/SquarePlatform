@@ -1,6 +1,7 @@
 package br.com.giorgetti.games.squareplatform.gameobjects.interaction;
 
 import br.com.giorgetti.games.squareplatform.main.GamePanel;
+import br.com.giorgetti.games.squareplatform.tiles.TileMap;
 
 import java.awt.*;
 import java.text.AttributedCharacterIterator;
@@ -23,6 +24,7 @@ public class Information extends AutoInteractiveSprite {
     public Information() {
         this.width = WIDTH;
         this.height = FULL_HEIGHT;
+        this.ySpeed = 0;
 
         messages.add("---- Important Information ----");
         messages.add("");
@@ -41,10 +43,14 @@ public class Information extends AutoInteractiveSprite {
 
         g.setColor(Color.black);
         Font oldFont = g.getFont();
+
+        int drawX = getX() - map.getX();
+        int drawY = GamePanel.HEIGHT-getY()+(DRAW_HEIGHT/2)+map.getY();
+
         g.setFont(new Font("TimeRoman", Font.BOLD, 16));
-        g.drawString("!",getX() - map.getX() - 1, GamePanel.HEIGHT - getY() - (FULL_HEIGHT/2 + DRAW_HEIGHT/2) + map.getY() + 1);
+        g.drawString("!", drawX - 1, drawY - 1);
         g.setColor(Color.yellow);
-        g.drawString("!",getX() - map.getX(), GamePanel.HEIGHT - getY() - (FULL_HEIGHT/2 + DRAW_HEIGHT/2) + map.getY() );
+        g.drawString("!", drawX, drawY);
         g.setFont(oldFont);
 
         // If timeStamp is not refreshed within 100ms message is hidden
