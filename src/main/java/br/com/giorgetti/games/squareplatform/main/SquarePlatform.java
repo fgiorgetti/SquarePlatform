@@ -8,6 +8,7 @@ import javax.swing.WindowConstants;
 
 import br.com.giorgetti.games.squareplatform.gameobjects.Player;
 import br.com.giorgetti.games.squareplatform.gamestate.levels.LevelStateManager;
+import br.com.giorgetti.games.squareplatform.gamestate.title.TitleState;
 
 /**
  * Created by fgiorgetti on 5/1/15.
@@ -17,17 +18,19 @@ public class SquarePlatform {
 	private static JFrame window;
 	private static DisplayMode originalDisplayMode;
 	private static final GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
+	private static Cursor originalCursor;
 
-    public static void main(String [] args ) {
+	public static void main(String [] args ) {
 
         window = new JFrame("Square Platform");
-        window.setContentPane(GamePanel.getInstance(new LevelStateManager("/maps/level1.dat", new Player())));
+        window.setContentPane(GamePanel.getInstance(new TitleState()));
+		//window.setContentPane(GamePanel.getInstance(new LevelStateManager("/maps/level1.dat", new Player())));
         window.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         window.setResizable(true); // without it, it does not hide taskbar on linux
 		window.setUndecorated(true);
         window.setIgnoreRepaint(true);
 		window.setUndecorated(false);
-		window.setCursor(hideCursor());
+		originalCursor = window.getCursor();
 		originalDisplayMode = gd.getDisplayMode();
 
 		switchFullScreen(LevelStateManager.isFullScreen());
@@ -37,9 +40,11 @@ public class SquarePlatform {
 	public static void switchFullScreen(boolean fullScreen) {
 
         if ( fullScreen && gd.isFullScreenSupported() ) {
+			window.setCursor(hideCursor());
 			window.setResizable(true); // without it, it does not hide taskbar on linux
 		} else {
 			window.setResizable(false);
+			window.setCursor(originalCursor);
 		}
 
 		DisplayMode displayMode = null;

@@ -3,6 +3,8 @@ package br.com.giorgetti.games.squareplatform.gamestate.levels;
 import br.com.giorgetti.games.squareplatform.gameobjects.Player;
 import br.com.giorgetti.games.squareplatform.gameobjects.SpriteDirection;
 import br.com.giorgetti.games.squareplatform.gamestate.GameState;
+import br.com.giorgetti.games.squareplatform.gamestate.GameStateManager;
+import br.com.giorgetti.games.squareplatform.gamestate.title.TitleState;
 import br.com.giorgetti.games.squareplatform.main.GamePanel;
 import br.com.giorgetti.games.squareplatform.main.SquarePlatform;
 import br.com.giorgetti.games.squareplatform.media.MediaPlayer;
@@ -22,12 +24,17 @@ import java.util.ArrayList;
  */
 public class LevelStateManager extends JFXPanel implements GameState {
 
+	private int currentLevel = 0;
+	private String[] levels = new String[] {
+        "level1"
+    };
+
 	private boolean initString = false;
     private static final Font GAME_OVER_FONT = Font.getFont(Font.DIALOG_INPUT);
 	protected TileMap map;
     protected boolean [] keyMap = new boolean[255];
     protected ArrayList<Integer> supportedKeys = new ArrayList<>();
-    protected Player player;
+    protected Player player = new Player();
     protected boolean gameOver = false;
     
     protected long realTimeElapsed;
@@ -39,7 +46,11 @@ public class LevelStateManager extends JFXPanel implements GameState {
 
 	private static boolean fullScreen = false;
 
-	public LevelStateManager(String mapPath, Player p) {
+	public LevelStateManager() {
+	    loadLevel("/maps/" + levels[currentLevel] + ".dat", player);
+    }
+
+    private void loadLevel(String mapPath, Player p) {
 
         this.map = new TileMap();
         this.map.loadTileMap(mapPath, p);
@@ -50,24 +61,18 @@ public class LevelStateManager extends JFXPanel implements GameState {
         keyMap[KeyEvent.VK_LEFT] = false;
         keyMap[KeyEvent.VK_RIGHT] = false;
         keyMap[KeyEvent.VK_F12] = false;
-		keyMap[KeyEvent.VK_SPACE] = false;
-		keyMap[KeyEvent.VK_ESCAPE] = false;
-		keyMap[KeyEvent.VK_F] = false;
+        keyMap[KeyEvent.VK_SPACE] = false;
+        keyMap[KeyEvent.VK_ESCAPE] = false;
+        keyMap[KeyEvent.VK_F] = false;
 
         this.supportedKeys.add(KeyEvent.VK_UP);
         this.supportedKeys.add(KeyEvent.VK_DOWN);
         this.supportedKeys.add(KeyEvent.VK_LEFT);
         this.supportedKeys.add(KeyEvent.VK_RIGHT);
         this.supportedKeys.add(KeyEvent.VK_F12);
-		this.supportedKeys.add(KeyEvent.VK_SPACE);
-		this.supportedKeys.add(KeyEvent.VK_ESCAPE);
-		this.supportedKeys.add(KeyEvent.VK_F);
-
-		//TODO Customize media to play on map
-		//TODO Adjust volume on configuration state
-		this.mediaPlayer = new MediaPlayer("/music/music.mp3");
-		this.mediaPlayer.setVolume(0.02D);
-		this.mediaPlayer.play(true, 2000);
+        this.supportedKeys.add(KeyEvent.VK_SPACE);
+        this.supportedKeys.add(KeyEvent.VK_ESCAPE);
+        this.supportedKeys.add(KeyEvent.VK_F);
 
     }
 
@@ -178,6 +183,13 @@ public class LevelStateManager extends JFXPanel implements GameState {
 
 	@Override
 	public void notifySwitchedOn() {
+
+		//TODO Customize media to play on map
+		//TODO Adjust volume on configuration state
+		this.mediaPlayer = new MediaPlayer("/music/music.mp3");
+		this.mediaPlayer.setVolume(0.02D);
+		this.mediaPlayer.play(true, 2000);
+
 	}
 
 	private void drawCollision(Graphics2D g) {
@@ -270,7 +282,8 @@ public class LevelStateManager extends JFXPanel implements GameState {
 		}
 
         if ( keyMap[KeyEvent.VK_ESCAPE] ) {
-        	System.exit(0);
+		    mediaPlayer.stop();
+		    GamePanel.gsm.switchGameState(new TitleState());
 		}
     }
 

@@ -10,6 +10,7 @@ public class MediaPlayer extends JFXPanel {
 
     private static final Map<String, Media> sounds = new HashMap<>();
 
+    private static double volume = .02;
     private Media music;
     private javafx.scene.media.MediaPlayer mediaPlayer;
 
@@ -25,7 +26,7 @@ public class MediaPlayer extends JFXPanel {
            }
 
            this.mediaPlayer = new javafx.scene.media.MediaPlayer(this.music);
-           this.mediaPlayer.setVolume(.02);
+           this.mediaPlayer.setVolume(volume);
 
        } catch (Exception e) {
            System.err.println("Unable to use audio: " + audioResource);
@@ -70,12 +71,16 @@ public class MediaPlayer extends JFXPanel {
         }
    }
 
-   public double getVolume() {
-        return this.mediaPlayer.getVolume();
+   public void stop() {
+        this.mediaPlayer.stop();
    }
 
-   public void setVolume(double volume) {
-        this.mediaPlayer.setVolume(volume);
+   public static double getVolume() {
+        return volume * 100;
+   }
+
+   public static void setVolume(double v) {
+        volume = v / 100;
    }
 
 }

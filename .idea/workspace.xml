@@ -2,8 +2,13 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="e7dc040d-9594-46f6-8ec5-8528565794df" name="Default" comment="">
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/java/br/com/giorgetti/games/squareplatform/gamestate/title/OptionState.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/java/br/com/giorgetti/games/squareplatform/gamestate/title/TitleState.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/br/com/giorgetti/games/squareplatform/gameobjects/MovableSprite.java" afterPath="$PROJECT_DIR$/src/main/java/br/com/giorgetti/games/squareplatform/gameobjects/MovableSprite.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/br/com/giorgetti/games/squareplatform/gamestate/GameStateManager.java" afterPath="$PROJECT_DIR$/src/main/java/br/com/giorgetti/games/squareplatform/gamestate/GameStateManager.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/br/com/giorgetti/games/squareplatform/gamestate/levels/LevelStateManager.java" afterPath="$PROJECT_DIR$/src/main/java/br/com/giorgetti/games/squareplatform/gamestate/levels/LevelStateManager.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/br/com/giorgetti/games/squareplatform/main/SquarePlatform.java" afterPath="$PROJECT_DIR$/src/main/java/br/com/giorgetti/games/squareplatform/main/SquarePlatform.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/br/com/giorgetti/games/squareplatform/media/MediaPlayer.java" afterPath="$PROJECT_DIR$/src/main/java/br/com/giorgetti/games/squareplatform/media/MediaPlayer.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/resources/maps/level1.dat" afterPath="$PROJECT_DIR$/src/main/resources/maps/level1.dat" />
     </list>
     <ignored path="SquarePlatform.iws" />
@@ -32,55 +37,83 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="Player.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="Player.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/br/com/giorgetti/games/squareplatform/gameobjects/Player.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="199">
-              <caret line="117" column="8" lean-forward="false" selection-start-line="117" selection-start-column="8" selection-end-line="117" selection-end-column="8" />
+            <state relative-caret-position="0">
+              <caret line="122" column="62" lean-forward="false" selection-start-line="122" selection-start-column="62" selection-end-line="122" selection-end-column="62" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="SquarePlatform.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/br/com/giorgetti/games/squareplatform/main/SquarePlatform.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="255">
+              <caret line="25" column="44" lean-forward="false" selection-start-line="25" selection-start-column="44" selection-end-line="25" selection-end-column="44" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="GamePanel.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/br/com/giorgetti/games/squareplatform/main/GamePanel.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="390">
+              <caret line="35" column="38" lean-forward="false" selection-start-line="35" selection-start-column="35" selection-end-line="35" selection-end-column="38" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="TitleState.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/br/com/giorgetti/games/squareplatform/gamestate/title/TitleState.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="326">
+              <caret line="45" column="29" lean-forward="true" selection-start-line="45" selection-start-column="29" selection-end-line="45" selection-end-column="29" />
               <folding>
-                <element signature="e#6526#6527#0" expanded="true" />
-                <element signature="e#6575#6576#0" expanded="true" />
-                <element signature="e#6601#6602#0" expanded="true" />
-                <element signature="e#6620#6621#0" expanded="true" />
-                <element signature="e#6656#6657#0" expanded="true" />
-                <element signature="e#6682#6683#0" expanded="true" />
-                <element signature="e#6718#6719#0" expanded="true" />
-                <element signature="e#6753#6754#0" expanded="true" />
-                <element signature="e#6968#6969#0" expanded="true" />
-                <element signature="e#6987#6988#0" expanded="true" />
-                <element signature="e#7013#7014#0" expanded="true" />
-                <element signature="e#7032#7033#0" expanded="true" />
+                <element signature="imports" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="MovableSprite.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/br/com/giorgetti/games/squareplatform/gameobjects/MovableSprite.java">
+      <file leaf-file-name="GameStateManager.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/br/com/giorgetti/games/squareplatform/gamestate/GameStateManager.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="175">
-              <caret line="214" column="49" lean-forward="false" selection-start-line="214" selection-start-column="49" selection-end-line="214" selection-end-column="49" />
+            <state relative-caret-position="390">
+              <caret line="28" column="12" lean-forward="false" selection-start-line="28" selection-start-column="12" selection-end-line="28" selection-end-column="12" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="LevelStateManager.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/br/com/giorgetti/games/squareplatform/gamestate/levels/LevelStateManager.java">
+      <file leaf-file-name="MediaPlayer.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/br/com/giorgetti/games/squareplatform/media/MediaPlayer.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1200">
-              <caret line="91" column="17" lean-forward="false" selection-start-line="91" selection-start-column="17" selection-end-line="91" selection-end-column="17" />
-              <folding />
+            <state relative-caret-position="603">
+              <caret line="80" column="0" lean-forward="false" selection-start-line="80" selection-start-column="0" selection-end-line="80" selection-end-column="0" />
+              <folding>
+                <element signature="e#2049#2050#0" expanded="true" />
+                <element signature="e#2087#2088#0" expanded="true" />
+                <element signature="e#2126#2127#0" expanded="true" />
+                <element signature="e#2160#2161#0" expanded="true" />
+                <element signature="e#2205#2206#0" expanded="true" />
+                <element signature="e#2236#2237#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Information.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/br/com/giorgetti/games/squareplatform/gameobjects/interaction/Information.java">
+      <file leaf-file-name="OptionState.java" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/main/java/br/com/giorgetti/games/squareplatform/gamestate/title/OptionState.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="46">
-              <caret line="47" column="58" lean-forward="false" selection-start-line="47" selection-start-column="58" selection-end-line="47" selection-end-column="58" />
-              <folding />
+            <state relative-caret-position="167">
+              <caret line="21" column="20" lean-forward="false" selection-start-line="21" selection-start-column="20" selection-end-line="21" selection-end-column="20" />
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -99,7 +132,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>pom.</find>
       <find>!</find>
       <find>! On</find>
       <find>== 0</find>
@@ -129,6 +161,7 @@
       <find>FALLING</find>
       <find>fps</find>
       <find>yspeed</find>
+      <find>gsm</find>
     </findStrings>
     <replaceStrings>
       <replace />
@@ -148,8 +181,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/src/main/java/br/com/giorgetti/games/squareplatform/sprites/Player.java" />
-        <option value="$PROJECT_DIR$/src/main/java/br/com/giorgetti/games/squareplatform/tiles/test.drl" />
         <option value="$PROJECT_DIR$/src/main/java/br/com/giorgetti/games/squareplatform/gameobjects/interaction/StaticObject.java" />
         <option value="$PROJECT_DIR$/src/main/java/br/com/giorgetti/games/squareplatform/gameobjects/interaction/InteractiveObject.java" />
         <option value="$PROJECT_DIR$/src/main/java/br/com/giorgetti/games/squareplatform/gameobjects/GameSprite.java" />
@@ -168,7 +199,6 @@
         <option value="$PROJECT_DIR$/src/main/java/br/com/giorgetti/games/squareplatform/gamestate/interaction/DialogGameState.java" />
         <option value="$PROJECT_DIR$/src/main/java/br/com/giorgetti/games/squareplatform/gameobjects/interaction/DataInput.java" />
         <option value="$PROJECT_DIR$/src/main/java/br/com/giorgetti/games/squareplatform/gamestate/interaction/MessageGameState.java" />
-        <option value="$PROJECT_DIR$/src/main/java/br/com/giorgetti/games/squareplatform/gamestate/GameStateManager.java" />
         <option value="/Library/Java/JavaVirtualMachines/jdk1.7.0_80.jdk/Contents/Home/jre/lib/rt.jar!/sun/audio/AudioStream.class" />
         <option value="$PROJECT_DIR$/src/main/java/br/com/giorgetti/games/squareplatform/gameobjects/BlockingSprite.java" />
         <option value="$PROJECT_DIR$/src/main/java/br/com/giorgetti/games/squareplatform/gameobjects/interaction/OpenBlockingDoor.java" />
@@ -184,21 +214,24 @@
         <option value="$PROJECT_DIR$/src/main/java/br/com/giorgetti/games/squareplatform/gameobjects/interaction/WizardInformation.java" />
         <option value="$PROJECT_DIR$/src/main/java/br/com/giorgetti/games/squareplatform/gameobjects/interaction/WizardLevel1.java" />
         <option value="$PROJECT_DIR$/src/main/java/br/com/giorgetti/games/squareplatform/gameobjects/interaction/Button.java" />
-        <option value="$PROJECT_DIR$/src/main/java/br/com/giorgetti/games/squareplatform/media/MediaPlayer.java" />
         <option value="$PROJECT_DIR$/src/main/java/br/com/giorgetti/games/squareplatform/gameobjects/GameObjectSelector.java" />
         <option value="$PROJECT_DIR$/src/main/java/br/com/giorgetti/games/squareplatform/gameobjects/Sprite.java" />
-        <option value="$PROJECT_DIR$/src/main/java/br/com/giorgetti/games/squareplatform/main/SquarePlatform.java" />
         <option value="$PROJECT_DIR$/src/main/java/br/com/giorgetti/games/squareplatform/gameobjects/interaction/AutoInteractiveSprite.java" />
         <option value="$PROJECT_DIR$/src/main/java/br/com/giorgetti/games/squareplatform/gameobjects/interaction/Checkpoint.java" />
         <option value="$PROJECT_DIR$/src/main/java/br/com/giorgetti/games/squareplatform/tiles/TileMap.java" />
         <option value="$PROJECT_DIR$/src/main/java/br/com/giorgetti/games/squareplatform/gameobjects/interaction/EnemyDumb.java" />
         <option value="$PROJECT_DIR$/src/main/java/br/com/giorgetti/games/squareplatform/gameobjects/interaction/EnemyFly.java" />
         <option value="$PROJECT_DIR$/src/main/java/br/com/giorgetti/games/squareplatform/gameobjects/interaction/Enemy.java" />
-        <option value="$PROJECT_DIR$/src/main/java/br/com/giorgetti/games/squareplatform/gamestate/levels/LevelStateManager.java" />
         <option value="$PROJECT_DIR$/src/main/resources/maps/level1.dat" />
         <option value="$PROJECT_DIR$/src/main/java/br/com/giorgetti/games/squareplatform/gameobjects/interaction/Information.java" />
         <option value="$PROJECT_DIR$/src/main/java/br/com/giorgetti/games/squareplatform/gameobjects/MovableSprite.java" />
         <option value="$PROJECT_DIR$/src/main/java/br/com/giorgetti/games/squareplatform/gameobjects/Player.java" />
+        <option value="$PROJECT_DIR$/src/main/java/br/com/giorgetti/games/squareplatform/main/SquarePlatform.java" />
+        <option value="$PROJECT_DIR$/src/main/java/br/com/giorgetti/games/squareplatform/gamestate/GameStateManager.java" />
+        <option value="$PROJECT_DIR$/src/main/java/br/com/giorgetti/games/squareplatform/gamestate/levels/LevelStateManager.java" />
+        <option value="$PROJECT_DIR$/src/main/java/br/com/giorgetti/games/squareplatform/media/MediaPlayer.java" />
+        <option value="$PROJECT_DIR$/src/main/java/br/com/giorgetti/games/squareplatform/gamestate/title/TitleState.java" />
+        <option value="$PROJECT_DIR$/src/main/java/br/com/giorgetti/games/squareplatform/gamestate/title/OptionState.java" />
       </list>
     </option>
   </component>
@@ -339,9 +372,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
-      <pane id="PackagesPane" />
-      <pane id="AndroidView" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -382,7 +412,7 @@
               <item name="main" type="462c0819:PsiDirectoryNode" />
               <item name="java" type="462c0819:PsiDirectoryNode" />
               <item name="squareplatform" type="462c0819:PsiDirectoryNode" />
-              <item name="gameobjects" type="462c0819:PsiDirectoryNode" />
+              <item name="gamestate" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="SquarePlatform" type="b2602c69:ProjectViewProjectNode" />
@@ -391,8 +421,18 @@
               <item name="main" type="462c0819:PsiDirectoryNode" />
               <item name="java" type="462c0819:PsiDirectoryNode" />
               <item name="squareplatform" type="462c0819:PsiDirectoryNode" />
-              <item name="gameobjects" type="462c0819:PsiDirectoryNode" />
-              <item name="interaction" type="462c0819:PsiDirectoryNode" />
+              <item name="gamestate" type="462c0819:PsiDirectoryNode" />
+              <item name="levels" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="SquarePlatform" type="b2602c69:ProjectViewProjectNode" />
+              <item name="SquarePlatform" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="squareplatform" type="462c0819:PsiDirectoryNode" />
+              <item name="gamestate" type="462c0819:PsiDirectoryNode" />
+              <item name="title" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="SquarePlatform" type="b2602c69:ProjectViewProjectNode" />
@@ -400,6 +440,14 @@
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="main" type="462c0819:PsiDirectoryNode" />
               <item name="resources" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="SquarePlatform" type="b2602c69:ProjectViewProjectNode" />
+              <item name="SquarePlatform" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="resources" type="462c0819:PsiDirectoryNode" />
+              <item name="backgrounds" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="SquarePlatform" type="b2602c69:ProjectViewProjectNode" />
@@ -418,11 +466,22 @@
               <item name="sprites" type="462c0819:PsiDirectoryNode" />
               <item name="player" type="462c0819:PsiDirectoryNode" />
             </path>
+            <path>
+              <item name="SquarePlatform" type="b2602c69:ProjectViewProjectNode" />
+              <item name="SquarePlatform" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="resources" type="462c0819:PsiDirectoryNode" />
+              <item name="title" type="462c0819:PsiDirectoryNode" />
+            </path>
           </expand>
           <select />
         </subPane>
       </pane>
+      <pane id="PackagesPane" />
       <pane id="Scratches" />
+      <pane id="Scope" />
+      <pane id="AndroidView" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -848,13 +907,6 @@
       <option name="presentableId" value="Default" />
       <updated>1430454872653</updated>
     </task>
-    <task id="LOCAL-00021" summary="Showing tile type when editing the map">
-      <created>1438095622541</created>
-      <option name="number" value="00021" />
-      <option name="presentableId" value="LOCAL-00021" />
-      <option name="project" value="LOCAL" />
-      <updated>1438095622541</updated>
-    </task>
     <task id="LOCAL-00022" summary="Added slow movement of background on y axis">
       <created>1438118484040</created>
       <option name="number" value="00022" />
@@ -1191,7 +1243,14 @@
       <option name="project" value="LOCAL" />
       <updated>1503092952898</updated>
     </task>
-    <option name="localTasksCounter" value="70" />
+    <task id="LOCAL-00070" summary="Fixed issue when player jumped over an enemy then while bouncing it falls over a blocked tile, its state was left as JUMPING.&#10;Condition was state==jumping and yspeed = -1.">
+      <created>1503094430772</created>
+      <option name="number" value="00070" />
+      <option name="presentableId" value="LOCAL-00070" />
+      <option name="project" value="LOCAL" />
+      <updated>1503094430774</updated>
+    </task>
+    <option name="localTasksCounter" value="71" />
     <servers />
   </component>
   <component name="TodoView">
@@ -1218,7 +1277,7 @@
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3259587" sideWeight="0.49030694" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.31260097" sideWeight="0.4885845" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.32229403" sideWeight="0.4885845" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25767368" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
@@ -1263,10 +1322,10 @@
       <window_info id="Documentation" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="FLOATING" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" x="100" y="123" width="1080" height="526" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32599118" sideWeight="0.49676898" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.6386431" sideWeight="0.49353796" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.6386431" sideWeight="0.49353796" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Coverage" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32956383" sideWeight="0.5" order="0" side_tool="true" content_ui="tabs" />
-      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3259587" sideWeight="0.49030694" order="8" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.30775446" sideWeight="0.4885845" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.3259587" sideWeight="0.49030694" order="8" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.32229403" sideWeight="0.4885845" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3259587" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Theme Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.51141554" order="4" side_tool="true" content_ui="tabs" />
@@ -1311,7 +1370,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="LOCAL_CHANGES_DETAILS_PREVIEW_SHOWN" value="true" />
-    <MESSAGE value="Removed debug messages." />
     <MESSAGE value="Added Coin as a sample Sprite that auto interacts with player when they collide." />
     <MESSAGE value="Created question, information and added animation for coin." />
     <MESSAGE value="Several fixes and created a component to better handle user input" />
@@ -1336,7 +1394,8 @@
     <MESSAGE value="Fixed issue on linux" />
     <MESSAGE value="Added lifes, gameover support and now player loses life when hitting an enemy of falling off the screen." />
     <MESSAGE value="Minor fixes to Information and LevelStateManager" />
-    <option name="LAST_COMMIT_MESSAGE" value="Minor fixes to Information and LevelStateManager" />
+    <MESSAGE value="Fixed issue when player jumped over an enemy then while bouncing it falls over a blocked tile, its state was left as JUMPING.&#10;Condition was state==jumping and yspeed = -1." />
+    <option name="LAST_COMMIT_MESSAGE" value="Fixed issue when player jumped over an enemy then while bouncing it falls over a blocked tile, its state was left as JUMPING.&#10;Condition was state==jumping and yspeed = -1." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1349,21 +1408,6 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/pom.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="375">
-          <caret line="25" column="17" lean-forward="false" selection-start-line="25" selection-start-column="17" selection-end-line="25" selection-end-column="17" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/br/com/giorgetti/games/squareplatform/gamestate/GameState.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="105">
-          <caret line="8" column="19" lean-forward="false" selection-start-line="8" selection-start-column="19" selection-end-line="8" selection-end-column="19" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/br/com/giorgetti/games/squareplatform/media.java" />
     <entry file="jar:///Library/Java/JavaVirtualMachines/jdk1.7.0_80.jdk/Contents/Home/jre/lib/rt.jar!/sun/audio/AudioStream.class">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-401">
@@ -1453,20 +1497,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/br/com/giorgetti/games/squareplatform/gamestate/GameStateManager.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="330">
-          <caret line="24" column="8" lean-forward="false" selection-start-line="24" selection-start-column="8" selection-end-line="24" selection-end-column="8" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/br/com/giorgetti/games/squareplatform/main/GamePanel.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="255">
-          <caret line="26" column="39" lean-forward="false" selection-start-line="26" selection-start-column="39" selection-end-line="26" selection-end-column="39" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/br/com/giorgetti/games/squareplatform/gameobjects/interaction/LeftRightPlatform.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="210">
@@ -1510,13 +1540,6 @@
     <entry file="file://$PROJECT_DIR$/src/main/resources/sprites/objects/button.png">
       <provider selected="true" editor-type-id="images">
         <state />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/br/com/giorgetti/games/squareplatform/gameobjects/Animation.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="75">
-          <caret line="35" column="8" lean-forward="false" selection-start-line="35" selection-start-column="8" selection-end-line="35" selection-end-column="8" />
-        </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/br/com/giorgetti/games/squareplatform/gameobjects/interaction/WizardLevel1.java">
@@ -1584,20 +1607,6 @@
         <state />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/br/com/giorgetti/games/squareplatform/main/SquarePlatform.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="780">
-          <caret line="59" column="44" lean-forward="true" selection-start-line="59" selection-start-column="44" selection-end-line="59" selection-end-column="44" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/br/com/giorgetti/games/squareplatform/media/MediaPlayer.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="165">
-          <caret line="15" column="11" lean-forward="false" selection-start-line="15" selection-start-column="11" selection-end-line="15" selection-end-column="11" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/br/com/giorgetti/games/squareplatform/gameobjects/interaction/EnemyDumb.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="200">
@@ -1633,30 +1642,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/br/com/giorgetti/games/squareplatform/gamestate/levels/LevelStateManager.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1200">
-          <caret line="91" column="17" lean-forward="false" selection-start-line="91" selection-start-column="17" selection-end-line="91" selection-end-column="17" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/br/com/giorgetti/games/squareplatform/gameobjects/Sprite.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="99">
           <caret line="38" column="25" lean-forward="false" selection-start-line="38" selection-start-column="25" selection-end-line="38" selection-end-column="25" />
-          <folding>
-            <element signature="e#1351#1352#0" expanded="true" />
-            <element signature="e#1393#1394#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/br/com/giorgetti/games/squareplatform/tiles/TileMap.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="271">
-          <caret line="776" column="20" lean-forward="false" selection-start-line="776" selection-start-column="20" selection-end-line="776" selection-end-column="20" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1667,39 +1656,114 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/br/com/giorgetti/games/squareplatform/gameobjects/Animation.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="135">
+          <caret line="39" column="96" lean-forward="false" selection-start-line="39" selection-start-column="96" selection-end-line="39" selection-end-column="96" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/br/com/giorgetti/games/squareplatform/tiles/Background.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="390">
+          <caret line="32" column="4" lean-forward="false" selection-start-line="32" selection-start-column="4" selection-end-line="32" selection-end-column="4" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/br/com/giorgetti/games/squareplatform/gameobjects/interaction/Information.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="46">
+        <state relative-caret-position="380">
           <caret line="47" column="58" lean-forward="false" selection-start-line="47" selection-start-column="58" selection-end-line="47" selection-end-column="58" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/br/com/giorgetti/games/squareplatform/tiles/TileMap.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="270">
+          <caret line="808" column="16" lean-forward="false" selection-start-line="808" selection-start-column="16" selection-end-line="808" selection-end-column="16" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/br/com/giorgetti/games/squareplatform/gameobjects/Player.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="122" column="62" lean-forward="false" selection-start-line="122" selection-start-column="62" selection-end-line="122" selection-end-column="62" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/br/com/giorgetti/games/squareplatform/gameobjects/MovableSprite.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="175">
+        <state relative-caret-position="380">
           <caret line="214" column="49" lean-forward="false" selection-start-line="214" selection-start-column="49" selection-end-line="214" selection-end-column="49" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/br/com/giorgetti/games/squareplatform/main/SquarePlatform.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="255">
+          <caret line="25" column="44" lean-forward="false" selection-start-line="25" selection-start-column="44" selection-end-line="25" selection-end-column="44" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/br/com/giorgetti/games/squareplatform/gameobjects/Player.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/br/com/giorgetti/games/squareplatform/main/GamePanel.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="199">
-          <caret line="117" column="8" lean-forward="false" selection-start-line="117" selection-start-column="8" selection-end-line="117" selection-end-column="8" />
+        <state relative-caret-position="390">
+          <caret line="35" column="38" lean-forward="false" selection-start-line="35" selection-start-column="35" selection-end-line="35" selection-end-column="38" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/br/com/giorgetti/games/squareplatform/gamestate/levels/LevelStateManager.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="360">
+          <caret line="190" column="8" lean-forward="false" selection-start-line="190" selection-start-column="8" selection-end-line="190" selection-end-column="8" />
           <folding>
-            <element signature="e#6526#6527#0" expanded="true" />
-            <element signature="e#6575#6576#0" expanded="true" />
-            <element signature="e#6601#6602#0" expanded="true" />
-            <element signature="e#6620#6621#0" expanded="true" />
-            <element signature="e#6656#6657#0" expanded="true" />
-            <element signature="e#6682#6683#0" expanded="true" />
-            <element signature="e#6718#6719#0" expanded="true" />
-            <element signature="e#6753#6754#0" expanded="true" />
-            <element signature="e#6968#6969#0" expanded="true" />
-            <element signature="e#6987#6988#0" expanded="true" />
-            <element signature="e#7013#7014#0" expanded="true" />
-            <element signature="e#7032#7033#0" expanded="true" />
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/br/com/giorgetti/games/squareplatform/media/MediaPlayer.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="603">
+          <caret line="80" column="0" lean-forward="false" selection-start-line="80" selection-start-column="0" selection-end-line="80" selection-end-column="0" />
+          <folding>
+            <element signature="e#2049#2050#0" expanded="true" />
+            <element signature="e#2087#2088#0" expanded="true" />
+            <element signature="e#2126#2127#0" expanded="true" />
+            <element signature="e#2160#2161#0" expanded="true" />
+            <element signature="e#2205#2206#0" expanded="true" />
+            <element signature="e#2236#2237#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/br/com/giorgetti/games/squareplatform/gamestate/title/TitleState.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="326">
+          <caret line="45" column="29" lean-forward="true" selection-start-line="45" selection-start-column="29" selection-end-line="45" selection-end-column="29" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/br/com/giorgetti/games/squareplatform/gamestate/GameStateManager.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="390">
+          <caret line="28" column="12" lean-forward="false" selection-start-line="28" selection-start-column="12" selection-end-line="28" selection-end-column="12" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/br/com/giorgetti/games/squareplatform/gamestate/title/OptionState.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="167">
+          <caret line="21" column="20" lean-forward="false" selection-start-line="21" selection-start-column="20" selection-end-line="21" selection-end-column="20" />
+          <folding>
+            <element signature="imports" expanded="true" />
           </folding>
         </state>
       </provider>
