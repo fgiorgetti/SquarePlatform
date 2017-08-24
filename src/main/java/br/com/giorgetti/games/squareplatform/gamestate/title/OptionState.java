@@ -13,6 +13,7 @@ public class OptionState implements GameState {
     private static final LinkedHashMap<String, OptionType> OPTIONS = new LinkedHashMap<>();
     private static final LinkedHashMap<String, Object> INPUT = new LinkedHashMap<>();
     private static String[] OPTIONS_ARR;
+    private static OptionState instance;
     private int cursorIndex = 0;
 
     public enum OptionType {
@@ -32,6 +33,15 @@ public class OptionState implements GameState {
 
         OPTIONS_ARR = OPTIONS.keySet().toArray(new String[0]);
 
+    }
+
+    private OptionState() { }
+
+    public static OptionState getInstance() {
+        if ( instance == null ) {
+            instance = new OptionState();
+        }
+        return instance;
     }
 
     @Override
@@ -131,7 +141,6 @@ public class OptionState implements GameState {
 
         } else if ( OPTIONS.get(OPTIONS_ARR[cursorIndex]).equals(OptionType.INTEGER_GAUGE) ) {
 
-            System.out.println("CUR VALUE = " + INPUT.get(OPTIONS_ARR[cursorIndex]));
             Integer curValue = (Integer) INPUT.get(OPTIONS_ARR[cursorIndex]);
 
             if ( e.getKeyCode() == KeyEvent.VK_LEFT ) {

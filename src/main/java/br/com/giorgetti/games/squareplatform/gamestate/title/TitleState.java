@@ -54,7 +54,7 @@ public class TitleState extends JFXPanel implements GameState {
             bgMaxY = backgroundSky.getImage().getHeight() * drawTimes;
 
             menuOptions.put(START, new LevelStateManager());
-            menuOptions.put(OPTIONS, new OptionState());
+            menuOptions.put(OPTIONS, OptionState.getInstance());
         } catch (IOException e) {
             e.printStackTrace();
         }

@@ -4,6 +4,7 @@ import br.com.giorgetti.games.squareplatform.gameobjects.Player;
 import br.com.giorgetti.games.squareplatform.gameobjects.SpriteDirection;
 import br.com.giorgetti.games.squareplatform.gamestate.GameState;
 import br.com.giorgetti.games.squareplatform.gamestate.GameStateManager;
+import br.com.giorgetti.games.squareplatform.gamestate.title.OptionState;
 import br.com.giorgetti.games.squareplatform.gamestate.title.TitleState;
 import br.com.giorgetti.games.squareplatform.main.GamePanel;
 import br.com.giorgetti.games.squareplatform.main.SquarePlatform;
@@ -64,6 +65,7 @@ public class LevelStateManager extends JFXPanel implements GameState {
         keyMap[KeyEvent.VK_SPACE] = false;
         keyMap[KeyEvent.VK_ESCAPE] = false;
         keyMap[KeyEvent.VK_F] = false;
+		keyMap[KeyEvent.VK_O] = false;
 
         this.supportedKeys.add(KeyEvent.VK_UP);
         this.supportedKeys.add(KeyEvent.VK_DOWN);
@@ -73,6 +75,7 @@ public class LevelStateManager extends JFXPanel implements GameState {
         this.supportedKeys.add(KeyEvent.VK_SPACE);
         this.supportedKeys.add(KeyEvent.VK_ESCAPE);
         this.supportedKeys.add(KeyEvent.VK_F);
+		this.supportedKeys.add(KeyEvent.VK_O);
 
     }
 
@@ -290,6 +293,10 @@ public class LevelStateManager extends JFXPanel implements GameState {
 		if ( e.getKeyCode() == KeyEvent.VK_F ) {
 			fullScreen = !fullScreen;
 			SquarePlatform.switchFullScreen(fullScreen);
+		}
+
+		if ( e.getKeyCode() == KeyEvent.VK_O ) {
+		    GamePanel.gsm.addTemporaryState(OptionState.getInstance());
 		}
 
         if ( keyMap[KeyEvent.VK_ESCAPE] ) {
