@@ -13,4 +13,5 @@ public interface GameState extends KeyListener {
     void notifySwitchedOff();
     void notifySwitchedOn();
 
+    default void destroy() {}
 }

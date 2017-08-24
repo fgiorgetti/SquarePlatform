@@ -40,7 +40,7 @@ public class GameStateManager implements KeyListener {
     public void cleanTemporaryState() {
         this.temporaryState.notifySwitchedOff();
         this.temporaryState = null;
-        this.currentState.notifySwitchedOff();
+        this.currentState.notifySwitchedOn();
     }
 
     public void switchGameState(GameState state) {

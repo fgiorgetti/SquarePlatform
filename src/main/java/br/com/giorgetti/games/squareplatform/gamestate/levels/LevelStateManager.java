@@ -176,6 +176,17 @@ public class LevelStateManager extends JFXPanel implements GameState {
     }
 
 	@Override
+	public void destroy() {
+
+		if ( this.mediaPlayer != null ) {
+			this.mediaPlayer.stop();
+			this.mediaPlayer.remove();
+			this.mediaPlayer = null;
+		}
+
+	}
+
+	@Override
 	public void notifySwitchedOff() {
 		keyMap[KeyEvent.VK_LEFT] = false;
 		keyMap[KeyEvent.VK_RIGHT] = false;
@@ -185,10 +196,10 @@ public class LevelStateManager extends JFXPanel implements GameState {
 	public void notifySwitchedOn() {
 
 		//TODO Customize media to play on map
-		//TODO Adjust volume on configuration state
-		this.mediaPlayer = new MediaPlayer("/music/music.mp3");
-		this.mediaPlayer.setVolume(0.02D);
-		this.mediaPlayer.play(true, 2000);
+		if ( this.mediaPlayer == null ) {
+			this.mediaPlayer = new MediaPlayer("/music/music.mp3", MediaPlayer.MediaType.MUSIC);
+			this.mediaPlayer.play(true, 2000);
+		}
 
 	}
 
@@ -282,8 +293,8 @@ public class LevelStateManager extends JFXPanel implements GameState {
 		}
 
         if ( keyMap[KeyEvent.VK_ESCAPE] ) {
-		    mediaPlayer.stop();
-		    GamePanel.gsm.switchGameState(new TitleState());
+		    destroy();
+		    GamePanel.gsm.switchGameState(TitleState.getInstance());
 		}
     }
 

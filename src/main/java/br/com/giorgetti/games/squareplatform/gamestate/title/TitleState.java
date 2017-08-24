@@ -30,8 +30,20 @@ public class TitleState extends JFXPanel implements GameState {
     private String[] options = new String[]{START, OPTIONS};
 
     private static final LinkedHashMap<String, GameState> menuOptions = new LinkedHashMap<>();
+    private static TitleState instance;
 
-    public TitleState() {
+    /**
+     * Make this a singleton
+     * @return
+     */
+    public static TitleState getInstance() {
+        if ( instance == null ) {
+            instance = new TitleState();
+        }
+        return instance;
+    }
+
+    private TitleState() {
 
         try {
             backgroundSky   = new Background("/backgrounds/background.png", SPEED_PCT);
@@ -100,7 +112,7 @@ public class TitleState extends JFXPanel implements GameState {
     public void keyPressed(KeyEvent e) {
 
         if ( e.getKeyCode() == KeyEvent.VK_ENTER ) {
-            GamePanel.gsm.switchGameState(menuOptions.get(options[selectedOption]));
+            assignState();
         } else if ( e.getKeyCode() == KeyEvent.VK_ESCAPE ) {
             System.exit(0);
         }
@@ -113,6 +125,25 @@ public class TitleState extends JFXPanel implements GameState {
             if ( ++selectedOption >= options.length ) {
                 selectedOption = 0;
             }
+        }
+
+    }
+
+    private void assignState() {
+        String opt = options[selectedOption];
+        GameState gs = menuOptions.get(opt);
+
+        switch (opt) {
+            case START:
+                gs = new LevelStateManager();
+                menuOptions.put(opt, gs);
+                GamePanel.gsm.switchGameState(gs);
+                break;
+            case OPTIONS:
+                GamePanel.gsm.addTemporaryState(gs);
+                break;
+            default:
+                break;
         }
 
     }

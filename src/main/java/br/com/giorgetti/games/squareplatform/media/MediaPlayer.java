@@ -1,20 +1,31 @@
 package br.com.giorgetti.games.squareplatform.media;
 
+import br.com.giorgetti.games.squareplatform.config.OptionsConfig;
+import br.com.giorgetti.games.squareplatform.config.OptionsObserver;
 import javafx.embed.swing.JFXPanel;
 import javafx.scene.media.Media;
 
+import javax.swing.text.html.Option;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
-public class MediaPlayer extends JFXPanel {
+public class MediaPlayer extends JFXPanel implements OptionsObserver {
 
-    private static final Map<String, Media> sounds = new HashMap<>();
+    public enum MediaType {
+        MUSIC, SFX
+    }
 
-    private static double volume = .02;
+    private static final Map<String, Media> sounds = new ConcurrentHashMap<>();
+
     private Media music;
+    private MediaType type;
+    private OptionsConfig options;
+    private boolean forever;
+
     private javafx.scene.media.MediaPlayer mediaPlayer;
 
-    public MediaPlayer(String audioResource) {
+    public MediaPlayer(String audioResource, MediaType type) {
 
        try {
 
@@ -26,7 +37,9 @@ public class MediaPlayer extends JFXPanel {
            }
 
            this.mediaPlayer = new javafx.scene.media.MediaPlayer(this.music);
-           this.mediaPlayer.setVolume(volume);
+           this.type = type;
+           this.options = OptionsConfig.getInstance();
+           this.options.addOptionsObserver(this);
 
        } catch (Exception e) {
            System.err.println("Unable to use audio: " + audioResource);
@@ -48,6 +61,8 @@ public class MediaPlayer extends JFXPanel {
             return;
         }
 
+        this.forever = forever;
+
         if ( this.mediaPlayer.getStatus() == javafx.scene.media.MediaPlayer.Status.PLAYING ) {
             this.mediaPlayer.stop();
         }
@@ -55,6 +70,9 @@ public class MediaPlayer extends JFXPanel {
         if ( forever ) {
             this.mediaPlayer.setCycleCount(javafx.scene.media.MediaPlayer.INDEFINITE);
         }
+
+        // Adjust volume before playing
+        mediaPlayer.setVolume(getVolume());
 
         if ( delayMs == 0 ) {
             this.mediaPlayer.play();
@@ -75,12 +93,43 @@ public class MediaPlayer extends JFXPanel {
         this.mediaPlayer.stop();
    }
 
-   public static double getVolume() {
-        return volume * 100;
+   public double getVolume() {
+        return this.type == MediaType.MUSIC
+                ? options.getMusicVolume()
+                : options.getSfxVolume();
    }
 
-   public static void setVolume(double v) {
-        volume = v / 100;
-   }
+    @Override
+    public void optionsChanged(OptionsConfig options) {
+        double volume = getVolume();
+        this.mediaPlayer.setVolume(volume);
+    }
+
+    /**
+     * Removes the Options Observer asynchronously. If media playing forever, it will be
+     * stopped and observer removed. If not playing forever, it waits till media is played
+     * before removing the observer.
+     */
+    public void remove() {
+
+        final MediaPlayer player = this;
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+
+                if ( !forever ) {
+                    // Wait till it finishes
+                    while (mediaPlayer.getStatus().equals(javafx.scene.media.MediaPlayer.Status.PLAYING)) {}
+                } else {
+                    mediaPlayer.stop();
+                }
+
+                OptionsConfig.getInstance().removeObserver(player);
+
+            }
+        }).start();
+
+    }
 
 }

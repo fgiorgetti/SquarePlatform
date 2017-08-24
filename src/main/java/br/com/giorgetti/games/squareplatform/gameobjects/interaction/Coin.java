@@ -3,7 +3,6 @@ package br.com.giorgetti.games.squareplatform.gameobjects.interaction;
 import br.com.giorgetti.games.squareplatform.gameobjects.Animation;
 import br.com.giorgetti.games.squareplatform.main.GamePanel;
 import br.com.giorgetti.games.squareplatform.media.MediaPlayer;
-import br.com.giorgetti.games.squareplatform.tiles.TileMap;
 
 import java.awt.*;
 
@@ -12,7 +11,7 @@ import java.awt.*;
  */
 public class Coin extends AutoInteractiveSprite {
 
-    private static MediaPlayer mediaPlayer = new MediaPlayer("/sounds/coin.wav");
+    private static MediaPlayer mediaPlayer = new MediaPlayer("/sounds/coin.wav", MediaPlayer.MediaType.SFX);
     private final int HEIGHT = 20;
     private final int WIDTH = 14;
     private final int SCORE = 10;
@@ -47,6 +46,7 @@ public class Coin extends AutoInteractiveSprite {
         mediaPlayer.play(false);
         map.getPlayer().addScore(SCORE);
         map.removeSprite(this);
+        mediaPlayer.remove();
     }
 
     @Override

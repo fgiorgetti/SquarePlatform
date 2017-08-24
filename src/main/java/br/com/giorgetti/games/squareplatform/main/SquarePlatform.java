@@ -23,7 +23,7 @@ public class SquarePlatform {
 	public static void main(String [] args ) {
 
         window = new JFrame("Square Platform");
-        window.setContentPane(GamePanel.getInstance(new TitleState()));
+        window.setContentPane(GamePanel.getInstance(TitleState.getInstance()));
 		//window.setContentPane(GamePanel.getInstance(new LevelStateManager("/maps/level1.dat", new Player())));
         window.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         window.setResizable(true); // without it, it does not hide taskbar on linux
