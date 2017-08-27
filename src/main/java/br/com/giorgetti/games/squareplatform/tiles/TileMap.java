@@ -1,6 +1,7 @@
 package br.com.giorgetti.games.squareplatform.tiles;
 
 import br.com.giorgetti.games.squareplatform.exception.ErrorConstants;
+import br.com.giorgetti.games.squareplatform.exception.InvalidMapException;
 import br.com.giorgetti.games.squareplatform.gameobjects.MovableSprite;
 import br.com.giorgetti.games.squareplatform.gameobjects.Player;
 import br.com.giorgetti.games.squareplatform.gameobjects.Sprite;
@@ -92,7 +93,7 @@ public class TileMap {
     private int lastCheckpointX, lastCheckpointY;
 
     // Sprites in game
-    private Sprite[] gameObjects;
+    private Sprite[] gameObjects = new Sprite[0];
 
     /**
      * Stores identification for each sprite on the map
@@ -158,17 +159,21 @@ public class TileMap {
      *
      * @param tileMapPath
      */
-    public void loadTileMap(String tileMapPath, Sprite player) {
+    public void loadTileMap(String tileMapPath, Sprite player) throws InvalidMapException {
 
         // Opening the tile map file
         BufferedReader reader = null;
         try {
-            reader = new BufferedReader(new InputStreamReader(getClass().getResourceAsStream(tileMapPath)));
+            if ( !editMode ) {
+                reader = new BufferedReader(new InputStreamReader(getClass().getResourceAsStream(tileMapPath)));
+            } else {
+                reader = new BufferedReader(new InputStreamReader(new FileInputStream("src/main/resources" + tileMapPath)));
+            }
             this.player = player;
         } catch (Exception e1) {
             System.err.println("Unable to load tile map: " + tileMapPath);
-            e1.printStackTrace();
-            System.exit(ErrorConstants.INVALID_TILE_MAP_PATH);
+            //e1.printStackTrace();
+            throw new InvalidMapException();
         }
 
         String line = null;
@@ -603,7 +608,7 @@ public class TileMap {
                 .append("HEIGHT=").append(getHeight()).append("\n")
                 .append("BG=").append(getBackgroundsAsString()).append("\n")
                 .append("TS=").append(getTileSetsAsString()).append("\n")
-                .append("SPRITES=").append(getSpritesAsString())
+                .append(getSpritesAsString().trim().isEmpty()? "":"SPRITES=").append(getSpritesAsString())
                 .append("PLAYER=").append(player.getX()).append(PROP_SEPARATOR).append(player.getY()).append("\n")
                 .append(getMapAsString());
         

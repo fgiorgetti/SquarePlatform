@@ -1,5 +1,6 @@
 package br.com.giorgetti.games.squareplatform.gamestate.levels;
 
+import br.com.giorgetti.games.squareplatform.exception.InvalidMapException;
 import br.com.giorgetti.games.squareplatform.gameobjects.Player;
 import br.com.giorgetti.games.squareplatform.gameobjects.SpriteDirection;
 import br.com.giorgetti.games.squareplatform.gamestate.GameState;
@@ -27,7 +28,8 @@ public class LevelStateManager extends JFXPanel implements GameState {
 
 	private int currentLevel = 0;
 	private String[] levels = new String[] {
-        "level1"
+        "level1",
+		"level2"
     };
 
 	private boolean initString = false;
@@ -46,67 +48,111 @@ public class LevelStateManager extends JFXPanel implements GameState {
 	private MediaPlayer mediaPlayer;
 
 	private static boolean fullScreen = false;
+	private static LevelStateManager instance = null;
 
-	public LevelStateManager() {
-	    loadLevel("/maps/" + levels[currentLevel] + ".dat", player);
+	public static LevelStateManager getInstance() {
+		if ( instance == null ) {
+			instance = new LevelStateManager();
+		}
+		return instance;
+	}
+
+	private LevelStateManager() {
     }
+
+    public void newGame() {
+
+		this.player = new Player();
+		currentLevel = 0;
+		loadLevel("/maps/" + levels[currentLevel] + ".dat", player);
+
+	}
+
+	public void nextLevel() {
+
+		if ( ++currentLevel >= levels.length ) {
+			destroy();
+			// TODO Create a final state to congratulate player
+			GamePanel.gsm.switchGameState(TitleState.getInstance());
+		} else {
+		    this.mediaPlayer.stop();
+			loadLevel("/maps/" + levels[currentLevel] + ".dat", player);
+			this.mediaPlayer.play();
+		}
+
+	}
 
     private void loadLevel(String mapPath, Player p) {
 
-        this.map = new TileMap();
-        this.map.loadTileMap(mapPath, p);
-        this.player = p;
+	    synchronized (p) {
 
-        keyMap[KeyEvent.VK_UP] = false;
-        keyMap[KeyEvent.VK_DOWN] = false;
-        keyMap[KeyEvent.VK_LEFT] = false;
-        keyMap[KeyEvent.VK_RIGHT] = false;
-        keyMap[KeyEvent.VK_F12] = false;
-        keyMap[KeyEvent.VK_SPACE] = false;
-        keyMap[KeyEvent.VK_ESCAPE] = false;
-        keyMap[KeyEvent.VK_F] = false;
-		keyMap[KeyEvent.VK_O] = false;
+			this.map = new TileMap();
+			try {
+				this.map.loadTileMap(mapPath, p);
+			} catch (InvalidMapException e) {
+				System.out.println("Invalid map. Fix game setup - Not found = " + mapPath);
+				System.exit(1);
+			}
+			this.player = p;
 
-        this.supportedKeys.add(KeyEvent.VK_UP);
-        this.supportedKeys.add(KeyEvent.VK_DOWN);
-        this.supportedKeys.add(KeyEvent.VK_LEFT);
-        this.supportedKeys.add(KeyEvent.VK_RIGHT);
-        this.supportedKeys.add(KeyEvent.VK_F12);
-        this.supportedKeys.add(KeyEvent.VK_SPACE);
-        this.supportedKeys.add(KeyEvent.VK_ESCAPE);
-        this.supportedKeys.add(KeyEvent.VK_F);
-		this.supportedKeys.add(KeyEvent.VK_O);
+			keyMap[KeyEvent.VK_UP] = false;
+			keyMap[KeyEvent.VK_DOWN] = false;
+			keyMap[KeyEvent.VK_LEFT] = false;
+			keyMap[KeyEvent.VK_RIGHT] = false;
+			keyMap[KeyEvent.VK_F12] = false;
+			keyMap[KeyEvent.VK_SPACE] = false;
+			keyMap[KeyEvent.VK_ESCAPE] = false;
+			keyMap[KeyEvent.VK_F] = false;
+			keyMap[KeyEvent.VK_O] = false;
+
+			this.supportedKeys.add(KeyEvent.VK_UP);
+			this.supportedKeys.add(KeyEvent.VK_DOWN);
+			this.supportedKeys.add(KeyEvent.VK_LEFT);
+			this.supportedKeys.add(KeyEvent.VK_RIGHT);
+			this.supportedKeys.add(KeyEvent.VK_F12);
+			this.supportedKeys.add(KeyEvent.VK_SPACE);
+			this.supportedKeys.add(KeyEvent.VK_ESCAPE);
+			this.supportedKeys.add(KeyEvent.VK_F);
+			this.supportedKeys.add(KeyEvent.VK_O);
+
+		}
 
     }
 
     public void update() {
 
-    	// Need to send back to a final score page or main menu
-    	if ( gameOver ) {
-    		return;
-    	}
+	    synchronized (this.player) {
 
-    	if ( !player.isDying() ) {
-			map.update();
-			updatePlayer();
-		} else {
-    		player.update(map);
+	        if ( this.map == null ) {
+	        	return;
+			}
+
+			// Need to send back to a final score page or main menu
+			if ( gameOver ) {
+				return;
+			}
+
+			if ( !player.isDying() ) {
+				map.update();
+				updatePlayer();
+			} else {
+				player.update(map);
+			}
+
+			// Testing when player falls in a hole
+			if ( player.getY()-1 <= -player.getHeight() ) {
+				if ( player.getLifes() == 0 ) {
+					gameOver = true;
+				} else {
+					try { Thread.sleep(500); } catch (InterruptedException e) {}
+					map.recoverLastCheckpoint();
+					player.revive();
+				}
+			}
+
 		}
 
-        // Testing when player falls in a hole
-    	if ( player.getY()-1 <= -player.getHeight() ) {
-    		//gameOver = true; // lose one life instead
-			if ( player.getLifes() == 0 ) {
-				//player.revive();
-				gameOver = true;
-			} else {
-				try { Thread.sleep(500); } catch (InterruptedException e) {}
-				map.recoverLastCheckpoint();
-				player.revive();
-			}
-    	}
-
-    }
+	}
 
 	/**
      * Updates player info based on keys.
@@ -145,44 +191,42 @@ public class LevelStateManager extends JFXPanel implements GameState {
 
     public void draw(Graphics2D g) {        
 
-    	// If we dont do it, then if we write anything, we observe a delay...
-    	// Need to research if there is a better approach.
-        /*
-    	if ( !initString ) {
-            g.drawString("", 0, 0);
-            initString = true;
-    	}
-    	*/
-    	
-        map.draw(g);
+        synchronized (this.player ) {
 
-        // Drawing player
-        player.draw(g);
-        drawFps(g);
+            if ( this.map == null ) {
+            	return;
+			}
 
-        // Enable for debugging purposes.
-        //drawCollision(g);
-                
-        if ( gameOver ) {
-        	
-        	int panelX = GamePanel.WIDTH/2-40;
-        	int panelY = GamePanel.HEIGHT/2-15;
-        	
-            g.setColor(Color.BLACK);
-            g.setFont(GAME_OVER_FONT);
-            g.fillRect(panelX, panelY, 80, 30);
-            g.setColor(Color.WHITE);
-            g.drawString("Game Over", panelX + 5, panelY + 20);
+			map.draw(g);
 
-        }
-        
-    }
+			// Drawing player
+			player.draw(g);
+			drawFps(g);
+
+			// Enable for debugging purposes.
+			//drawCollision(g);
+
+			if ( gameOver ) {
+
+				int panelX = GamePanel.WIDTH/2-40;
+				int panelY = GamePanel.HEIGHT/2-15;
+
+				g.setColor(Color.BLACK);
+				g.setFont(GAME_OVER_FONT);
+				g.fillRect(panelX, panelY, 80, 30);
+				g.setColor(Color.WHITE);
+				g.drawString("Game Over", panelX + 5, panelY + 20);
+
+			}
+
+		}
+
+	}
 
 	@Override
 	public void destroy() {
 
 		if ( this.mediaPlayer != null ) {
-			this.mediaPlayer.stop();
 			this.mediaPlayer.remove();
 			this.mediaPlayer = null;
 		}

@@ -22,6 +22,7 @@ public class MediaPlayer extends JFXPanel implements OptionsObserver {
     private MediaType type;
     private OptionsConfig options;
     private boolean forever;
+    private boolean removed = false;
 
     private javafx.scene.media.MediaPlayer mediaPlayer;
 
@@ -82,7 +83,9 @@ public class MediaPlayer extends JFXPanel implements OptionsObserver {
                 public void run() {
                     try {
                         Thread.currentThread().sleep(delayMs);
-                        mediaPlayer.play();
+                        if ( !removed ) {
+                            mediaPlayer.play();
+                        }
                     } catch (InterruptedException e) {}
                 }
             }).start();
@@ -125,6 +128,7 @@ public class MediaPlayer extends JFXPanel implements OptionsObserver {
                     mediaPlayer.stop();
                 }
 
+                removed = true;
                 OptionsConfig.getInstance().removeObserver(player);
 
             }

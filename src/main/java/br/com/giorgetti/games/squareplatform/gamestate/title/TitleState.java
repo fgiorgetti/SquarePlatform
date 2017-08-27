@@ -53,7 +53,7 @@ public class TitleState extends JFXPanel implements GameState {
             bgMaxX = backgroundSky.getImage().getWidth() * drawTimes;
             bgMaxY = backgroundSky.getImage().getHeight() * drawTimes;
 
-            menuOptions.put(START, new LevelStateManager());
+            menuOptions.put(START, LevelStateManager.getInstance());
             menuOptions.put(OPTIONS, OptionState.getInstance());
         } catch (IOException e) {
             e.printStackTrace();
@@ -135,8 +135,8 @@ public class TitleState extends JFXPanel implements GameState {
 
         switch (opt) {
             case START:
-                gs = new LevelStateManager();
-                menuOptions.put(opt, gs);
+                LevelStateManager.getInstance().newGame();
+                menuOptions.put(opt, LevelStateManager.getInstance());
                 GamePanel.gsm.switchGameState(gs);
                 break;
             case OPTIONS:

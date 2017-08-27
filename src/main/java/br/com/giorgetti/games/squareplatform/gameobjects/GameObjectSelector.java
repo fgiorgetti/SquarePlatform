@@ -21,6 +21,7 @@ public class GameObjectSelector {
         gameObjectsMap.put("Button", Button.class);
         gameObjectsMap.put("Coin", Coin.class);
         gameObjectsMap.put("Checkpoint", Checkpoint.class);
+        gameObjectsMap.put("End Level", EndLevel.class);
         gameObjectsMap.put("Enemy - Dumb", EnemyDumb.class);
         gameObjectsMap.put("Enemy - Fly", EnemyFly.class);
         gameObjectsMap.put("Information", Information.class);

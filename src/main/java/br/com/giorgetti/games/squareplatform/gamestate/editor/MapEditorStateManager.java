@@ -1,5 +1,6 @@
 package br.com.giorgetti.games.squareplatform.gamestate.editor;
 
+import br.com.giorgetti.games.squareplatform.exception.InvalidMapException;
 import br.com.giorgetti.games.squareplatform.gameobjects.GameObjectSelector;
 import br.com.giorgetti.games.squareplatform.gameobjects.MovableSprite;
 import br.com.giorgetti.games.squareplatform.gameobjects.Sprite;
@@ -8,6 +9,7 @@ import br.com.giorgetti.games.squareplatform.gamestate.interaction.DialogCallbac
 import br.com.giorgetti.games.squareplatform.gamestate.interaction.DialogGameState;
 import br.com.giorgetti.games.squareplatform.gamestate.interaction.MessageGameState;
 import br.com.giorgetti.games.squareplatform.main.GamePanel;
+import br.com.giorgetti.games.squareplatform.main.TileMapEditor;
 import br.com.giorgetti.games.squareplatform.tiles.Tile;
 import br.com.giorgetti.games.squareplatform.tiles.TileMap;
 import br.com.giorgetti.games.squareplatform.tiles.TileSet;
@@ -17,6 +19,7 @@ import java.awt.event.KeyEvent;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
+import java.io.IOException;
 import java.util.LinkedList;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -47,7 +50,7 @@ public class MapEditorStateManager implements GameState {
         PREV, NEXT;
     }
 
-    public MapEditorStateManager(String mapPath, Sprite p) {
+    public MapEditorStateManager(String mapPath, Sprite p) throws InvalidMapException {
 
         this.map = new TileMap(true);
         this.map.loadTileMap(mapPath, p);
@@ -253,6 +256,32 @@ public class MapEditorStateManager implements GameState {
         // Output map content
         } else if ( e.getKeyCode() == KeyEvent.VK_S ) {
 
+            // Saving player current position
+            int playerX = player.getX();
+            int playerY = player.getY();
+
+            String baseDir = System.getProperty("user.dir") + "/src/main/resources/maps/";
+            // Setting the pre-defined player position
+            player.setX(playerInitialX);
+            player.setY(playerInitialY);
+            System.out.println("Saving file as: " + baseDir + TileMapEditor.getMapPath());
+            try {
+                BufferedWriter out = new BufferedWriter(new FileWriter(new File(baseDir + TileMapEditor.getMapPath())));
+                out.write(getMap().toString());
+                out.flush();
+                out.close();
+                messages.addMessage("Map has been saved");
+            } catch (IOException e1) {
+                messages.addMessage("Error saving map");
+                messages.addMessage(e1.getMessage());
+            }
+
+            // Restoring player position
+            player.setX(playerX);
+            player.setY(playerY);
+
+        } else if ( e.getKeyCode() == KeyEvent.VK_A ) {
+
             dialog.createDialog("Enter file name", new DialogCallbackHandler() {
                 @Override
                 public void handle(String userInput) {
@@ -283,6 +312,13 @@ public class MapEditorStateManager implements GameState {
                         dialog.enable();
                     }
                 }
+            });
+        } else if ( e.getKeyCode() == KeyEvent.VK_O ) {
+            dialog.createDialog("Enter file name", new DialogCallbackHandler() {
+                        @Override
+                        public void handle(String userInput) {
+                            TileMapEditor.loadMap(userInput);
+                        }
             });
         } else if ( e.getKeyCode() == KeyEvent.VK_OPEN_BRACKET ) {
             curGameObject = GameObjectSelector.getPreviousGameObject(curGameObject);

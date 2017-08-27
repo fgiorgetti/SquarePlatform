@@ -16,7 +16,6 @@ import javafx.embed.swing.JFXPanel;
  */
 @SuppressWarnings("serial")
 public class GamePanel extends JFXPanel implements Runnable {
-    //public class GamePanel extends JPanel implements Runnable {
 
     // Game panel dimensions
     //public static final int WIDTH = 800;
@@ -44,17 +43,23 @@ public class GamePanel extends JFXPanel implements Runnable {
         return instance;
     }
 
+    public static void resetInstance() {
+        instance = null;
+    }
+
     private GamePanel(GameState gs) {
         setPreferredSize(new Dimension(WIDTH * SCALE, HEIGHT * SCALE));
         setFocusable(true);
+        setIgnoreRepaint(true);
+        setDoubleBuffered(true);
         requestFocus();
         gsm = new GameStateManager(gs);
     }
 
 
     /**
-     * This method is called overrides the one provided by
-     * JComponent (parent of JPanel) to notify that this object
+     * This method overrides the one provided by
+     * JComponent (parent of JFXPanel) to notify that this object
      * now has a parent object and so it is active.
      *
      * The main game thread will be started here.
@@ -64,6 +69,7 @@ public class GamePanel extends JFXPanel implements Runnable {
         super.addNotify();
         if ( this.thread == null ) {
             this.thread = new Thread(this);
+            this.thread.setName("GameLoop");
             addKeyListener(gsm);
             init();
             thread.start();
@@ -93,7 +99,7 @@ public class GamePanel extends JFXPanel implements Runnable {
 
         // Main game loop
         long start = System.currentTimeMillis();
-        while ( true ) {
+        while ( instance != null ) {
 
             // Let the game state manager handle the content
             g.setColor(Color.WHITE);
@@ -111,13 +117,17 @@ public class GamePanel extends JFXPanel implements Runnable {
     }
 
     /**
-     * Draw prepared image to the JPanel
+     * Draw prepared image to the JFXPanel
      */
     private void drawToScreen() {
 
         Graphics2D g2 = (Graphics2D) getGraphics();
-        g2.drawImage(image, 0, 0, WIDTH * SCALE, HEIGHT * SCALE, null);
-        g2.dispose();
+
+        // When changing the instance (resetInstance) g2 might become null
+        try {
+            g2.drawImage(image, 0, 0, WIDTH * SCALE, HEIGHT * SCALE, null);
+            g2.dispose();
+        } catch (NullPointerException npe) {}
 
     }
 
