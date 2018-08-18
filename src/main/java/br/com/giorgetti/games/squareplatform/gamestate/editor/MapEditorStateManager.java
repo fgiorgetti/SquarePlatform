@@ -1,9 +1,8 @@
 package br.com.giorgetti.games.squareplatform.gamestate.editor;
 
 import br.com.giorgetti.games.squareplatform.exception.InvalidMapException;
-import br.com.giorgetti.games.squareplatform.gameobjects.GameObjectSelector;
-import br.com.giorgetti.games.squareplatform.gameobjects.MovableSprite;
-import br.com.giorgetti.games.squareplatform.gameobjects.Sprite;
+import br.com.giorgetti.games.squareplatform.editor.GameObjectSelector;
+import br.com.giorgetti.games.squareplatform.gameobjects.sprite.Sprite;
 import br.com.giorgetti.games.squareplatform.gamestate.GameState;
 import br.com.giorgetti.games.squareplatform.gamestate.interaction.DialogCallbackHandler;
 import br.com.giorgetti.games.squareplatform.gamestate.interaction.DialogGameState;

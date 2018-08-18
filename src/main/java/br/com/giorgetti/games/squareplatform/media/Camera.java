@@ -1,7 +1,6 @@
 package br.com.giorgetti.games.squareplatform.media;
 
-import br.com.giorgetti.games.squareplatform.gameobjects.Player;
-import br.com.giorgetti.games.squareplatform.gameobjects.sprite.SpriteState;
+import br.com.giorgetti.games.squareplatform.gameobjects.player.Player;
 import br.com.giorgetti.games.squareplatform.main.GamePanel;
 import br.com.giorgetti.games.squareplatform.tiles.TileMap;
 

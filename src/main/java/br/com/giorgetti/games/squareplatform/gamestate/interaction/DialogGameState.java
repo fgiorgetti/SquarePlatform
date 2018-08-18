@@ -8,6 +8,7 @@ import java.util.LinkedHashMap;
 import java.util.TreeSet;
 
 /**
+ * Game state that is activated when opening a Dialog window.
  * Created by fgiorgetti on 5/15/15.
  */
 public class DialogGameState implements GameState {

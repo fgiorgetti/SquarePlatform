@@ -12,6 +12,8 @@ import br.com.giorgetti.games.squareplatform.gamestate.GameStateManager;
 import javafx.embed.swing.JFXPanel;
 
 /**
+ * Handles the main loop in the game, drawing all data to the screen
+ * coordinating the delays needed and triggering all interactions.
  * Created by fgiorgetti on 5/1/15.
  */
 @SuppressWarnings("serial")

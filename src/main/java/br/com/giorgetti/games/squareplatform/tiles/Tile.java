@@ -3,6 +3,8 @@ package br.com.giorgetti.games.squareplatform.tiles;
 import java.awt.image.BufferedImage;
 
 /**
+ * Each of the tile that is drawn to the screen. A tile can be blocking or non-blocking.
+ *
  * Created by fgiorgetti on 5/1/15.
  */
 public class Tile {

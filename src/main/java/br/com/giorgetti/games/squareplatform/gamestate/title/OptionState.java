@@ -8,6 +8,9 @@ import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.util.LinkedHashMap;
 
+/**
+ * State that is activated when user enters the options page.
+ */
 public class OptionState implements GameState {
 
     private static final LinkedHashMap<String, OptionType> OPTIONS = new LinkedHashMap<>();

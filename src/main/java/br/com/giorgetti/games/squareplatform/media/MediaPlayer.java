@@ -10,6 +10,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+/**
+ * Plays audio resources according to pre-defined configuration.
+ */
 public class MediaPlayer extends JFXPanel implements OptionsObserver {
 
     public enum MediaType {

@@ -2,10 +2,10 @@ package br.com.giorgetti.games.squareplatform.tiles;
 
 import br.com.giorgetti.games.squareplatform.exception.ErrorConstants;
 import br.com.giorgetti.games.squareplatform.exception.InvalidMapException;
-import br.com.giorgetti.games.squareplatform.gameobjects.MovableSprite;
-import br.com.giorgetti.games.squareplatform.gameobjects.Player;
-import br.com.giorgetti.games.squareplatform.gameobjects.Sprite;
-import br.com.giorgetti.games.squareplatform.gameobjects.interaction.InteractiveSprite;
+import br.com.giorgetti.games.squareplatform.gameobjects.sprite.MovableSprite;
+import br.com.giorgetti.games.squareplatform.gameobjects.player.Player;
+import br.com.giorgetti.games.squareplatform.gameobjects.sprite.Sprite;
+import br.com.giorgetti.games.squareplatform.gameobjects.interaction.action.InteractiveSprite;
 import br.com.giorgetti.games.squareplatform.main.GamePanel;
 import br.com.giorgetti.games.squareplatform.media.Camera;
 import br.com.giorgetti.games.squareplatform.tiles.Tile.TileType;
