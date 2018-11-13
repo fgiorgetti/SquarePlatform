@@ -62,6 +62,7 @@ public class LevelStateManager extends JFXPanel implements GameState {
     public void newGame() {
 
 		this.player = new Player();
+		gameOver = false;
 		currentLevel = 0;
 		loadLevel("/maps/" + levels[currentLevel] + ".dat", player);
 
@@ -85,9 +86,10 @@ public class LevelStateManager extends JFXPanel implements GameState {
 
 	    synchronized (p) {
 
-			this.map = new TileMap();
+			TileMap loadedMap = new TileMap();
+
 			try {
-				this.map.loadTileMap(mapPath, p);
+				loadedMap.loadTileMap(mapPath, p);
 			} catch (InvalidMapException e) {
 				System.out.println("Invalid map. Fix game setup - Not found = " + mapPath);
 				System.exit(1);
@@ -114,6 +116,8 @@ public class LevelStateManager extends JFXPanel implements GameState {
 			this.supportedKeys.add(KeyEvent.VK_F);
 			this.supportedKeys.add(KeyEvent.VK_O);
 
+			p.setMap(loadedMap);
+			this.map = loadedMap;
 		}
 
     }
