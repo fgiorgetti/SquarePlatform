@@ -6,11 +6,11 @@ import java.awt.image.BufferedImage;
 import javax.swing.JFrame;
 import javax.swing.WindowConstants;
 
-import br.com.giorgetti.games.squareplatform.gameobjects.Player;
 import br.com.giorgetti.games.squareplatform.gamestate.levels.LevelStateManager;
 import br.com.giorgetti.games.squareplatform.gamestate.title.TitleState;
 
 /**
+ * Main class to run the game.
  * Created by fgiorgetti on 5/1/15.
  */
 public class SquarePlatform {

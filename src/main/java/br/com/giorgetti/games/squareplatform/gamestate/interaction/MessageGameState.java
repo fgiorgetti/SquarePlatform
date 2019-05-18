@@ -10,6 +10,8 @@ import java.util.TreeSet;
 import br.com.giorgetti.games.squareplatform.gamestate.GameState;
 
 /**
+ * Game state that is used when providing messages to the user.
+ *
  * Created by fgiorgetti on 5/15/15.
  */
 public class MessageGameState implements GameState {

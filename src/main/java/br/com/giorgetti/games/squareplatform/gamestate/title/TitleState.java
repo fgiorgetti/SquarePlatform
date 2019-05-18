@@ -13,6 +13,9 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.LinkedHashMap;
 
+/**
+ * State that is turned on when user enters the game or when game is over.
+ */
 public class TitleState extends JFXPanel implements GameState {
 
     public static final String SPEED_PCT = "40";

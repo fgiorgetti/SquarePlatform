@@ -5,6 +5,8 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
 /**
+ * Handles game states allows during the game.
+ *
  * Created by fgiorgetti on 5/1/15.
  */
 public class GameStateManager implements KeyListener {

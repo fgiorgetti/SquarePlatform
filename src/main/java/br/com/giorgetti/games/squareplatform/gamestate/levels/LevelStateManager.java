@@ -1,10 +1,9 @@
 package br.com.giorgetti.games.squareplatform.gamestate.levels;
 
 import br.com.giorgetti.games.squareplatform.exception.InvalidMapException;
-import br.com.giorgetti.games.squareplatform.gameobjects.Player;
-import br.com.giorgetti.games.squareplatform.gameobjects.SpriteDirection;
+import br.com.giorgetti.games.squareplatform.gameobjects.player.Player;
+import br.com.giorgetti.games.squareplatform.gameobjects.sprite.SpriteDirection;
 import br.com.giorgetti.games.squareplatform.gamestate.GameState;
-import br.com.giorgetti.games.squareplatform.gamestate.GameStateManager;
 import br.com.giorgetti.games.squareplatform.gamestate.title.OptionState;
 import br.com.giorgetti.games.squareplatform.gamestate.title.TitleState;
 import br.com.giorgetti.games.squareplatform.main.GamePanel;
@@ -63,6 +62,7 @@ public class LevelStateManager extends JFXPanel implements GameState {
     public void newGame() {
 
 		this.player = new Player();
+		gameOver = false;
 		currentLevel = 0;
 		loadLevel("/maps/" + levels[currentLevel] + ".dat", player);
 
@@ -86,9 +86,10 @@ public class LevelStateManager extends JFXPanel implements GameState {
 
 	    synchronized (p) {
 
-			this.map = new TileMap();
+			TileMap loadedMap = new TileMap();
+
 			try {
-				this.map.loadTileMap(mapPath, p);
+				loadedMap.loadTileMap(mapPath, p);
 			} catch (InvalidMapException e) {
 				System.out.println("Invalid map. Fix game setup - Not found = " + mapPath);
 				System.exit(1);
@@ -115,6 +116,8 @@ public class LevelStateManager extends JFXPanel implements GameState {
 			this.supportedKeys.add(KeyEvent.VK_F);
 			this.supportedKeys.add(KeyEvent.VK_O);
 
+			p.setMap(loadedMap);
+			this.map = loadedMap;
 		}
 
     }

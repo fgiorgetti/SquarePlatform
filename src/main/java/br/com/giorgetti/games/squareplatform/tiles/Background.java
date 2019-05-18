@@ -8,6 +8,10 @@ import java.awt.image.BufferedImage;
 import javax.imageio.ImageIO;
 
 /**
+ * Represents a background in the map. A background moves in a different speed
+ * than the player is moving to provide a feeling of distance. The slowest it moves
+ * the more distant it is.
+ *
  * Created by fgiorgetti on 5/9/15.
  */
 public class Background {

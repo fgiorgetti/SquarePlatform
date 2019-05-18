@@ -1,7 +1,7 @@
 package br.com.giorgetti.games.squareplatform.main;
 
 import br.com.giorgetti.games.squareplatform.exception.InvalidMapException;
-import br.com.giorgetti.games.squareplatform.gameobjects.EditorPlayer;
+import br.com.giorgetti.games.squareplatform.gameobjects.sprite.EditorPlayer;
 import br.com.giorgetti.games.squareplatform.gamestate.editor.MapEditorStateManager;
 
 import javax.swing.*;
@@ -11,6 +11,7 @@ import java.io.FileWriter;
 import java.util.Scanner;
 
 /**
+ * Main class to run the map editor.
  * Created by fgiorgetti on 5/1/15.
  */
 public class TileMapEditor {
