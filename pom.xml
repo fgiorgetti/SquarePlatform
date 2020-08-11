@@ -22,13 +22,14 @@
         </plugins>
     </build>
 
+    <!-- If using OpenJDK + OpenJFX you must set PATH_TO_FX -->
     <!--
     <dependencies>
-        <dependency>
-            <groupId>com.google.guava</groupId>
-            <artifactId>guava</artifactId>
-            <version>22.0</version>
-        </dependency>
+      <dependency>
+        <groupId>org.openjfx</groupId>
+        <artifactId>javafx-controls</artifactId>
+        <version>14</version>
+      </dependency>
     </dependencies>
     -->
 
