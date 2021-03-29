@@ -238,19 +238,21 @@ public class MapEditorStateManager implements GameState {
         } else if ( e.getKeyCode() == KeyEvent.VK_X ) {
 
             // Remove selected tile
-            if (getMap().getMap().containsKey(row) &&
-                    getMap().getMap().get(row).containsKey(col)) {
-                getMap().getMap().get(row).remove(col);
+            synchronized (this.map) {
+                if (getMap().getMap().containsKey(row) &&
+                        getMap().getMap().get(row).containsKey(col)) {
+                    getMap().getMap().get(row).remove(col);
 
-                // If row is empty, remove row
-                if (getMap().getMap().get(row).isEmpty()) {
-                    getMap().getMap().remove(row);
+                    // If row is empty, remove row
+                    if (getMap().getMap().get(row).isEmpty()) {
+                        getMap().getMap().remove(row);
+                    }
+
                 }
 
+                // Remove sprite at player x,y
+                getMap().removeSpriteAtPlayer();
             }
-
-            // Remove sprite at player x,y
-            getMap().removeSpriteAtPlayer();
 
         // Output map content
         } else if ( e.getKeyCode() == KeyEvent.VK_S ) {

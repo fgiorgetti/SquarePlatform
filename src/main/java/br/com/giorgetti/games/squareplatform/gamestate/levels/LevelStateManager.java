@@ -247,7 +247,7 @@ public class LevelStateManager extends JFXPanel implements GameState {
 
 		//TODO Customize media to play on map
 		if ( this.mediaPlayer == null ) {
-			this.mediaPlayer = new MediaPlayer("/music/music.mp3", MediaPlayer.MediaType.MUSIC);
+			this.mediaPlayer = new MediaPlayer("/music/music.wav", MediaPlayer.MediaType.MUSIC);
 			this.mediaPlayer.play(true, 2000);
 		}
 
