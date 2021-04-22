@@ -6,4 +6,6 @@ before_install:
   - sudo apt-get update -q
   - sudo apt install openjfx libopenjfx-java libopenjfx-jni
 script:
+- echo BRANCH=$TRAVIS_BRANCH
+- echo TAG=$TRAVIS_TAG
 - bash ./build.sh
