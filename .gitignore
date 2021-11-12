@@ -1,2 +1,5 @@
 /target/
+lib
+*.iml
 *.DS_Store
+.idea/

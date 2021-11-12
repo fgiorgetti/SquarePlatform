@@ -26,3 +26,30 @@ a future plan.
 
 For now, the purpose is to have a complete 2D scrolling game with a
 few levels, music, enemies, a menu and a few more stuff.
+
+## Installing OpenJfx runtime dependency
+
+Download https://download2.gluonhq.com/openjfx/17.0.1/openjfx-17.0.1_linux-x64_bin-sdk.zip.
+Uncompress the zip file and link it to the ./lib, example:
+
+```
+ln -s ~/Downloads/javafx-sdk-17.0.1/lib/ ./
+```
+
+## Building
+
+```
+make clean package
+```
+
+## Running the game
+
+```
+./square.sh
+```
+
+## Running the map editor
+
+```
+./mapeditor.sh
+```
