@@ -33,13 +33,13 @@ Download https://download2.gluonhq.com/openjfx/17.0.1/openjfx-17.0.1_linux-x64_b
 Uncompress the zip file and link it to the ./lib, example:
 
 ```
-ln -s ~/Downloads/javafx-sdk-17.0.1/lib/ ./
+ln -s javafx-sdk-17.0.1/lib/ ./
 ```
 
 ## Building
 
 ```
-make clean package
+mvn clean package
 ```
 
 ## Running the game
